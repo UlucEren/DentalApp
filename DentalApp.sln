@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "DentalApp\Core\Core
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "DentalApp\Entities\Entities.csproj", "{BD3D67A8-4232-41F0-959D-307B001151EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "WebUI\WebUI.csproj", "{5987FF3B-EDA8-4603-A8F6-6CF5276831C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{BD3D67A8-4232-41F0-959D-307B001151EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD3D67A8-4232-41F0-959D-307B001151EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD3D67A8-4232-41F0-959D-307B001151EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5987FF3B-EDA8-4603-A8F6-6CF5276831C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5987FF3B-EDA8-4603-A8F6-6CF5276831C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5987FF3B-EDA8-4603-A8F6-6CF5276831C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5987FF3B-EDA8-4603-A8F6-6CF5276831C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
