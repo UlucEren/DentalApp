@@ -1,0 +1,40 @@
+﻿<div class=" row">
+    <div class="col-md-4 " style="width: 100%; height: 620px; overflow-y: scroll;">
+        <div class="card card-primary card-outline card-tabs">
+            @Html.Partial("/Views/Home/Left_Table.cshtml")
+        </div>
+    </div>
+    <div class="col-md-8">
+        <!-- col-md-8 Start-->
+        <div class="col">
+            <div class="card card-primary card-outline card-tabs">
+                <div class="card-header p-0 pt-1 border-bottom-0">
+                    <ul class="nav nav-tabs justify-content-center nav-fill" id="custom-tabs-three-tab" role="tablist">
+                        <li class="nav-item" style="width: 50%;">
+                            <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="pill" href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home" aria-selected="true">Daimi Dişler</a>
+                        </li>
+                        <li class="nav-item" style="width: 50%;">
+                            <a class="nav-link" id="custom-tabs-three-profile-tab" data-toggle="pill" href="#custom-tabs-three-profile" role="tab" aria-controls="custom-tabs-three-profile" aria-selected="false">Süt Dişleri</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="custom-tabs-three-tabContent">
+                        <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
+                            @Html.Partial("/Views/Home/Teeth.cshtml")
+                        </div>
+                        <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
+                            @Html.Partial("/Views/Home/Milk_Teeth.cshtml")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-primary card-outline card-tabs">
+            <div class="card-body">
+                @Html.Partial("/Views/Home/Right_Table.cshtml")
+            </div>
+        </div>
+        <!-- col-md-8 End-->
+    </div>
+</div>

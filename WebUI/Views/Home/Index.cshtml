@@ -1,42 +1,98 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@section head {    
+@section head {
     <link rel="stylesheet" href="~/Teeth/css/style.css">
-
+    <!-- DataTables -->
+  <link rel="stylesheet" href="~/content/AdminLTE-3.2.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="~/content/AdminLTE-3.2.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="~/content/AdminLTE-3.2.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 }
- <!-- Main content -->
+    <!-- Main content -->
     <section class="content">
 
-      <!-- Default box -->
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Title</h3>
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Title</h3>
 
-          <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-              <i class="fas fa-minus"></i>
-            </button>
-            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                @Html.Partial("/Views/Home/Treatment.cshtml")
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                Footer
+            </div>
+            <!-- /.card-footer-->
         </div>
-        <div class="card-body">
-          @Html.Partial("/Views/Home/Teeth.cshtml")
-        </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-          Footer
-        </div>
-        <!-- /.card-footer-->
-      </div>
-      <!-- /.card -->
+        <!-- /.card -->
 
     </section>
     <!-- /.content -->
-    
-@section scripts{
+    @section scripts{
 
     <script src="~/Teeth/js/script.js"></script>
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/content/AdminLTE-3.2.0/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/content/AdminLTE-3.2.0/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/content/AdminLTE-3.2.0/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/content/AdminLTE-3.2.0/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/content/AdminLTE-3.2.0/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/content/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/content/AdminLTE-3.2.0/plugins/jszip/jszip.min.js"></script>
+    <script src="~/content/AdminLTE-3.2.0/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/content/AdminLTE-3.2.0/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/content/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/content/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/content/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+
+<script>
+    
+  $(function () {
+    $("#example2").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#oral-treatment-list').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": false,
+    });
+  });
+
+  $(document).ready(function () {
+      //      var x = document.getElementById("example1_wrapper");
+      //var y = $("#example1_wrapper .row div");
+      
+      //console.log(x);
+      //console.log(y);
+      $("#oral-treatment-list_wrapper .row div").css({'max-width': '100%'});
+      $("#oral-treatment-list_wrapper .row div").removeClass("col-md-6");
+      
+      //y[0].innerHTML = 'Arama:';
+      
+      
+  //if (list.hasChildNodes()) {
+  //  //list.removeChild(list.children[0]);
+  //}
+
+        });
+ 
+</script>
+
 }

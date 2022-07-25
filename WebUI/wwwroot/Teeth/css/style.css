@@ -8,12 +8,15 @@
     margin: 0;
     color: #fff;
 }*/
-
+.table {
+    
+}
 .teets {
     /*background-color: #444451;*/
     height: 92px;
     margin: 1px;
     border-radius: 5px;
+    zoom: 0.7;
 }
 
 .d-18 {
@@ -24,83 +27,303 @@
 .d-17 {
     background-image: url("../images/teeth/dis-17.svg");
     width: 40px;
+    
 }
 
 .d-16 {
     background-image: url("../images/teeth/dis-16.svg");
     width: 41px;
+    
 }
 
 .d-15 {
     background-image: url("../images/teeth/dis-15.svg");
     width: 30px;
+    
 }
 
 .d-14 {
     background-image: url("../images/teeth/dis-14.svg");
     width: 28px;
+    
 }
 
 .d-13 {
     background-image: url("../images/teeth/dis-13.svg");
     width: 33px;
+    
 }
 
 .d-12 {
     background-image: url("../images/teeth/dis-12.svg");
     width: 32px;
+    
 }
 
 .d-11 {
     background-image: url("../images/teeth/dis-11.svg");
     width: 32px;
+    
 }
 
 .d-21 {
     background-image: url("../images/teeth/dis-21.svg");
     width: 33px;
+    
 }
 
 .d-22 {
     background-image: url("../images/teeth/dis-22.svg");
     width: 34px;
+    
 }
 
 .d-23 {
     background-image: url("../images/teeth/dis-23.svg");
     width: 33px;
+    
 }
 
 .d-24 {
     background-image: url("../images/teeth/dis-24.svg");
     width: 29px;
+    
 }
 
 .d-25 {
     background-image: url("../images/teeth/dis-25.svg");
     width: 27px;
+    
 }
 
 .d-26 {
     background-image: url("../images/teeth/dis-26.svg");
     width: 40px;
+    
 }
 
 .d-27 {
     background-image: url("../images/teeth/dis-27.svg");
     width: 38px;
+    
 }
 
 .d-28 {
     background-image: url("../images/teeth/dis-28.svg");
     width: 33px;
+    
+}
+
+.d-48 {
+    background-image: url("../images/teeth/dis-48.svg");
+    width: 43px;
+    height: 90px;
+}
+
+.d-47 {
+    background-image: url("../images/teeth/dis-47.svg");
+    width: 43px;
+    height: 90px;
+}
+
+.d-46 {
+    background-image: url("../images/teeth/dis-46.svg");
+    width: 43px;
+    height: 90px;
+}
+
+.d-45 {
+    background-image: url("../images/teeth/dis-45.svg");
+    width: 28px;
+    height: 90px;
+}
+
+.d-44 {
+    background-image: url("../images/teeth/dis-44.svg");
+    width: 30px;
+    height: 90px;
+}
+
+.d-43 {
+    background-image: url("../images/teeth/dis-43.svg");
+    width: 32px;
+    height: 90px;
+}
+
+.d-42 {
+    background-image: url("../images/teeth/dis-42.svg");
+    width: 28px;
+    height: 90px;
+}
+
+.d-41 {
+    background-image: url("../images/teeth/dis-41.svg");
+    width: 23px;
+    height: 90px;
+}
+
+.d-31 {
+    background-image: url("../images/teeth/dis-31.svg");
+    width: 23px;
+    height: 90px;
+}
+
+.d-32 {
+    background-image: url("../images/teeth/dis-32.svg");
+    width: 26px;
+    height: 90px;
+}
+.d-33 {
+    background-image: url("../images/teeth/dis-33.svg");
+    width: 30px;
+    height: 90px;
+}
+
+.d-34 {
+    background-image: url("../images/teeth/dis-34.svg");
+    width: 30px;
+    height: 90px;
+}
+
+.d-35 {
+    background-image: url("../images/teeth/dis-35.svg");
+    width: 26px;
+    height: 90px;
+}
+
+.d-36 {
+    background-image: url("../images/teeth/dis-36.svg");
+    width: 43px;
+    height: 90px;
+}
+
+.d-37 {
+    background-image: url("../images/teeth/dis-37.svg");
+    width: 43px;
+    height: 90px;
+}
+
+.d-38 {
+    background-image: url("../images/teeth/dis-38.svg");
+    width: 43px;
+    height: 90px;
+}
+
+.d-55 {
+    background-image: url("../images/teeth/dis-18.svg");
+    width: 33px;
+}
+
+.d-54 {
+    background-image: url("../images/teeth/dis-17.svg");
+    width: 40px;
+}
+
+.d-53 {
+    background-image: url("../images/teeth/dis-13.svg");
+    width: 33px;
+}
+
+.d-52 {
+    background-image: url("../images/teeth/dis-12.svg");
+    width: 32px;
+}
+
+.d-51 {
+    background-image: url("../images/teeth/dis-11.svg");
+    width: 32px;
+}
+
+.d-61 {
+    background-image: url("../images/teeth/dis-21.svg");
+    width: 33px;
+}
+
+.d-62 {
+    background-image: url("../images/teeth/dis-22.svg");
+    width: 34px;
+}
+
+.d-63 {
+    background-image: url("../images/teeth/dis-23.svg");
+    width: 33px;
+}
+
+.d-64 {
+    background-image: url("../images/teeth/dis-27.svg");
+    width: 38px;
+}
+
+.d-65 {
+    background-image: url("../images/teeth/dis-28.svg");
+    width: 33px;
+}
+
+.d-85 {
+    background-image: url("../images/teeth/dis-48.svg");
+    width: 43px;
+    height: 90px;
+}
+
+.d-84 {
+    background-image: url("../images/teeth/dis-47.svg");
+    width: 43px;
+    height: 90px;
+}
+
+.d-83 {
+    background-image: url("../images/teeth/dis-43.svg");
+    width: 32px;
+    height: 90px;
+}
+
+.d-82 {
+    background-image: url("../images/teeth/dis-42.svg");
+    width: 28px;
+    height: 90px;
+}
+
+.d-81 {
+    background-image: url("../images/teeth/dis-41.svg");
+    width: 23px;
+    height: 90px;
+}
+
+.d-71 {
+    background-image: url("../images/teeth/dis-31.svg");
+    width: 23px;
+    height: 90px;
+}
+
+.d-72 {
+    background-image: url("../images/teeth/dis-32.svg");
+    width: 26px;
+    height: 90px;
+}
+
+.d-73 {
+    background-image: url("../images/teeth/dis-33.svg");
+    width: 30px;
+    height: 90px;
+}
+
+.d-74 {
+    background-image: url("../images/teeth/dis-37.svg");
+    width: 43px;
+    height: 90px;
+}
+
+.d-75 {
+    background-image: url("../images/teeth/dis-38.svg");
+    width: 43px;
+    height: 90px;
 }
 
 .numbr {
-    background-color: #444451;
+    background-color: #f6eb6f;
     height: 35px;
-    width: 35px;
-    margin: 3px;
+    width: 20px;
+    margin: 10px;
     border-radius: 5px;
 }
 
@@ -157,4 +380,70 @@
 
 p.text span {
     color: #f6eb6f;
+}
+
+@media (min-width: 1360px) {
+    table.tbl-teeth {
+        zoom: 300%
+    }
+}
+
+@media (min-width: 1100px) {
+    table.tbl-teeth {
+        zoom: 150%
+    }
+}
+
+@media (max-width: 520px) {
+    table.tbl-teeth {
+        zoom: 80%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    table.tbl-teeth {
+        zoom: 94%
+    }
+}
+
+@media (max-width: 435px) {
+    table.tbl-teeth {
+        zoom: 91%
+    }
+}
+
+@media (max-width: 390px) {
+    table.tbl-teeth {
+        zoom: 87%
+    }
+}
+
+@media (max-width: 360px) {
+    table.tbl-teeth {
+        zoom: 83%
+    }
+}
+
+@media (max-width: 320px) {
+    .tbl-teeth {
+        zoom: 73%
+    }
+}
+
+.tbl-teeth {
+    margin: auto;
+}
+
+.dataTables_paginate {
+    zoom: 85%
+}
+
+td {
+    cursor: pointer;
+}
+
+.selected {
+    background-color: dodgerblue;
+    color: #FFF;
 }
