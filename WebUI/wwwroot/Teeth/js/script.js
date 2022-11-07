@@ -8,15 +8,44 @@ const select = document.getElementById('movie');
 /*console.log(select);*/
 const teets = document.querySelectorAll('.teets:not(.reserved)');
 /*console.log(teets);*/
+const oral_treatment_list = document.querySelector('.oral-treatment-list');
 
 getFromLocalStorage();
 calculateTotal();
 
 container.addEventListener('click', function (e) {
     /*console.log(e);*/
-    if (e.target.classList.contains('teets') && !e.target.classList.contains('reserved')) {
-       e.target.classList.toggle('selected');
-       calculateTotal()      
+    if (e.target.classList.contains('teets')) {
+       //e.target.classList.toggle('selected');
+        /*calculateTotal() */
+        const selected_oral_treatment_list = oral_treatment_list.querySelectorAll('.selected');
+        if (selected_oral_treatment_list.length==0) {
+            alert("Tedavi Seçiniz.");
+            return;
+        }
+        //console.log(selected_oral_treatment_list);
+        //console.log(selected_oral_treatment_list[0].dataset);
+        //console.log(selected_oral_treatment_list[0].dataset.tedaviId);
+        //console.log(selected_oral_treatment_list[0].dataset.tedaviKod);
+        //console.log(selected_oral_treatment_list[0].dataset.tedaviAdi);
+        //console.log(selected_oral_treatment_list[0].dataset.tedaviMasraf);
+        //console.log(selected_oral_treatment_list[0].dataset.tedaviFiyat);
+        /*console.log(e.target.classList[1]);*/
+        //console.log($('#treatments-table-body'));
+        //console.log($('#treatments-table-body tr').length);
+        
+        var ThisMonth = new Date().getMonth() + 1;
+        var ThisDay = new Date().getDate();
+        var ThisYear = new Date().getFullYear(); ThisMonth.toString()
+        var ThisDate = ThisDay.toString() + "." + ThisMonth.toString() + "." + ThisYear.toString();
+        /*console.log(ThisDate);*/
+        
+        let teet = e.target.classList[1];
+        let result_teet = teet.substring(teet.indexOf("-") + 1);
+        console.log(document.getElementById('treatments-table-body').rows[0].cells.item(1).innerHTML);
+        if (document.getElementById('treatments-table-body').rows[0].cells.item(1).innerHTML =="Sistemde Kayýtlý Veri Bulunamadý")
+        document.getElementById('treatments-table-body').deleteRow(0);
+        $('#treatments-table-body').append('<tr><td>' + selected_oral_treatment_list[0].dataset.tedaviId + '</td><td>' + ThisDate + '</td><td>' + result_teet + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviAdi + '</td><td>Doktor</td><td>' + selected_oral_treatment_list[0].dataset.tedaviFiyat + '</td></tr>'); 
     }
 });
 
@@ -29,8 +58,9 @@ function calculateTotal() {
 
     const selectedteetsArr = [];
     const teetsArr = [];
-
+    
     selectedteets.forEach(function (teets) {
+       
         selectedteetsArr.push(teets);
     });
 
@@ -75,7 +105,15 @@ function saveToLocalStorage(indexs) {
     /*localStorage.setItem('selectedMovieIndex', select.selectedIndex);*/
 }
 
+
 $("#oral-treatment-list tr").click(function () {
-    $(this).addClass('selected').siblings().removeClass('selected');    
+    
+    if (this.classList.contains('process-treatment')) {
+        $(this).toggleClass('selected').siblings().removeClass('selected');
+    }
+        
 });
+
+
+
 
