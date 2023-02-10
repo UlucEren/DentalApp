@@ -1,7 +1,13 @@
+using WebUI.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+builder.Services.AddDbContext<AppIdentityDbContext>(options =>
+            options.UseSqlServer(@"Data Source=DESKTOP-Q2ICC8E\SQLEXPRESS;Initial Catalog=DentalAppDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
 
 var app = builder.Build();
 
