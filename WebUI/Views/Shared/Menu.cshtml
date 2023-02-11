@@ -1,0 +1,16 @@
+﻿@if (User.IsInRole("admin"))
+{
+    <li class="nav-item-header pt-0">
+        <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">ADMIN</div>
+        <i class="ph-dots-three sidebar-resize-show"></i>
+    </li>
+    <li class="nav-item">
+        <a href="index.html" class="nav-link active">
+            <i class="ph-house"></i>
+            <span>
+                Dashboard
+                <span class="d-block fw-normal opacity-50">No pending orders</span>
+            </span>
+        </a>
+    </li>
+}
