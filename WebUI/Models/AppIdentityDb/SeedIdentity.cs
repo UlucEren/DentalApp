@@ -9,7 +9,7 @@ namespace WebUI.Models.AppIdentityDb
 {
     public static class SeedIdentity
     {
-        public static async Task Seed(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public static async Task Seed(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IConfiguration configuration)
         {
             var username = configuration["Data:AdminUser:username"];
             var email = configuration["Data:AdminUser:email"];
@@ -18,7 +18,7 @@ namespace WebUI.Models.AppIdentityDb
 
             if (await userManager.FindByNameAsync(username) == null)
             {
-                await roleManager.CreateAsync(new IdentityRole(role));
+                await roleManager.CreateAsync(new AppRole(role));
 
                 var user = new AppUser()
                 {
