@@ -7,7 +7,7 @@ namespace DataAccess.Context.EntityFramework
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-3BJ5GK9;Database=DemoDb;Integrated Security=true;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-Q2ICC8E\\SQLEXPRESS;Database=DentalAppDB;Integrated Security=true;");
         }
 
         public DbSet<User> Users { get; set; }

@@ -12,6 +12,8 @@ using DataAccess.Repositories.EmailParameterRepository;
 using DataAccess.Repositories.OperationClaimRepository;
 using DataAccess.Repositories.UserOperationClaimRepository;
 using DataAccess.Repositories.UserRepository;
+using Entities.Concrete;
+using Microsoft.AspNetCore.Identity;
 
 namespace Business.DependencyResolvers.Autofac
 {
@@ -34,6 +36,12 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<AuthManager>().As<IAuthService>();
 
             builder.RegisterType<TokenHandler>().As<ITokenHandler>();
+
+			//builder.RegisterType<SignInManager<AspNetUsers>>().AsSelf().InstancePerLifetimeScope();
+			//builder.RegisterType<UserManager<AspNetUsers>>().AsSelf().InstancePerLifetimeScope();
+
+
+			//builder.RegisterType<AuthenticationManager>().As<IAuthenticationService>();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

@@ -1,4 +1,9 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Autofac.Core;
+using Business.Abstract;
+using Business.Authentication;
+using Business.DependencyResolvers.Autofac;
 using Business.Repositories.UserRepository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
@@ -11,6 +16,9 @@ using System.Security;
 using WebUI.Models.AppIdentityDb;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+//builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
@@ -44,6 +52,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 		{
 			var cookieBuilder = new CookieBuilder();
 			cookieBuilder.Name = "DentalAppCookie";
+			cookieBuilder.HttpOnly = true;
+			cookieBuilder.SameSite = SameSiteMode.Strict;
 			options.LoginPath = new PathString("/Account/Login");
 			options.LogoutPath = new PathString("/Account/logout");
 			options.AccessDeniedPath = new PathString("/Account/AccessDenied");
@@ -64,6 +74,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 //    opt.ExpireTimeSpan = TimeSpan.FromDays(60);
 //    opt.SlidingExpiration = true;
 //});
+//builder.Services.AddScoped<IAuthenticationService, AuthenticationManager>();
 
 var app = builder.Build();
 
