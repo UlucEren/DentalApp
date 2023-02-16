@@ -54,7 +54,7 @@ namespace WebUI.Controllers
 				return Redirect(model.ReturnUrl ?? "~/");
 			}
 
-			ModelState.AddModelError("", "Email veya parola yanlış");
+            ModelState.AddModelError("", "Email veya parola yanlış");
 			return View(model);
 		}
 
@@ -74,6 +74,18 @@ namespace WebUI.Controllers
 		public IActionResult Accessdenied()
 		{
 			return View();
+		}
+		public JsonResult MailAvailable(string Email)
+		{
+			//using (ApartmanV1Context context = new ApartmanV1Context())
+			//{
+			//	bool available = context.AspNetUsersList.Where(x => x.Email == Email).Any();
+
+
+			//	return Json(available, JsonRequestBehavior.AllowGet);
+
+			//}
+			return null;
 		}
 	}
 }
