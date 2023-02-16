@@ -22,8 +22,16 @@
 	<!-- /core JS files -->
 	<!-- Theme JS files -->
 	<script src="~/content/Limitless-40/html/layout_1/full/assets/js/app.js"></script>
+	<script src="~/content/Limitless-40/assets/demo/pages/form_validation_styles.js"></script>
 	<!-- /theme JS files -->
-
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<style>
+		label.error {
+			color: red;
+			
+		}
+</style>
 </head>
 
 <body>
@@ -55,10 +63,11 @@
 								<div class="mb-3">
 									<label class="form-label">Mail Adresi</label>
 									<div class="form-control-feedback form-control-feedback-start">
-										<input asp-for="Email" value="@Model.Email" type="text" class="form-control" placeholder="info@dentalapp.com">
+										<input required asp-for="Email" value="@Model.Email" type="text" class="form-control" placeholder="info@dentalapp.com">
+										<div class="invalid-feedback">Enter your username</div>
 										<div class="form-control-feedback-icon">
 											<i class="ph-user-circle text-muted"></i>
-										</div>
+										</div>										
 									</div>
 								</div>
 
@@ -121,5 +130,34 @@
 
 	</div>
 	<!-- /page content -->
+	<script>
+		$.validator.addMethod("email_available", function (value) {
+			return false;
+		}, 'Email adresi sistemde kayıtlı değil!');
+		$(".login-form").validate({
+			rules: {
+				Email: {
+					required: true,
+					email: true,
+					email_available: true
+				},
+				Password: {
+					required: true,
+					minlength: 6
+				}
+			},
+			messages: {
+				Email: {
+					required: "Lütfen e-posta adresinizi girin",
+					email: "Lütfen geçerli bir e-posta adresi girin"					
+					
+				},
+				Password: {
+					required: "Lütfen şifrenizi girin",
+					minlength: "Şifreniz en az 6 karakter olmalıdır"
+				}
+			}
+		});
+	</script>
 </body>
 </html>
