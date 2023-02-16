@@ -134,6 +134,7 @@
 		$.validator.addMethod("email_available", function (value) {
 			return false;
 		}, 'Email adresi sistemde kayıtlı değil!');
+
 		$(".login-form").validate({
 			rules: {
 				Email: {
@@ -149,8 +150,7 @@
 			messages: {
 				Email: {
 					required: "Lütfen e-posta adresinizi girin",
-					email: "Lütfen geçerli bir e-posta adresi girin"					
-					
+					email: "Lütfen geçerli bir e-posta adresi girin"
 				},
 				Password: {
 					required: "Lütfen şifrenizi girin",
