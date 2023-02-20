@@ -17,24 +17,15 @@
             </span>
         </a>
     </li>
-    <li class="nav-item">
-        <a href="\Admin\Index" class="nav-link @{isactive=(selectedPage == "/Admin/Index") ? "active" : "";@isactive;} ">
-            <i class="ph-house"></i>
-            <span>
-                Kullanıcı Listesi
-                <span class="d-block fw-normal opacity-50">No pending orders</span>
-            </span>
-        </a>
-    </li>
     <li class="nav-item nav-item-submenu">
         <a href="#" class="nav-link">
-            <i class="ph-swatches"></i>
-            <span>Themes</span>
+            <i class="ph-user-focus"></i>
+            <span>Kullanıcı İşlemleri</span>
         </a>
         <ul class="nav-group-sub collapse">
-            <li class="nav-item"><a href="index.html" class="nav-link active">Default</a></li>
-            <li class="nav-item"><a href="../../../LTR/material/full/index.html" class="nav-link disabled">Material <span class="badge align-self-center ms-auto">Coming soon</span></a></li>
-            <li class="nav-item"><a href="../../../LTR/clean/full/index.html" class="nav-link disabled">Clean <span class="badge align-self-center ms-auto">Coming soon</span></a></li>
+            <li class="nav-item"><a href="\Admin\Index" class="nav-link @{isactive=(selectedPage == "/Admin/Index") ? "active" : "";@isactive;}">Kullanıcı Listesi</a></li>
+            <li class="nav-item"><a href="\Admin\Rol" class="nav-link @{isactive=(selectedPage == "/Admin/Rol") ? "active" : "";@isactive;}">Rol Listesi</a></li>
+            <li class="nav-item"><a href="../../../LTR/clean/full/index.html" class="nav-link">Clean</a></li>
         </ul>
     </li>
 }
