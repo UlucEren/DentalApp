@@ -1,0 +1,460 @@
+﻿@using WebUI.Models.AppIdentityDb;
+@model List<AppUser>
+@section head {
+    <!-- Global stylesheets -->
+    <link href="~/content/Limitless-40/assets/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">
+    <!-- /global stylesheets -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <style>
+        label.error {
+            color: red;
+        }
+
+        input.error {
+            border: 1px solid red;
+        }
+    </style>
+}
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <!-- Dropdown list -->
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <div style="float: left;">
+                        <h4 class="mb-0">Kullanıcı Listesi</h4>
+                    </div>
+                    <div style="float: right;">
+                        <button class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#modal_default"><i class="fas fa-plus-circle"></i>Kullanıcı Ekle</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="list-group list-group-borderless py-2">
+                <div class="list-group-item fw-semibold">Ana Kullanıcı</div>
+                @foreach (var item in Model)
+                {
+                    <div class="list-group-item hstack gap-3">
+                        <a href="#" class="status-indicator-container">
+                            <img src="~/content/Limitless-40/assets/images/demo/users/face1.jpg" class="w-40px h-40px rounded-pill" alt="">
+                            <span class="status-indicator bg-success"></span>
+                        </a>
+
+                        <div class="flex-fill">
+                            <div class="fw-semibold">@item.UserName</div>
+                            <span class="text-muted"><b>UserId( </b>@item.Id<b> ) - Email( </b>@item.Email<b> )</b></span>
+                        </div>
+
+                        <div class="d-flex align-self-center dropdown ms-3">
+                            <a href="#" class="text-body d-inline-flex align-items-center dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="ph-list"></i>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#call">
+                                    <i class="ph-phone me-2"></i>
+                                    Make a call
+                                </a>
+                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#chat">
+                                    <i class="ph-chats me-2"></i>
+                                    Start chat
+                                </a>
+                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#video">
+                                    <i class="ph-video-camera me-2"></i>
+                                    Video call
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <!-- /dropdown list -->
+
+    </div>
+</div>
+
+<!-- Phone call modal -->
+<div id="call" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="card-img-actions d-inline-block mb-3">
+                    <img class="rounded-circle" src="~/content/Limitless-40/assets/images/demo/users/face2.jpg" width="160" height="160" alt="">
+                    <div class="card-img-actions-overlay card-img rounded-circle">
+                        <a href="#" class="btn btn-outline-white btn-icon rounded-pill">
+                            <i class="ph-user"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <h6 class="mb-0">Nathan Jacobson</h6>
+                    <span class="text-muted">Lead UX designer</span>
+                </div>
+
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item">
+                        <a href="#" class="btn btn-success rounded-pill p-2">
+                            <i class="ph-phone"></i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" class="btn btn-danger rounded-pill p-2" data-bs-dismiss="modal">
+                            <i class="ph-phone-slash"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /phone call modal -->
+<!-- Chat modal -->
+<div id="chat" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">James Alexander</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="media-chat-scrollable mb-3">
+                    <div class="media-chat vstack gap-2">
+                        <div class="content-divider justify-content-center text-muted mx-0">Monday, Feb 10</div>
+
+                        <div class="media-chat-item hstack align-items-start gap-3">
+                            <a href="#" class="d-block status-indicator-container">
+                                <img src="~/content/Limitless-40/assets/images/demo/users/face11.jpg" class="w-40px h-40px rounded-pill" alt="">
+                                <span class="status-indicator bg-success"></span>
+                            </a>
+
+                            <div>
+                                <div class="media-chat-message">Below mounted advantageous spread yikes bat stubbornly crud a and a excepting</div>
+                                <div class="fs-sm text-muted mt-2">Mon, 9:54 am</div>
+                            </div>
+                        </div>
+
+                        <div class="media-chat-item media-chat-item-reverse hstack align-items-start gap-3">
+                            <a href="#" class="d-block status-indicator-container">
+                                <img src="~/content/Limitless-40/assets/images/demo/users/face1.jpg" class="w-40px h-40px rounded-pill" alt="">
+                                <span class="status-indicator bg-success"></span>
+                            </a>
+
+                            <div>
+                                <div class="media-chat-message">Far squid and that hello fidgeted and when. As this oh darn but slapped casually husky sheared that cardinal hugely one and some unnecessary factiously hedgehog a feeling one rudely much but one owing sympathetic regardless more astonishing evasive tasteful much.</div>
+                                <div class="fs-sm text-muted text-end mt-2">Mon, 10:24 am</div>
+                            </div>
+                        </div>
+
+                        <div class="media-chat-item hstack align-items-start gap-3">
+                            <a href="#" class="d-block status-indicator-container">
+                                <img src="~/content/Limitless-40/assets/images/demo/users/face11.jpg" class="w-40px h-40px rounded-pill" alt="">
+                                <span class="status-indicator bg-success"></span>
+                            </a>
+
+                            <div>
+                                <div class="media-chat-message">Darn over sour then cynically less roadrunner up some cast buoyant. Macaw krill when and upon less contrary warthog jeez some koala less since therefore minimal.</div>
+                                <div class="fs-sm text-muted mt-2">Mon, 10:56 am</div>
+                            </div>
+                        </div>
+
+                        <div class="media-chat-item media-chat-item-reverse hstack align-items-start gap-3">
+                            <a href="#" class="d-block status-indicator-container">
+                                <img src="~/content/Limitless-40/assets/images/demo/users/face1.jpg" class="w-40px h-40px rounded-pill" alt="">
+                                <span class="status-indicator bg-success"></span>
+                            </a>
+
+                            <div>
+                                <div class="media-chat-message">Some upset impious a and submissive when far crane the belched coquettishly. More the puerile dove wherever</div>
+                                <div class="fs-sm text-muted text-end mt-2">Mon, 11:29 am</div>
+                            </div>
+                        </div>
+
+                        <div class="content-divider justify-content-center text-muted mx-0">Yesterday</div>
+
+                        <div class="media-chat-item hstack align-items-start gap-3">
+                            <a href="#" class="d-block status-indicator-container">
+                                <img src="~/content/Limitless-40/assets/images/demo/users/face11.jpg" class="w-40px h-40px rounded-pill" alt="">
+                                <span class="status-indicator bg-success"></span>
+                            </a>
+
+                            <div>
+                                <div class="media-chat-message">Crud reran and while much withdrew ardent much crab hugely met dizzily that more jeez gent equivalent unsafely far one hesitant so therefore.</div>
+                                <div class="fs-sm text-muted mt-2">Tue, 10:28 am</div>
+                            </div>
+                        </div>
+
+                        <div class="media-chat-item media-chat-item-reverse hstack align-items-start gap-3">
+                            <a href="#" class="d-block status-indicator-container">
+                                <img src="~/content/Limitless-40/assets/images/demo/users/face1.jpg" class="w-40px h-40px rounded-pill" alt="">
+                                <span class="status-indicator bg-success"></span>
+                            </a>
+
+                            <div>
+                                <div class="media-chat-message">Thus superb the tapir the wallaby blank frog execrably much since dalmatian by in hot. Uninspiringly arose mounted stared one curt safe</div>
+                                <div class="fs-sm text-muted mt-2">Tue, 8:12 am</div>
+                            </div>
+                        </div>
+
+                        <div class="content-divider justify-content-center text-muted mx-0">Today</div>
+
+                        <div class="media-chat-item hstack align-items-start gap-3">
+                            <a href="#" class="d-block status-indicator-container">
+                                <img src="~/content/Limitless-40/assets/images/demo/users/face11.jpg" class="w-40px h-40px rounded-pill" alt="">
+                                <span class="status-indicator bg-success"></span>
+                            </a>
+
+                            <div>
+                                <div class="media-chat-message">Tolerantly some understood this stubbornly after snarlingly frog far added insect into snorted more auspiciously heedless drunkenly jeez foolhardy oh.</div>
+                                <div class="fs-sm text-muted mt-2">Wed, 4:20 pm</div>
+                            </div>
+                        </div>
+
+                        <div class="media-chat-item media-chat-item-reverse hstack align-items-start gap-3">
+                            <a href="#" class="d-block status-indicator-container">
+                                <img src="~/content/Limitless-40/assets/images/demo/users/face1.jpg" class="w-40px h-40px rounded-pill" alt="">
+                                <span class="status-indicator bg-success"></span>
+                            </a>
+
+                            <div>
+                                <div class="media-chat-message">Satisfactorily strenuously while sleazily dear frustratingly insect menially some shook far sardonic badger telepathic much jeepers immature much hey.</div>
+                                <div class="fs-sm text-muted mt-2">
+                                    <i class="ph-checks text-primary me-1"></i>
+                                    2 hours ago
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="media-chat-item hstack align-items-start gap-3">
+                            <a href="#" class="d-block status-indicator-container">
+                                <img src="~/content/Limitless-40/assets/images/demo/users/face11.jpg" class="w-40px h-40px rounded-pill" alt="">
+                                <span class="status-indicator bg-success"></span>
+                            </a>
+
+                            <div class="align-self-center">
+                                <span class="fw-semibold">Victoria</span> is typing
+                                <div class="typing-indicator">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-control form-control-content mb-3" contenteditable="" data-placeholder="Type message here and hit enter..."></div>
+
+                <div class="d-flex align-items-center">
+                    <div>
+                        <a href="#" class="btn btn-light btn-icon border-transparent rounded-pill btn-sm me-1" data-bs-popup="tooltip">
+                            <i class="ph-text-aa"></i>
+                        </a>
+                        <a href="#" class="btn btn-light btn-icon border-transparent rounded-pill btn-sm me-1" data-bs-popup="tooltip">
+                            <i class="ph-smiley"></i>
+                        </a>
+                        <a href="#" class="btn btn-light btn-icon border-transparent rounded-pill btn-sm me-1" data-bs-popup="tooltip">
+                            <i class="ph-paperclip"></i>
+                        </a>
+                    </div>
+
+                    <button type="button" class="btn btn-primary ms-auto">
+                        Send
+                        <i class="ph-paper-plane-tilt ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /chat modal -->
+<!-- Video call modal -->
+<div id="video" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card-img-actions mb-3">
+                            <img class="rounded img-fluid" src="~/content/Limitless-40/assets/images/demo/users/face1.jpg" alt="">
+                            <div class="d-flex position-absolute bottom-0 w-100 py-2 px-3 bg-dark bg-opacity-50 rounded-bottom">
+                                <a href="#" class="text-white">
+                                    <i class="ph-frame-corners"></i>
+                                </a>
+
+                                <div class="d-flex dropdown ms-auto">
+                                    <a href="#" class="d-inline-flex align-items-center text-white dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="ph-gear"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a href="#" class="dropdown-item">Action</a>
+                                        <a href="#" class="dropdown-item">Another action</a>
+                                        <a href="#" class="dropdown-item">Something else</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="#" class="dropdown-item">One more line</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <h6 class="mb-0">Adriana Linders</h6>
+                            <span class="text-muted">Chief accountant</span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card-img-actions mb-3">
+                            <img class="rounded img-fluid" src="~/content/Limitless-40/assets/images/demo/users/face3.jpg" alt="">
+                            <div class="d-flex position-absolute bottom-0 w-100 py-2 px-3 bg-dark bg-opacity-50 rounded-bottom">
+                                <a href="#" class="text-white">
+                                    <i class="ph-frame-corners"></i>
+                                </a>
+
+                                <div class="d-flex dropdown ms-auto">
+                                    <a href="#" class="d-inline-flex align-items-center text-white dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="ph-gear"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a href="#" class="dropdown-item">Action</a>
+                                        <a href="#" class="dropdown-item">Another action</a>
+                                        <a href="#" class="dropdown-item">Something else</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="#" class="dropdown-item">One more line</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <h6 class="mb-0">Victoria Ansley</h6>
+                            <span class="text-muted">Lead UX designer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body border-top">
+                <div class="d-flex justify-content-center text-center mb-0">
+                    <a href="#" class="btn btn-light rounded-pill p-2">
+                        <i class="ph-microphone"></i>
+                    </a>
+                    <a href="#" class="btn btn-light rounded-pill p-2 ms-2">
+                        <i class="ph-video-camera"></i>
+                    </a>
+                    <a href="#" class="btn btn-light rounded-pill p-2 ms-2">
+                        <i class="ph-chats"></i>
+                    </a>
+                    <a href="#" class="btn btn-danger rounded-pill p-2 ms-2" data-bs-dismiss="modal">
+                        <i class="ph-phone-slash"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /video call modal -->
+<!-- Basic modal -->
+<div id="modal_default" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="create-form" action="\Admin\CreateUser" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Kullanıcı Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Kullanıcı Adı</label>
+                        <div class="col-md-8">
+                            <input name="name" type="text" class="form-control">
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Email</label>
+                        <div class="col-md-8">
+                            <input name="email" type="text" class="form-control">
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Şifre</label>
+                        <div class="col-md-8">
+                            <input name="password" type="password" class="form-control">
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                    <button type="submit" id="targetclick" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /basic modal -->
+<script>
+    $.validator.addMethod("email_available", function (value) {
+        console.log(value);
+        var available = false;
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "/Admin/MailAvailable",
+            data: { Email: value },
+            success: function myfunction(data) {
+                if (data) {
+                    available = false;
+                }
+                else {
+                    available = true;
+                }
+            },
+            error: function myfunction() {
+                alert("error");
+            }
+        });
+        return available;
+    }, 'Email adresi sistemde kayıtlı!');
+
+    $("#create-form").validate({
+        rules: {
+            email: {
+                required: true,
+                email: true,
+                email_available: true
+            },
+            name: {
+                required: true
+            },
+            password: {
+                required: true,
+                minlength: 6
+            }
+        },
+        messages: {
+            email: {
+                required: "Lütfen e-posta adresinizi girin",
+                email: "Lütfen geçerli bir e-posta adresi girin"
+            },
+             name: {
+                required: "Lütfen kullanıcı adı girin"
+            },
+            password: {
+                required: "Lütfen şifrenizi girin",
+                minlength: "Şifreniz en az 6 karakter olmalıdır"
+            }
+        }
+    });
+</script>
