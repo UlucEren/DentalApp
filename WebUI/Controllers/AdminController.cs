@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Entities.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Models.AppIdentityDb;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebUI.Controllers
 {
@@ -16,18 +18,60 @@ namespace WebUI.Controllers
         {
             return View(userManager.Users.ToList());
         }
-        public IActionResult Rol()
+        public async Task<IActionResult> Rol()
         {
-            return View();
+            var roles = await roleManager.Roles.Select(x => new RoleViewModelDto()
+            {
+                Id = x.Id,
+                Name = x.Name!
+            }).ToListAsync();
+            return View(roles);
         }
         [HttpPost]
-        public IActionResult CreateUser(string name, string email, string password)
+        public async Task<IActionResult> CreateUser(string name, string email,string phone, string password)
         {
-            return View();
+            AppUser user = new AppUser();
+            user.UserName = name;
+            user.Email = email;
+            user.PhoneNumber = phone;
+
+            IdentityResult result = await userManager.CreateAsync(user, password);
+            return RedirectToAction("Users");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateRol(string name)
+        {
+            AppRole rol = new AppRole();
+            rol.Name = name;
+
+            IdentityResult result = await roleManager.CreateAsync(rol);
+            return RedirectToAction("Rol");
+        }
+      [HttpPost]
+        public async Task<IActionResult> UpdateRol(string name,string id)
+        {
+            AppRole rol = await roleManager.FindByIdAsync(id);
+            rol.Name = name;
+
+            IdentityResult result = await roleManager.UpdateAsync(rol);
+            return RedirectToAction("Rol");
+        }
+       public async Task<IActionResult> DeleteRol(string id)
+        {
+            AppRole rol = await roleManager.FindByIdAsync(id);            
+
+            IdentityResult result = await roleManager.DeleteAsync(rol);
+            return RedirectToAction("Rol");
         }
         public JsonResult MailAvailable(string Email)
         {            
                 bool available = userManager.Users.Any(x => x.Email == Email);
+                return Json(available);
+        }
+        public JsonResult RolAvailable(string rol)
+        {            
+                bool available = roleManager.Roles.Any(x=>x.Name==rol);
                 return Json(available);
         }
     }

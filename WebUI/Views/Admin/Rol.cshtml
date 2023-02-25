@@ -1,6 +1,8 @@
-﻿@{
+﻿@using Entities.Dtos;
+@{
     ViewData["Title"] = "Rol";
 }
+@model List<RoleViewModelDto>
 @section head {
     <!-- Global stylesheets -->
     <link href="~/content/Limitless-40/assets/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">
@@ -11,8 +13,19 @@
     <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/extensions/buttons.min.js"></script>
     <script src="~/content/Limitless-40/assets/demo/pages/datatables_extension_buttons_init.js"></script>
     <!-- /theme JS files -->
-}
 
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+    <style>
+        label.error {
+            color: red;
+        }
+
+        input.error {
+            border: 1px solid red;
+        }
+    </style>
+}
 <!-- Custom button -->
 <div class="card">
     <div class="card-header">
@@ -22,135 +35,39 @@
     <table class="table datatable-button-new-rol">
         <thead>
             <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Job Title</th>
-                <th>DOB</th>
-                <th>Status</th>
-                <th>Salary</th>
+                <th>Rol Id</th>
+                <th>Rol Adı</th>
+                <th class="text-center">Seçenek</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Marth</td>
-                <td><a href="#">Enright</a></td>
-                <td>Traffic Court Referee</td>
-                <td>22 Jun 1972</td>
-                <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td>
-                <td>$85,600</td>
-            </tr>
-            <tr>
-                <td>Jackelyn</td>
-                <td>Weible</td>
-                <td><a href="#">Airline Transport Pilot</a></td>
-                <td>3 Oct 1981</td>
-                <td><span class="badge bg-light">Inactive</span></td>
-                <td>$106,450</td>
-            </tr>
-            <tr>
-                <td>Aura</td>
-                <td>Hard</td>
-                <td>Business Services Sales Representative</td>
-                <td>19 Apr 1969</td>
-                <td><span class="badge bg-danger bg-opacity-10 text-danger">Suspended</span></td>
-                <td>$237,500</td>
-            </tr>
-            <tr>
-                <td>Nathalie</td>
-                <td><a href="#">Pretty</a></td>
-                <td>Drywall Stripper</td>
-                <td>13 Dec 1977</td>
-                <td><span class="badge bg-info bg-opacity-10 text-info">Pending</span></td>
-                <td>$198,500</td>
-            </tr>
-            <tr>
-                <td>Sharan</td>
-                <td>Leland</td>
-                <td>Aviation Tactical Readiness Officer</td>
-                <td>30 Dec 1991</td>
-                <td><span class="badge bg-light">Inactive</span></td>
-                <td>$470,600</td>
-            </tr>
-            <tr>
-                <td>Maxine</td>
-                <td><a href="#">Woldt</a></td>
-                <td><a href="#">Business Services Sales Representative</a></td>
-                <td>17 Oct 1987</td>
-                <td><span class="badge bg-info bg-opacity-10 text-info">Pending</span></td>
-                <td>$90,560</td>
-            </tr>
-            <tr>
-                <td>Sylvia</td>
-                <td><a href="#">Mcgaughy</a></td>
-                <td>Hemodialysis Technician</td>
-                <td>11 Nov 1983</td>
-                <td><span class="badge bg-danger bg-opacity-10 text-danger">Suspended</span></td>
-                <td>$103,600</td>
-            </tr>
-            <tr>
-                <td>Lizzee</td>
-                <td><a href="#">Goodlow</a></td>
-                <td>Technical Services Librarian</td>
-                <td>1 Nov 1961</td>
-                <td><span class="badge bg-danger bg-opacity-10 text-danger">Suspended</span></td>
-                <td>$205,500</td>
-            </tr>
-            <tr>
-                <td>Kennedy</td>
-                <td>Haley</td>
-                <td>Senior Marketing Designer</td>
-                <td>18 Dec 1960</td>
-                <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td>
-                <td>$137,500</td>
-            </tr>
-            <tr>
-                <td>Chantal</td>
-                <td><a href="#">Nailor</a></td>
-                <td>Technical Services Librarian</td>
-                <td>10 Jan 1980</td>
-                <td><span class="badge bg-light">Inactive</span></td>
-                <td>$372,000</td>
-            </tr>
-            <tr>
-                <td>Delma</td>
-                <td>Bonds</td>
-                <td>Lead Brand Manager</td>
-                <td>21 Dec 1968</td>
-                <td><span class="badge bg-info bg-opacity-10 text-info">Pending</span></td>
-                <td>$162,700</td>
-            </tr>
-            <tr>
-                <td>Roland</td>
-                <td>Salmos</td>
-                <td><a href="#">Senior Program Developer</a></td>
-                <td>5 Jun 1986</td>
-                <td><span class="badge bg-light">Inactive</span></td>
-                <td>$433,060</td>
-            </tr>
-            <tr>
-                <td>Coy</td>
-                <td>Wollard</td>
-                <td>Customer Service Operator</td>
-                <td>12 Oct 1982</td>
-                <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td>
-                <td>$86,000</td>
-            </tr>
-            <tr>
-                <td>Maxwell</td>
-                <td>Maben</td>
-                <td>Regional Representative</td>
-                <td>25 Feb 1988</td>
-                <td><span class="badge bg-danger bg-opacity-10 text-danger">Suspended</span></td>
-                <td>$130,500</td>
-            </tr>
-            <tr>
-                <td>Cicely</td>
-                <td>Sigler</td>
-                <td><a href="#">Senior Research Officer</a></td>
-                <td>15 Mar 1960</td>
-                <td><span class="badge bg-info bg-opacity-10 text-info">Pending</span></td>
-                <td>$159,000</td>
-            </tr>
+            @foreach (RoleViewModelDto u in Model)
+            {
+                <tr>
+                    <td>@u.Id</td>
+                    <td>@u.Name</td>
+                    <td class="text-center">
+                        <div class="d-inline-flex">
+                            <div class="dropdown">
+                                <a href="#" class="text-body" data-bs-toggle="dropdown">
+                                    <i class="ph-list"></i>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a style="cursor:pointer;" class="dropdown-item update_modal" data-name="@u.Name" data-id="@u.Id">
+                                        <i class="far fa-edit me-2"></i>
+                                        Düzenle
+                                    </a>
+                                    <a href="\Admin\DeleteRol\@u.Id" onclick="return confirm('Silmek istediğinizden emin misiniz?')" class="dropdown-item">
+                                        <i class="far fa-times-circle me-2"></i>
+                                        Sil
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
@@ -159,29 +76,111 @@
 <div id="modal_default" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Rol Ekle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+            <form id="create-form" action="\Admin\CreateRol" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rol Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
-            <div class="modal-body">
-                <div class="row mb-3">
-                    <label class="col-md-4 col-form-label">Rol Adı</label>
-                    <div class="col-md-8">
-                        <input id="rol_name" name="name" type="text" class="form-control">
-                        @*<div class="form-text text-muted">Here goes your name</div>*@
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Rol Adı</label>
+                        <div class="col-md-8">
+                            <input name="name" type="text" class="form-control">
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
-                <button type="button" id="targetclick" class="btn btn-primary">Kaydet</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                    <button type="submit" id="targetclick" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 <!-- /basic modal -->
+<!-- Update modal -->
+<div id="modal_update" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="update-form" action="\Admin\UpdateRol" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rol Düzenle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Rol Adı</label>
+                        <div class="col-md-8">
+                            <input id="update_id" name="id" type="hidden" class="form-control">
+                            <input id="update_name" name="name" type="text" class="form-control">
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                    <button type="submit" id="targetclick" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Update modal -->
+<script>
+    $.validator.addMethod("role_available", function (value) {
+        var available = false;
+        console.log(value);
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "/Admin/RolAvailable",
+            data: { rol: value },
+            success: function myfunction(data) {
+                if (data) {
+                    available = false;
+                }
+                else {
+                    available = true;
+                }
+            },
+            error: function myfunction() {
+                alert("error");
+            }
+        });
+        return available;
+    }, 'Rol ismi sistemde kayıtlı!');
+    $("#create-form").validate({
+        rules: {
+            name: {
+                required: true,
+                role_available: true
+            }
+        },
+        messages: {
+            name: {
+                required: "Lütfen rol adı giriniz"
+            }
+        }
+    });
+    $("#update-form").validate({
+        rules: {
+            name: {
+                required: true,
+                role_available: true
+            }
+        },
+        messages: {
+            name: {
+                required: "Lütfen rol adı giriniz"
+            }
+        }
+    });
+</script>
 
 <script>
     $(document).ready(function () {
@@ -199,9 +198,20 @@
     });
 </script>
 
-<script>
+@*<script>
     $("#targetclick").click(function () {
         alert($("#rol_name").val());
         $("#modal_default").modal('toggle');
     });
+</script>*@
+
+<script>
+    $(".update_modal").click(function () {
+        var name = $(this).data("name");
+        var id = $(this).data("id");
+        $("#update_id").val(id);
+        $("#update_name").val(name);
+        $("#modal_update").modal('show');
+    });
+
 </script>

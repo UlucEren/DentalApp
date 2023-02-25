@@ -53,6 +53,7 @@
 
                     <!-- Login card -->
                     <form class="login-form" action="\Account\Login" method="post">
+                        <input asp-for="ReturnUrl" value="@Model.ReturnUrl" type="hidden" class="form-control">
                         <div class="card mb-0">
                             <div class="card-body">
                                 <div class="text-center mb-3">

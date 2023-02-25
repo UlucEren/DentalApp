@@ -2,6 +2,7 @@
 using Business.Repositories.UserRepository;
 using Castle.Core.Smtp;
 using Entities.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -58,18 +59,12 @@ namespace WebUI.Controllers
 			return View(model);
 		}
 
-		public async Task<IActionResult> Logout()
+        [Authorize]
+        public async Task<IActionResult> Logout()
 		{
-			//await _signInManager.SignOutAsync();
-
-			//TempData.Put("message", new ResultMessage()
-			//{
-			//	Title = "Oturum Kapatıldı.",
-			//	Message = "Hesabınız güvenli bir şekilde sonlandırıldı.",
-			//	Css = "warning"
-			//});
-
-			return Redirect("~/");
+           await _signInManager.SignOutAsync();
+            //return Redirect("~/");
+			return RedirectToAction("Login", new { ReturnUrl = "~/" });
 		}
 		public IActionResult Accessdenied()
 		{

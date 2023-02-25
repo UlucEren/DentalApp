@@ -386,6 +386,13 @@
                         </div>
                     </div>
                     <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Telefon No</label>
+                        <div class="col-md-8">
+                            <input name="phone" type="text" class="form-control">
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+                    <div class="row mb-3">
                         <label class="col-md-4 col-form-label">Şifre</label>
                         <div class="col-md-8">
                             <input name="password" type="password" class="form-control">
@@ -406,7 +413,6 @@
 <!-- /basic modal -->
 <script>
     $.validator.addMethod("email_available", function (value) {
-        console.log(value);
         var available = false;
         $.ajax({
             async: false,
