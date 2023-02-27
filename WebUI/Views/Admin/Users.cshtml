@@ -28,7 +28,7 @@
                         <h4 class="mb-0">Kullanıcı Listesi</h4>
                     </div>
                     <div style="float: right;">
-                        <button class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#modal_default"><i class="fas fa-plus-circle"></i>Kullanıcı Ekle</button>
+                        <button class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#modal_default"><i class="fas fa-user-plus">&nbsp;</i>Kullanıcı Ekle</button>
                     </div>
                 </div>
             </div>
@@ -54,17 +54,25 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#call">
-                                    <i class="ph-phone me-2"></i>
-                                    Make a call
+                                <a href="\Admin\AssignRoleToUser" class="dropdown-item">
+                                    <i class="fas fa-user-tag me-2"></i>
+                                    Rol Ata
                                 </a>
                                 <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#chat">
-                                    <i class="ph-chats me-2"></i>
-                                    Start chat
+                                    <i class="far fa-edit me-2"></i>
+                                    Kullanıcı Düzenle
                                 </a>
                                 <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#video">
-                                    <i class="ph-video-camera me-2"></i>
-                                    Video call
+                                    <i class="far fa-times-circle me-2"></i>
+                                    Kullanıcı Sil
+                                </a>
+                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#video">
+                                    <i class="fas fa-user-lock me-2"></i>
+                                    Kullanıcı Hesap Giriş Kitle
+                                </a>
+                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#video">
+                                    <i class="fas fa-unlock-alt me-2"></i>
+                                    Kullanıcı Hesap Giriş Aç
                                 </a>
                             </div>
                         </div>
@@ -77,42 +85,6 @@
     </div>
 </div>
 
-<!-- Phone call modal -->
-<div id="call" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <div class="card-img-actions d-inline-block mb-3">
-                    <img class="rounded-circle" src="~/content/Limitless-40/assets/images/demo/users/face2.jpg" width="160" height="160" alt="">
-                    <div class="card-img-actions-overlay card-img rounded-circle">
-                        <a href="#" class="btn btn-outline-white btn-icon rounded-pill">
-                            <i class="ph-user"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <h6 class="mb-0">Nathan Jacobson</h6>
-                    <span class="text-muted">Lead UX designer</span>
-                </div>
-
-                <ul class="list-inline mb-0">
-                    <li class="list-inline-item">
-                        <a href="#" class="btn btn-success rounded-pill p-2">
-                            <i class="ph-phone"></i>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#" class="btn btn-danger rounded-pill p-2" data-bs-dismiss="modal">
-                            <i class="ph-phone-slash"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /phone call modal -->
 <!-- Chat modal -->
 <div id="chat" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -454,7 +426,7 @@
                 required: "Lütfen e-posta adresinizi girin",
                 email: "Lütfen geçerli bir e-posta adresi girin"
             },
-             name: {
+            name: {
                 required: "Lütfen kullanıcı adı girin"
             },
             password: {

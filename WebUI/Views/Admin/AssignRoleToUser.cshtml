@@ -1,0 +1,135 @@
+﻿@using WebUI.Models.AppIdentityDb;
+@{
+    ViewData["Title"] = "AssignRoleToUser";
+}
+@model List<AssignRoleToUserViewModel>
+@section head {
+    <!-- Global stylesheets -->
+    @*<link href="~/content/Limitless-40/assets/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">*@
+    <!-- /global stylesheets -->
+    <!-- Theme JS files -->
+    <script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>
+    <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/datatables.min.js"></script>
+    @*<script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/extensions/buttons.min.js"></script>*@
+    @*<script src="~/content/Limitless-40/assets/demo/pages/datatables_extension_buttons_init.js"></script>*@
+    <!-- /theme JS files -->
+    @*<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>*@
+
+}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Rol Listesi</h5>
+    </div>
+    @* <table class='table'>
+    <thead>
+    <tr>
+    <th>Göster</th>
+    <th>Yeni</th>
+    <th class="text-center">Değiştir</th>
+    <th>Sil</th>
+    </tr>
+    </thead>
+    <tbody>*@
+    @{
+        float[] data = new float[] { 1.1f, 2.1f, 2.2f, 2.3f, 2.4f, 3.1f, 3.2f, 3.3f, 4.1f, 4.2f };
+
+        int rowCountt = 4; // 4 satır
+        int colCountt = 4; // 4 sütun
+
+        AssignRoleToUserViewModel[,] matrix = new AssignRoleToUserViewModel[rowCountt, colCountt]; // 4x4 boyutunda boş bir matrix oluştur
+
+        for (int i = 0; i < Model.Count; i++)
+        {
+            int row = Convert.ToInt32(Model[i].TableIndex.ToString("0.0").Remove(Model[i].TableIndex.ToString("0.0").IndexOf(","))); // elemanın bulunduğu satır
+            int col = Convert.ToInt32(Model[i].TableIndex.ToString("0.0").Substring(Model[i].TableIndex.ToString("0.0").IndexOf(",") + 1)); // elemanın bulunduğu sütun
+
+            matrix[row - 1, col - 1] = new AssignRoleToUserViewModel(Model[i].Id,Model[i].Name,Model[i].Exist,Model[i].TableIndex); // elemanı matrix'e ekle
+        }
+
+
+
+
+
+
+        //                float[,] matrix = new float[,]
+        //{
+        //    { 1.1f, 0.0f, 0.0f, 0.0f },
+        //    { 2.1f, 2.2f, 2.3f, 2.4f },
+        //    { 3.1f, 3.2f, 3.3f, 0.0f },
+        //    { 5.1f, 5.2f, 0.0f, 0.0f }
+        //};
+        int rowCount = matrix.GetLength(0);
+        int colCount = matrix.GetLength(1);
+
+        // HTML tablosunun başlangıç etiketi
+        string tableStartTag = "<table>";
+
+        // Tablo başlık satırını oluşturun
+        string headerRow = "<tr><th></th>";
+        for (int col = 0; col < colCount; col++)
+        {
+            headerRow += $"<th>{col + 1}</th>";
+        }
+        headerRow += "</tr>";
+
+        // Tablo içeriğini oluşturun
+        string tableContent = "";
+        for (int row = 0; row < rowCount; row++)
+        {
+            string rowContent = $"<tr><th>{row + 1}</th>";
+            for (int col = 0; col < colCount; col++)
+            {
+                rowContent += $"<td>{matrix[row, col]}</td>";
+            }
+            rowContent += "</tr>";
+            tableContent += rowContent;
+        }
+
+        // HTML tablosunun bitiş etiketi
+        string tableEndTag = "</table>";
+
+        // Tamamlanmış HTML tablosunu birleştirin
+        string tableHtml = tableStartTag + headerRow + tableContent + tableEndTag;
+
+        // HTML tablosunu ekrana yazdırın
+        @Html.Raw(tableHtml)
+        ;
+        //float[] data = new float[] { 1.1f, 2.1f, 2.2f, 2.3f, 2.4f, 3.1f, 3.2f, 3.3f, 5.1f, 5.2f };
+        //int columnCount = 4;
+        //int rowCount = Convert.ToInt32(data[data.Length - 1].ToString("0.0").Remove(data[data.Length - 1].ToString("0.0").IndexOf(".")));
+
+        //string html = "";
+        //for (int i = 0; i < data.Length; i++)
+        //{
+        //    int row = Convert.ToInt32(data[i].ToString("0.0").Remove(data[i].ToString("0.0").IndexOf(".")));
+        //    int column = Convert.ToInt32(data[i].ToString("0.0").Substring(data[i].ToString("0.0").IndexOf(".") + 1));
+        //    html = html + "<tr>";
+
+        //    for (int j = 1; j < rowCount + 1; j++)
+        //    {
+
+
+        //        for (int z = 1; z < columnCount +1 ; i++)
+        //        {
+
+        //            html = html + ("<td>" + data[i].ToString("0.0") + "</td>");
+        //            i +=1;
+        //        }
+
+        //        //if (index < data.Length)
+        //        //{
+        //        //    html = html + ("<td>" + data[index].ToString("0.0") + "</td>");
+        //        //}
+        //        //else
+        //        //{
+        //        //    html = html + ("<td></td>");
+        //        //}
+        //    }
+
+        //    html = html + "</tr>";
+        //}
+        //@Html.Raw(html);
+    }
+    @* </tbody>
+    </table>*@
+</div>

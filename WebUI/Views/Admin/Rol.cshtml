@@ -15,6 +15,7 @@
     <!-- /theme JS files -->
 
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 
     <style>
         label.error {
@@ -37,6 +38,7 @@
             <tr>
                 <th>Rol Id</th>
                 <th>Rol Adı</th>
+                <th>Table Index</th>
                 <th class="text-center">Seçenek</th>
             </tr>
         </thead>
@@ -46,6 +48,7 @@
                 <tr>
                     <td>@u.Id</td>
                     <td>@u.Name</td>
+                    <td>@u.TableIndex</td>
                     <td class="text-center">
                         <div class="d-inline-flex">
                             <div class="dropdown">
@@ -54,7 +57,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end">
-                                    <a style="cursor:pointer;" class="dropdown-item update_modal" data-name="@u.Name" data-id="@u.Id">
+                                    <a style="cursor:pointer;" class="dropdown-item update_modal" data-name="@u.Name" data-id="@u.Id" data-tableindex="@u.TableIndex">
                                         <i class="far fa-edit me-2"></i>
                                         Düzenle
                                     </a>
@@ -90,6 +93,13 @@
                             @*<div class="form-text text-muted">Here goes your name</div>*@
                         </div>
                     </div>
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Table Index</label>
+                        <div class="col-md-8">
+                            <input name="tableIndex" type="text" class="form-control">
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
                 </div>
 
                 <div class="modal-footer">
@@ -120,6 +130,14 @@
                             @*<div class="form-text text-muted">Here goes your name</div>*@
                         </div>
                     </div>
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Table Index</label>
+                        <div class="col-md-8">
+                            <input id="update_table_index" name="tableIndex" type="text" class="form-control">
+                            <input name="tableIndexButton" value="Table Index Güncelle" type="hidden" class="form-control">
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
                 </div>
 
                 <div class="modal-footer">
@@ -134,7 +152,6 @@
 <script>
     $.validator.addMethod("role_available", function (value) {
         var available = false;
-        console.log(value);
         $.ajax({
             async: false,
             type: "POST",
@@ -152,8 +169,19 @@
                 alert("error");
             }
         });
+        if (available == false) {
+            $('input[name="tableIndexButton"]').attr('type', 'button');
+            $('input[name="tableIndexButton"]').css('color', 'blue');
+            $('input[name="tableIndexButton"]').css('border-color', 'blue');
+        }
+        else {
+            $('input[name="tableIndexButton"]').attr('type', 'hidden');
+        }
         return available;
     }, 'Rol ismi sistemde kayıtlı!');
+    $.validator.addMethod("float", function (value, element) {
+        return this.optional(element) || /^-?\d+(?:[.,]\d*?)?$/.test(value);
+    }, "Lütfen bir ondalıklı değeri girin.");
     $("#create-form").validate({
         rules: {
             name: {
@@ -172,11 +200,21 @@
             name: {
                 required: true,
                 role_available: true
+            },
+            tableIndex: {
+                required: true,
+                float: true,
+                pattern: /^[0-9,]+$/
             }
         },
         messages: {
             name: {
                 required: "Lütfen rol adı giriniz"
+            },
+            tableIndex: {
+                required: "Girdi alanı boş bırakılamaz",
+                float: "Lütfen bir ondalıklı değer girin.",
+                pattern: "Sadece rakam ve virgül kullanın"
             }
         }
     });
@@ -195,6 +233,30 @@
                 }
             ]
         });
+        $('input[name="tableIndexButton"]').on('click', function () {
+            var updateId = $("#update_id").val();
+            var updateTableId = $("#update_table_index").val();
+            console.log(updateId);
+            console.log(updateTableId);
+            //    $.ajax({
+            //    async: false,
+            //    type: "POST",
+            //    url: "/Admin/UpdateTableIndex",
+            //    data: { rolId: updateId,rolTableIndex: updateTableId},
+            //    success: function myfunction(data) {
+            //        if (data) {
+            //            available = false;
+            //        }
+            //        else {
+            //            available = true;
+            //        }
+            //    },
+            //    error: function myfunction() {
+            //        alert("error");
+            //    }
+            //});
+            alert('Table Index Güncellendi!');
+        });
     });
 </script>
 
@@ -209,8 +271,10 @@
     $(".update_modal").click(function () {
         var name = $(this).data("name");
         var id = $(this).data("id");
+        var tableIndex = $(this).data("tableindex");
         $("#update_id").val(id);
         $("#update_name").val(name);
+        $("#update_table_index").val(tableIndex);
         $("#modal_update").modal('show');
     });
 
