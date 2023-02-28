@@ -14,9 +14,14 @@ namespace WebUI.Controllers
     public class AdminController : BaseController
     {
         private readonly IConfiguration _configuration;
+        private readonly DbContextOptionsBuilder<AppIdentityDbContext> _optionsBuilder;
+        private readonly DbContextOptions<AppIdentityDbContext> options;
         public AdminController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IConfiguration configuration) : base(userManager, null, roleManager)
         {
             _configuration = configuration;
+            _optionsBuilder = new DbContextOptionsBuilder<AppIdentityDbContext>();
+			_optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnectionString"));
+            options = _optionsBuilder.Options;
         }
         public IActionResult Users()
         {
@@ -24,9 +29,9 @@ namespace WebUI.Controllers
         }
         public async Task<IActionResult> Rol()
         {
-            DbContextOptionsBuilder<AppIdentityDbContext> optionsBuilder = new DbContextOptionsBuilder<AppIdentityDbContext>();
-            optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnectionString"));
-            DbContextOptions<AppIdentityDbContext> options = optionsBuilder.Options;
+            //DbContextOptionsBuilder<AppIdentityDbContext> optionsBuilder = new DbContextOptionsBuilder<AppIdentityDbContext>();
+            //optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnectionString"));
+            //DbContextOptions<AppIdentityDbContext> options = optionsBuilder.Options;
             AppIdentityDbContext context = new AppIdentityDbContext(options);           
                 
             var roles = await context.Roles                
@@ -34,16 +39,16 @@ namespace WebUI.Controllers
             {
                 Id = x.Id,
                 Name = x.Name!,
-                TableIndex= (context.RoleTableIndexs.Where(a => a.RoleId == x.Id).SingleOrDefault().TableIndex != null) ? context.RoleTableIndexs.Where(a => a.RoleId == x.Id).SingleOrDefault().TableIndex : 0
+                TableIndex= (context.RoleTableIndexs.Where(a => a.RoleId == x.Id).SingleOrDefault().TableIndex != null) ? context.RoleTableIndexs.Where(a => a.RoleId == x.Id).SingleOrDefault()!.TableIndex : 0
                 }).ToListAsync();
             return View(roles);
         }
         [HttpPost]
         public async Task<IActionResult> CreateRol(string name,float? tableIndex)
         {
-            DbContextOptionsBuilder<AppIdentityDbContext> optionsBuilder = new DbContextOptionsBuilder<AppIdentityDbContext>();
-            optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnectionString"));
-            DbContextOptions<AppIdentityDbContext> options = optionsBuilder.Options;
+            //DbContextOptionsBuilder<AppIdentityDbContext> optionsBuilder = new DbContextOptionsBuilder<AppIdentityDbContext>();
+            //optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnectionString"));
+            //DbContextOptions<AppIdentityDbContext> options = optionsBuilder.Options;
             AppIdentityDbContext context = new AppIdentityDbContext(options);
             AppRole rol = new AppRole();
             rol.Name = name;
@@ -74,24 +79,26 @@ namespace WebUI.Controllers
             //RoleTableIndexs indexs= new RoleTableIndexs();
             //indexs.RoleId = rol.Id;
             //indexs.TableIndex = tableIndex;
-            DbContextOptionsBuilder<AppIdentityDbContext> optionsBuilder = new DbContextOptionsBuilder<AppIdentityDbContext>();
-            optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnectionString"));
-            DbContextOptions<AppIdentityDbContext> options = optionsBuilder.Options;
+            //DbContextOptionsBuilder<AppIdentityDbContext> optionsBuilder = new DbContextOptionsBuilder<AppIdentityDbContext>();
+            //optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnectionString"));
+            //DbContextOptions<AppIdentityDbContext> options = optionsBuilder.Options;
             using (AppIdentityDbContext context = new AppIdentityDbContext(options))
             {
-                if(context.RoleTableIndexs.Any(x => x.RoleId == id)) {
-                    RoleTableIndexs indexs = context.RoleTableIndexs.Where(x => x.RoleId == id).FirstOrDefault();
-                    indexs.TableIndex= tableIndex;
-                    context.RoleTableIndexs.Update(indexs);
+                RoleTableIndexs rtindex = context.RoleTableIndexs.Where(x => x.RoleId == rol.Id).FirstOrDefault()!;
+                if (rtindex == null)
+                {
+                    rtindex = new RoleTableIndexs();
+                    rtindex.TableIndex = tableIndex;
+                    rtindex.RoleId = rol.Id;
+                    context.RoleTableIndexs.Add(rtindex);
                     context.SaveChanges();
                 }
                 else
                 {
-                    RoleTableIndexs indexs = new RoleTableIndexs();
-                    indexs.TableIndex = tableIndex;
-                    indexs.RoleId= id;  
-                    context.RoleTableIndexs.Add(indexs);
+                    rtindex.TableIndex = tableIndex;
+                    context.RoleTableIndexs.Update(rtindex);
                     context.SaveChanges();
+
                 }
             }
 
@@ -100,6 +107,35 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
+        public JsonResult UpdateTableIndex(string rolId, float rolTableIndex)
+        {
+            bool result = false;
+            using (AppIdentityDbContext context = new AppIdentityDbContext(options))
+            {
+                RoleTableIndexs rtindex = context.RoleTableIndexs.Where(x => x.RoleId == rolId).FirstOrDefault()!;
+                if (rtindex==null)
+                {
+                    rtindex = new RoleTableIndexs();
+                    rtindex.TableIndex = rolTableIndex;
+                    rtindex.RoleId = rolId;
+                    context.RoleTableIndexs.Add(rtindex);
+                    context.SaveChanges();
+                    result = true;
+                }
+                else
+                {
+                    rtindex.TableIndex = rolTableIndex;
+                    context.RoleTableIndexs.Update(rtindex);
+                    context.SaveChanges();
+                    result = true;
+
+                }
+                
+            }
+                return Json(result);
+        }
+
+            [HttpPost]
         public async Task<IActionResult> CreateUser(string name, string email,string phone, string password)
         {
             AppUser user = new AppUser();
@@ -141,7 +177,10 @@ namespace WebUI.Controllers
             {
 
                 var assignRoleToUserViewModel = new AssignRoleToUserViewModel(role.Id,role.Name!, false, 0 );
-
+                using (AppIdentityDbContext context = new AppIdentityDbContext(options))
+                {
+                    assignRoleToUserViewModel.TableIndex = context.RoleTableIndexs.Where(x => x.RoleId == role.Id).FirstOrDefault()!.TableIndex;
+                }
 
                 if (userRoles.Contains(role.Name!))
                 {
@@ -158,28 +197,28 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AssignRoleToUser(/*string userId, List<AssignRoleToUserViewModel> requestList*/)
+        public async Task<IActionResult> AssignRoleToUser(string userId, List<AssignRoleToUserViewModel> requestList)
         {
 
-            //var userToAssignRoles = (await _userManager.FindByIdAsync(userId))!;
+            var userToAssignRoles = (await userManager.FindByIdAsync(userId))!;
 
-            //foreach (var role in requestList)
-            //{
+            foreach (var role in requestList)
+            {
 
-            //    if (role.Exist)
-            //    {
-            //        await _userManager.AddToRoleAsync(userToAssignRoles, role.Name);
+                if (role.Exist)
+                {
+                    await userManager.AddToRoleAsync(userToAssignRoles, role.Name);
 
-            //    }
-            //    else
-            //    {
-            //        await _userManager.RemoveFromRoleAsync(userToAssignRoles, role.Name);
-            //    }
+                }
+                else
+                {
+                    await userManager.RemoveFromRoleAsync(userToAssignRoles, role.Name);
+                }
 
-            //}
+            }
 
             //return RedirectToAction(nameof(HomeController.UserList), "Home");
-            return View();
+            return RedirectToAction("AssignRoleToUser", new {id = userId });
         }
     }
 

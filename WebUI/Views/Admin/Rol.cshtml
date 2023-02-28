@@ -179,6 +179,7 @@
         }
         return available;
     }, 'Rol ismi sistemde kayıtlı!');
+
     $.validator.addMethod("float", function (value, element) {
         return this.optional(element) || /^-?\d+(?:[.,]\d*?)?$/.test(value);
     }, "Lütfen bir ondalıklı değeri girin.");
@@ -187,11 +188,21 @@
             name: {
                 required: true,
                 role_available: true
+            },
+            tableIndex: {
+                required: true,
+                float: true,
+                pattern: /^[0-9,]+$/
             }
         },
         messages: {
             name: {
                 required: "Lütfen rol adı giriniz"
+            },
+            tableIndex: {
+                required: "Girdi alanı boş bırakılamaz",
+                float: "Lütfen bir ondalıklı değer girin.",
+                pattern: "Sadece rakam ve virgül kullanın"
             }
         }
     });
@@ -216,6 +227,21 @@
                 float: "Lütfen bir ondalıklı değer girin.",
                 pattern: "Sadece rakam ve virgül kullanın"
             }
+        },
+        highlight: function (element) {
+            $(element).addClass("error");
+            // Doğrulama sırasında hata oluştuğunda burada çalışacak kod bloğu
+            if (element.name === "tableIndex") {
+                $('input[name="tableIndexButton"]').prop("disabled", true);
+                $('input[name="tableIndexButton"]').css('color', 'red');
+            }
+        },
+        unhighlight: function (element) {
+            $(element).removeClass("error");
+            if (element.name === "tableIndex") {
+                $('input[name="tableIndexButton"]').prop("disabled", false);
+                $('input[name="tableIndexButton"]').css('color', 'blue');
+            }
         }
     });
 </script>
@@ -236,26 +262,27 @@
         $('input[name="tableIndexButton"]').on('click', function () {
             var updateId = $("#update_id").val();
             var updateTableId = $("#update_table_index").val();
-            console.log(updateId);
-            console.log(updateTableId);
-            //    $.ajax({
-            //    async: false,
-            //    type: "POST",
-            //    url: "/Admin/UpdateTableIndex",
-            //    data: { rolId: updateId,rolTableIndex: updateTableId},
-            //    success: function myfunction(data) {
-            //        if (data) {
-            //            available = false;
-            //        }
-            //        else {
-            //            available = true;
-            //        }
-            //    },
-            //    error: function myfunction() {
-            //        alert("error");
-            //    }
-            //});
-            alert('Table Index Güncellendi!');
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "/Admin/UpdateTableIndex",
+                data: { rolId: updateId, rolTableIndex: updateTableId },
+                success: function myfunction(data) {
+                    if (data) {
+                        $('input[name="tableIndexButton"]').attr('type', 'hidden');
+                        alert('Table Index Güncellendi!');
+                        location.reload();
+                    }
+                    else {
+                        $('input[name="tableIndexButton"]').css('color', 'red');
+                        alert('Table Index Güncellenemedi!');
+                    }
+                },
+                error: function myfunction() {
+                    alert("error");
+                }
+            });
+
         });
     });
 </script>

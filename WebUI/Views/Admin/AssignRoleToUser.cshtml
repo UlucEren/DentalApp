@@ -5,7 +5,7 @@
 @model List<AssignRoleToUserViewModel>
 @section head {
     <!-- Global stylesheets -->
-    @*<link href="~/content/Limitless-40/assets/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">*@
+    <link href="~/content/Limitless-40/assets/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">
     <!-- /global stylesheets -->
     <!-- Theme JS files -->
     <script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>
@@ -18,22 +18,19 @@
 }
 <div class="card">
     <div class="card-header">
-        <h5 class="mb-0">Rol Listesi</h5>
+        <div>
+            <div style="float: left;">
+                <h4 class="mb-0">Rol Atama</h4>
+            </div>
+            <div style="float: right;">
+                <button id="submitBtn" class="btn btn-teal"><i class="fas fa-user-plus">&nbsp;</i>Kaydet</button>
+            </div>
+        </div>
     </div>
-    @* <table class='table'>
-    <thead>
-    <tr>
-    <th>Göster</th>
-    <th>Yeni</th>
-    <th class="text-center">Değiştir</th>
-    <th>Sil</th>
-    </tr>
-    </thead>
-    <tbody>*@
     @{
-        float[] data = new float[] { 1.1f, 2.1f, 2.2f, 2.3f, 2.4f, 3.1f, 3.2f, 3.3f, 4.1f, 4.2f };
+        //float[] data = new float[] { 1.1f, 2.1f, 2.2f, 2.3f, 2.4f, 3.1f, 3.2f, 3.3f, 4.1f, 4.2f };
 
-        int rowCountt = 4; // 4 satır
+        int rowCountt = 9; // 4 satır
         int colCountt = 4; // 4 sütun
 
         AssignRoleToUserViewModel[,] matrix = new AssignRoleToUserViewModel[rowCountt, colCountt]; // 4x4 boyutunda boş bir matrix oluştur
@@ -43,13 +40,8 @@
             int row = Convert.ToInt32(Model[i].TableIndex.ToString("0.0").Remove(Model[i].TableIndex.ToString("0.0").IndexOf(","))); // elemanın bulunduğu satır
             int col = Convert.ToInt32(Model[i].TableIndex.ToString("0.0").Substring(Model[i].TableIndex.ToString("0.0").IndexOf(",") + 1)); // elemanın bulunduğu sütun
 
-            matrix[row - 1, col - 1] = new AssignRoleToUserViewModel(Model[i].Id,Model[i].Name,Model[i].Exist,Model[i].TableIndex); // elemanı matrix'e ekle
+            matrix[row - 1, col - 1] = new AssignRoleToUserViewModel(Model[i].Id, Model[i].Name, Model[i].Exist, Model[i].TableIndex); // elemanı matrix'e ekle
         }
-
-
-
-
-
 
         //                float[,] matrix = new float[,]
         //{
@@ -60,76 +52,75 @@
         //};
         int rowCount = matrix.GetLength(0);
         int colCount = matrix.GetLength(1);
-
-        // HTML tablosunun başlangıç etiketi
-        string tableStartTag = "<table>";
-
-        // Tablo başlık satırını oluşturun
-        string headerRow = "<tr><th></th>";
-        for (int col = 0; col < colCount; col++)
-        {
-            headerRow += $"<th>{col + 1}</th>";
-        }
-        headerRow += "</tr>";
-
-        // Tablo içeriğini oluşturun
-        string tableContent = "";
-        for (int row = 0; row < rowCount; row++)
-        {
-            string rowContent = $"<tr><th>{row + 1}</th>";
-            for (int col = 0; col < colCount; col++)
-            {
-                rowContent += $"<td>{matrix[row, col]}</td>";
-            }
-            rowContent += "</tr>";
-            tableContent += rowContent;
-        }
-
-        // HTML tablosunun bitiş etiketi
-        string tableEndTag = "</table>";
-
-        // Tamamlanmış HTML tablosunu birleştirin
-        string tableHtml = tableStartTag + headerRow + tableContent + tableEndTag;
-
-        // HTML tablosunu ekrana yazdırın
-        @Html.Raw(tableHtml)
-        ;
-        //float[] data = new float[] { 1.1f, 2.1f, 2.2f, 2.3f, 2.4f, 3.1f, 3.2f, 3.3f, 5.1f, 5.2f };
-        //int columnCount = 4;
-        //int rowCount = Convert.ToInt32(data[data.Length - 1].ToString("0.0").Remove(data[data.Length - 1].ToString("0.0").IndexOf(".")));
-
-        //string html = "";
-        //for (int i = 0; i < data.Length; i++)
-        //{
-        //    int row = Convert.ToInt32(data[i].ToString("0.0").Remove(data[i].ToString("0.0").IndexOf(".")));
-        //    int column = Convert.ToInt32(data[i].ToString("0.0").Substring(data[i].ToString("0.0").IndexOf(".") + 1));
-        //    html = html + "<tr>";
-
-        //    for (int j = 1; j < rowCount + 1; j++)
-        //    {
-
-
-        //        for (int z = 1; z < columnCount +1 ; i++)
-        //        {
-
-        //            html = html + ("<td>" + data[i].ToString("0.0") + "</td>");
-        //            i +=1;
-        //        }
-
-        //        //if (index < data.Length)
-        //        //{
-        //        //    html = html + ("<td>" + data[index].ToString("0.0") + "</td>");
-        //        //}
-        //        //else
-        //        //{
-        //        //    html = html + ("<td></td>");
-        //        //}
-        //    }
-
-        //    html = html + "</tr>";
-        //}
-        //@Html.Raw(html);
     }
-    @* </tbody>
-    </table>*@
+    <form id="myForm" asp-action="AssignRoleToUser" asp-route-userId="@ViewBag.userId" method="post">
+        @{
+            // HTML tablosunun başlangıç etiketi
+            string tableStartTag = "<table class='table'>";
+
+            // Tablo başlık satırını oluşturun
+            string headerRow = "<thead><tr><th></th>";
+            string[] headerRowName = new string[] { "YETKİ ADI", "Göster", "Yeni", "Değiştir", "Sil" };
+            for (int col = 0; col < colCount + 1; col++)
+            {
+                if (col == 0)
+                {
+                    headerRow += $"<th class='text-center'>{headerRowName[col]}</th>";
+                }
+                else
+                {
+                    headerRow += $"<th class='text-center'><div class='form-check form-check-inline form-switch'><input type='checkbox' class='form-check-input' id='sc_li_c'><label class='form-check-label' for='sc_li_c'>{headerRowName[col]}</label></div></th>";
+                }
+            }
+            headerRow += "</tr></thead>";
+
+            // Tablo içeriğini oluşturun
+            string tableContent = "";
+            int list = 0;
+            for (int row = 0; row < rowCount; row++)
+            {
+                string rowContent = $"<tr><th>{row + 1}</th>";
+                string hucreismi = matrix[row, 0].Name;
+                hucreismi = (hucreismi.Contains(".")) ? hucreismi.Remove(hucreismi.IndexOf(".")) : hucreismi;
+                rowContent += $"<td>{hucreismi}</td>";
+                for (int col = 0; col < colCount; col++)
+                {
+                    if (matrix[row, col] != null)
+                    {
+                        //string hucre = matrix[row, col].Name;
+                        //hucre = (hucre.Contains("»")) ? hucre.Substring(hucre.IndexOf("»")+2): hucre;
+                        string _checked = (matrix[row, col].Exist) ? "checked" : "";
+                        rowContent += $"<td class='text-center'><div class='form-check form-check-inline form-switch'><input type='checkbox' class='form-check-input' {_checked} value='True' name='[{list}].Exist'><input type='hidden' value='{matrix[row, col].Name}' name='[{list}].Name'><input type='hidden' value='{matrix[row, col].Id}' name='[{list}].Id'></div></td>";
+                        list += 1;
+                    }
+                    else
+                    {
+                        rowContent += "<td></td>";
+                    }
+                }
+                rowContent += "</tr>";
+                tableContent += rowContent;
+            }
+
+            // HTML tablosunun bitiş etiketi
+            string tableEndTag = "</table>";
+
+            // Tamamlanmış HTML tablosunu birleştirin
+            string tableHtml = tableStartTag + headerRow + tableContent + tableEndTag;
+
+            // HTML tablosunu ekrana yazdırın
+            @Html.Raw(tableHtml);
+        }
+        @* </tbody>
+        </table>*@
+    </form>
 </div>
+<script>
+  var submitBtn = document.getElementById('submitBtn');
+  var myForm = document.getElementById('myForm');
+
+  submitBtn.addEventListener('click', function() {
+    myForm.submit();
+    alert("Kaydedildi.");
+  });
+</script>

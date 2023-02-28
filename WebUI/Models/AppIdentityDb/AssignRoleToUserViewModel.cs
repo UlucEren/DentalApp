@@ -6,6 +6,10 @@
         public string Name { get; set; } = null!;
         public float TableIndex { get; set; }
         public bool Exist { get; set; }
+        public AssignRoleToUserViewModel()
+        {
+            // parametresiz yapıcı metot
+        }
         public AssignRoleToUserViewModel(string id, string name, bool exist, float tableIndex)
         {
             Id = id;
