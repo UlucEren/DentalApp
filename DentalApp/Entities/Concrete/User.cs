@@ -1,4 +1,6 @@
-﻿namespace Entities.Concrete
+﻿using System;
+
+namespace Entities.Concrete
 {
     public class User
     {
@@ -8,5 +10,6 @@
         public string ImageUrl { get; set; }
         public byte[] PasswordSalt { get; set; }
         public byte[] PasswordHash { get; set; }
+
     }
 }

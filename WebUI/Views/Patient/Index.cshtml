@@ -1,17 +1,29 @@
-﻿@{
+﻿@using Entities.Concrete;
+@{
     ViewData["Title"] = "Index";
 }
 @section head {
     <!-- Global stylesheets -->
     <link href="~/content/Limitless-40/assets/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">
     <!-- /global stylesheets -->
+    <!-- Theme JS files -->
+    <script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>
+    <!-- /theme JS files -->
 }
+@model Patient;
 <div class="row">
     <div class="page-header page-header-light border rounded mb-3">
         <div class="page-header-content">
             <div class="page-title">
                 <h5 class="mb-0">Hasta</h5>
-                <div class="text-muted mt-1">Ferhat Işık</div>
+                @if (Model != null)
+                {
+                    <div class="text-muted mt-1">@Model.FirstName @Model.LastName</div>
+                }
+                else
+                {
+                    <div class="text-muted mt-1">Kayıt Yok!</div>
+                }
             </div>
         </div>
 
@@ -92,290 +104,122 @@
 
         <div class="tab-content">
             <div class="tab-pane fade show active" id="js-tab1">
-            @*tab içerik başlangış*@
-            <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                        <div class="card">
-                            <div class="card-header bg-primary bg-opacity-10 text-primary">
-									<h6 class="mb-0">Hasta Resmi</h6>
-								</div>
-
-								<div class="card-body">
-									@*------*@
-                                <form method="post" enctype="multipart/form-data" id="hasta-resim-form">
-                                    <div style="text-align: center;">
-                                        @*<div id="onizleme"></div>*@
-                                        <img class="hasta-no-photo" src="https://via.placeholder.com/298x224/FFFFFF?text=Resim+Yok" alt="Ferhat Işık" style="border: 2px solid blue; width: 224px; height: 171px;">
-                                    </div>
-                                    <div>&nbsp;&nbsp</div>
-                                    <div style="text-align:center;">
-                                        <label class="btn btn-outline-dark">
-                                            <i class="fa fa-cloud-upload-alt"></i> Yükle<input type="file" class="hasta-fileUpload" id="btn-yukle" accept="image/*" name="hasta-resim" style="display: none;">
-                                        </label>
-                                        <button type="button" tabindex="-1" id="btn-kamera" class="btn btn-outline-primary hidden-xs hidden-sm" title="Kamera">
-                                            <i class="fa fa-camera fa-fw"></i> Kamera
-                                        </button>
-                                        <button type="button" tabindex="-1" id="btn-hasta-resim-sil" data-id="3" disabled="" class="btn btn-outline-danger waves-effect waves-light" title="Sil">
-                                            <i class="fa fa-trash fa-fw"></i> Sil
-                                        </button>
-                                    </div>
-                                </form>
-                                    @*----------*@
-								</div>
-							</div>
+                @*tab içerik başlangış*@
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="buton-grup d-flex justify-content-end">
+                        <button type="button" id="btn-back" class="btn btn-outline-dark" style="display: none;">
+                            <i class="fa fa-undo"></i> <span class="hidden-xs">Geri Al</span>
+                        </button>
+                        @if (User.IsInRole("Hasta Modülü » Hasta Ekranı.Create"))
+                        {
+                            <button id="btn-new" class="btn btn-outline-primary" style="margin-left: 10px;"><i class="fa fa-plus"></i> <span class="hidden-xs">Yeni</span></button>
+                        }
+                        @if (User.IsInRole("Hasta Modülü » Hasta Ekranı.Delete"))
+                        {
+                            <button type="button" id="btn-delete" class="btn btn-outline-danger" style="margin-left: 10px;">
+                                <i class="fa fa-trash"></i>
+                                <span class="hidden-xs">Sil</span>
+                            </button>
+                        }
+                        @if (User.IsInRole("Hasta Modülü » Hasta Ekranı.Update"))
+                        {
+                            <button type="button" id="btn-update" class="btn btn-outline-warning" style="margin-left: 10px;"><i class="fa fa-pencil-alt"></i> <span class="hidden-xs">Düzenle</span></button>
+                        }
+                        @if (User.IsInRole("Hasta Modülü » Hasta Ekranı.Create") || User.IsInRole("Hasta Modülü » Hasta Ekranı.Update"))
+                        {
+                            <button type="button" id="btn-save" class="btn btn-outline-success" disabled="disabled" style="margin-left: 10px;"><i class="fa fa-save"></i> <span class="hidden-xs">Kaydet</span></button>
+                        }
                     </div>
-                    <div class="col-xs-12 col-sm-6 col-md-8">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="buton-grup d-flex justify-content-end">
-                                    <button type="button" id="btn-geri" class="btn btn-outline-dark" style="">
-                                        <i class="fa fa-undo"></i> <span class="hidden-xs">Geri Al</span>
-                                        </button>
-                                    &nbsp;&nbsp;
-                                <a href="#" id="btn-yeni" class="btn btn-outline-primary" disabled="disabled" data-toggle="tooltip"><i class="fa fa-plus"></i> <span class="hidden-xs">Yeni</span></a>
-                                    &nbsp;&nbsp;
-                                <button type="button" id="btn-sil" class="btn btn-outline-danger" disabled="disabled">
-                                    <i class="fa fa-trash"></i>
-                                    <span class="hidden-xs">Sil</span>
-                                </button>
-                                    &nbsp;&nbsp;
-                                <button type="button" id="btn-degistir" class="btn btn-outline-warning" disabled="disabled"><i class="fa fa-pencil-alt"></i> <span class="hidden-xs">Düzenle</span></button>
-                                    &nbsp;&nbsp;
-                                <button type="button" id="btn-kaydet" class="btn btn-outline-success" data-islem="hasta-guncelle"><i class="fa fa-save"></i> <span class="hidden-xs">Kaydet</span></button>
-                            </div>
-                        </div>
-                            &nbsp;&nbsp;
-                            <div class="card">
-                                <div class="card-header bg-primary bg-opacity-10 text-primary">
-                                    <h6 class="mb-0">Hasta Bilgileri</h6>
-                                </div>
-
-                                <div class="card-body">
-                                    @*------------*@
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Ad Soyad: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Diş Hekimi: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Cinsiyet: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Uyruk: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Doğum Tarihi: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Tc Kimlik: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @*------------*@
-                                </div>                                
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header bg-primary bg-opacity-10 text-primary">
-                                    <h6 class="mb-0">İletişim</h6>
-                                </div>
-
-                                <div class="card-body">
-                                    @*------------*@
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Cep Telefonu: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Şehir: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Sabit Telefonu: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">İlçe: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Mail Adresi: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Adres: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @*------------*@
-                                </div>
-                                </div>
-                            <div class="card">
-                                <div class="card-header bg-primary bg-opacity-10 text-primary">
-                                    <h6 class="mb-0">Ek Bilgiler</h6>
-                                </div>
-
-                                <div class="card-body">
-                                    @*------------*@
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Tarife: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Kan Grubu: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Tedavi Durumu: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Kurum Sicil No: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    @*------------*@
-                                </div>
-                            </div>
-                    </div>
-
-                </div>               
+                </div>
+                &nbsp;&nbsp;
+                <div class="row patient-index-widget">
+                    @*@await Component.InvokeAsync("PatientIndex", new { patientId = ViewBag.PatientId });*@
+                </div>
+                @*tab içerik bitiş*@
             </div>
-            @*tab içerik bitiş*@
         </div>
-    </div>
 
     }
 </div>
+<script>
+    $(document).ready(function myfunction() {
+        $.ajax({
+            type: "GET",
+            url: "/Patient/PatientIndexReadWidget",
+            data: { patientId: "6b25f39f-c6ca-4b63-9539-eb693b65e38c" },
+            success: function myfunction(veri) {
+                $(".patient-index-widget").html('');
+                $(".patient-index-widget").html(veri);
+            },
+            error: function myfunction(veri) {
+                alert("error");
+            }
+        });
+        $("#btn-new").click(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Patient/PatientIndexNewWidget",                
+                success: function myfunction(data) {
+                    $(".patient-index-widget").html('');
+                    $(".patient-index-widget").html(data);
+                    $("#btn-back").data("btn", "btn-new");
+                    $('#btn-back').show();
+                    $("#btn-save").prop("disabled", false);
+                    $("#btn-update").prop("disabled", true);
+                    $("#btn-delete").prop("disabled", true);
+                    $("#btn-new").prop("disabled", true);
+                },
+                error: function myfunction(xhr, status, error) {
+                    if (xhr.status == 403) {
+                        alert("Yetkiniz Bulunmamaktadır. Yöneticinizle görüşün.");
+                    }
+                }
+            });
+        });
+        $("#btn-back").click(function () {
+            var whbtn = $("#btn-back").data("btn");
+            if (whbtn == "btn-new") {
+                $.ajax({
+                    type: "GET",
+                    url: "/Patient/PatientIndexReadWidget",
+                    data: { patientId: "6b25f39f-c6ca-4b63-9539-eb693b65e38c" },
+                    success: function myfunction(veri) {
+                        $(".patient-index-widget").html('');
+                        $(".patient-index-widget").html(veri);
+                        $('#btn-back').hide();
+                        $("#btn-save").prop("disabled", true);
+                        $("#btn-update").prop("disabled", false);
+                        $("#btn-delete").prop("disabled", false);
+                        $("#btn-new").prop("disabled", false);
+                    },
+                    error: function myfunction(veri) {
+                        alert("error");
+                    }
+                });
+            }
+            if (whbtn == "btn-update") {
+                $('#btn-back').hide();
+                $("#btn-save").prop("disabled", true);
+                $("#btn-update").prop("disabled", false);
+                $("#btn-delete").prop("disabled", false);
+                $("#btn-new").prop("disabled", false);
+                $(".patient-index-input:input").prop("disabled", true);
+            }
+        });
+        $("#btn-delete").click(function () {
+            alert("Delete");
+        });
+        $("#btn-update").click(function () {
+            $("#btn-back").data("btn", "btn-update");
+            $('#btn-back').show();
+            $("#btn-save").prop("disabled", false);
+            $("#btn-update").prop("disabled", true);
+            $("#btn-delete").prop("disabled", true);
+            $("#btn-new").prop("disabled", true);
+            $(".patient-index-input:input").prop("disabled", false);
+        });
+        $("#btn-save").click(function () {
+            alert("save");
+        });
+    });
+</script>
