@@ -133,7 +133,7 @@
                 </div>
                 &nbsp;&nbsp;
                 <div class="row patient-index-widget">
-                    @*@await Component.InvokeAsync("PatientIndex", new { patientId = ViewBag.PatientId });*@
+                    @await Component.InvokeAsync("PatientIndex", new { patientId = ViewBag.PatientId });
                 </div>
                 @*tab içerik bitiş*@
             </div>
@@ -143,18 +143,18 @@
 </div>
 <script>
     $(document).ready(function myfunction() {
-        $.ajax({
-            type: "GET",
-            url: "/Patient/PatientIndexReadWidget",
-            data: { patientId: "6b25f39f-c6ca-4b63-9539-eb693b65e38c" },
-            success: function myfunction(veri) {
-                $(".patient-index-widget").html('');
-                $(".patient-index-widget").html(veri);
-            },
-            error: function myfunction(veri) {
-                alert("error");
-            }
-        });
+        //$.ajax({
+        //    type: "GET",
+        //    url: "/Patient/PatientIndexReadWidget",
+        //    data: { patientId: "6b25f39f-c6ca-4b63-9539-eb693b65e38c" },
+        //    success: function myfunction(veri) {
+        //        $(".patient-index-widget").html('');
+        //        $(".patient-index-widget").html(veri);
+        //    },
+        //    error: function myfunction(veri) {
+        //        alert("error");
+        //    }
+        //});
         $("#btn-new").click(function () {
             $.ajax({
                 type: "GET",

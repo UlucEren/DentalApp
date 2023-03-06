@@ -45,11 +45,7 @@
                                                 <div class="col-lg-8 input-group">
                                                     <label class="col-lg-4 col-form-label text-lg-end">Ad Soyad: </label>
                                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control patient-index-input" placeholder="col-lg-6" disabled="disabled" value="@{
-                                        string a = (Model != null)?Model.FirstName+" "+Model.LastName:"";
-                                        @a
-;
-}">
+                                                    <input type="text" class="form-control patient-index-input" placeholder="col-lg-6" disabled="disabled" value="@{string a = (Model != null)?Model.FirstName+" "+Model.LastName:"";@a;}">
                                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                                 </div>
                                             </div>
