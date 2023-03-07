@@ -1,0 +1,49 @@
+﻿<table class="table" id="treatments-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th width="50">Tarih</th>
+            <th>Diş</th>
+            <th>Tedavi</th>
+            <th>Doktor</th>
+            <th>Fiyat</th>
+            
+        </tr>
+    </thead>
+    <tbody id="treatments-table-body">
+
+        <tr class="disabled">
+            <td class="hidden"></td>
+            <td colspan="5" class="text-center">Sistemde Kayıtlı Veri Bulunamadı</td>
+            <td class="hidden tedavi-fiyat"><span>0.00</span></td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="6" class="text-right">
+                <strong><span class="toplam">Toplam: 0.00 TRY</span></strong>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<div>
+    <button type="submit" class="btn-tedavi-islem btn btn-custom btn-danger  waves-effect waves-light" disabled="" onclick="$.tedavi_sil();">
+        <i class="fa fa-trash"></i>
+        Sil
+    </button>
+
+    <button type="submit" class="btn-tedavi-islem btn btn-custom btn-default waves-effect waves-light duzelt" disabled="" onclick="$.tedavi_duzelt();" name="duzelt">
+        <i class="fa fa-pencil"></i>
+        Düzelt
+    </button>
+
+    <button type="submit" class="btn-tedavi-islem btn btn-custom btn-success waves-effect waves-light yuvarla" disabled="" onclick="$.fiyat_yuvarla();"><i class="fa fa-retweet"></i> Hesap</button>
+
+    <button type="submit" class="btn-tedavi-islem btn btn-custom btn-inverse waves-effect waves-light hidden" name="tedaviye_kopyala" disabled="" onclick="$.tedaviye_kopyala();">
+        <i class="fa fa-clone"></i>
+        Tedaviye Aktar
+    </button>
+
+    <button type="submit" id="cikti" class="btn btn-custom btn-warning waves-effect waves-light"><i class="fa fa-print"></i> Yazdır</button>
+</div>
