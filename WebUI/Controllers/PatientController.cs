@@ -76,8 +76,8 @@ namespace WebUI.Controllers
         public JsonResult PatientIndexNewWidgetSave(Patient patient)
         {
             bool result = false;
-            string patientId="";
-            if (patient!=null)
+            string patientId = "";
+            if (patient != null)
             {
                 patientId = "6b25f39f-c6ca-4b63-9539-eb693b65e38c";
                 result = true;
@@ -85,7 +85,7 @@ namespace WebUI.Controllers
             var jsonResult = new JsonResult(new { Result = result, PatientId = patientId });
             return Json(jsonResult);
         }
-        
+
         [Authorize(Roles = "Hasta Modülü » Hasta Ekranı.Update")]
         [HttpPost]
         public JsonResult PatientIndexUpdateWidgetSave(Patient patient)
@@ -99,6 +99,11 @@ namespace WebUI.Controllers
             }
             var jsonResult = new JsonResult(new { Result = result, PatientId = patientId });
             return Json(jsonResult);
+        }
+
+        public IActionResult Oral()
+        {
+            return View();
         }
     }
 }

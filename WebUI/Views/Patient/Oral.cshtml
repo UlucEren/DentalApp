@@ -1,0 +1,171 @@
+﻿
+@{
+    ViewData["Title"] = "Oral";
+}
+
+@using Entities.Concrete;
+@{
+    ViewData["Title"] = "Index";
+    var selectedPage = Context.Request.Path;
+    string isactive = "";
+}
+@section head {
+    <!-- Global stylesheets -->
+    <link href="~/content/Limitless-40/assets/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">
+    <!-- /global stylesheets -->
+    <!-- Theme JS files -->
+    <script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>
+    <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/datatables.min.js"></script>
+    <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/extensions/responsive.min.js"></script>
+    <script src="~/content/Limitless-40/assets/demo/pages/datatables_extension_responsive.js"></script>
+    <script src="~/content/Limitless-40/assets/js/vendor/forms/selects/select2.min.js"></script>
+    <script src="~/content/Limitless-40/assets/js/vendor/forms/selects/bootstrap_multiselect.js"></script>
+    <script src="~/content/Limitless-40/assets/js/vendor/notifications/noty.min.js"></script>
+    <script src="~/content/Limitless-40/assets/demo/pages/colors_primary.js"></script>
+    <!-- /theme JS files -->
+    <style>
+        .table-container {
+            position: relative;
+        }
+        
+        .table-container .pagination {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            zoom: 0.7;
+            transform: translate(-50%,+120%);
+        }
+    </style>
+}
+@model Patient;
+<div class="row">
+    <div class="page-header page-header-light border rounded mb-3">
+        <div class="page-header-content">
+            <div class="page-title">
+                <h5 class="mb-0">Hasta</h5>
+                @if (Model != null)
+                {
+                    <div class="text-muted mt-1">@Model.FirstName @Model.LastName</div>
+                }
+                else
+                {
+                    <div class="text-muted mt-1">Kayıt Yok!</div>
+                }
+            </div>
+        </div>
+
+        <div class="page-header-content border-top border-top-primary border-top-width-2">
+        </div>
+    </div>
+</div>
+
+<div class="card card-body">
+    <ul class="nav nav-tabs nav-tabs-highlight nav-justified mb-3">
+        @if (User.IsInRole("Hasta Modülü » Hasta Ekranı.Read"))
+        {
+            <li class="nav-item">
+                <a href="/Patient/Index" class="nav-link">
+                    <i class="ph-user-circle me-2"></i>
+                    Hasta
+                </a>
+            </li>
+        }
+        @if (User.IsInRole("Hasta Modülü » Tedavi Ekranı.Read"))
+        {
+            <li class="nav-item">
+                <a href="#js-tab2" class="nav-link @{isactive=(selectedPage == "/Patient/Oral") ? "active" : "";@isactive;}" data-bs-toggle="tab">
+                    <i class="ph-user-circle me-2"></i>
+                    Tedavi
+                </a>
+            </li>
+        }
+        @if (User.IsInRole("Hasta Modülü » Hesap Ekranı.Read"))
+        {
+            <li class="nav-item">
+                <a href="#" class="nav-link ">
+                    <i class="ph-user-circle me-2"></i>
+                    Hesap
+                </a>
+            </li>
+        }
+        @if (User.IsInRole("Hasta Modülü » Fatura Ekranı.Read"))
+        {
+            <li class="nav-item">
+                <a href="#" class="nav-link ">
+                    <i class="ph-user-circle me-2"></i>
+                    Fatura
+                </a>
+            </li>
+        }
+        @if (User.IsInRole("Hasta Modülü » Reçete Ekranı.Read"))
+        {
+            <li class="nav-item">
+                <a href="#" class="nav-link ">
+                    <i class="ph-user-circle me-2"></i>
+                    Reçete
+                </a>
+            </li>
+        }
+        @if (User.IsInRole("Hasta Modülü » Görüntü Ekranı.Read"))
+        {
+            <li class="nav-item">
+                <a href="#" class="nav-link ">
+                    <i class="ph-user-circle me-2"></i>
+                    Görüntü
+                </a>
+            </li>
+        }
+        @if (User.IsInRole("Hasta Modülü » Randevu Ekranı.Read"))
+        {
+            <li class="nav-item">
+                <a href="#" class="nav-link ">
+                    <i class="ph-user-circle me-2"></i>
+                    Randevu
+                </a>
+            </li>
+        }
+    </ul>
+
+    @if (User.IsInRole("Hasta Modülü » Tedavi Ekranı.Read"))
+    {
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="js-tab2">
+                @*tab içerik başlangış*@
+                @Html.Partial("/Views/Patient/Treatment.cshtml")
+                @*tab içerik bitiş*@
+            </div>
+        </div>
+
+    }
+</div>
+@section scripts{
+
+    <script>
+        $('#oral-treatment-list').DataTable({
+            dom: '<"top"f><"middle"rt><"bottom"ip><"clear">',
+            language: {
+                search: "",
+                lengthMenu: "Sayfa Başına _MENU_ Kayıt Göster",
+                zeroRecords: "Eşleşen Kayıt Bulunamadı",
+                info: "Toplam _TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor.",
+                infoEmpty: "Kayıt Yok",
+                infoFiltered: "(_MAX_ kayıt içerisinden filtrelendi)",
+                paginate: {
+                    first: "İlk",
+                    last: "Son",
+                    next: "Sonraki",
+                    previous: "Önceki"
+                },
+                searchPlaceholder: "Arama yapmak için yazın"
+            },
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    </script>
+}

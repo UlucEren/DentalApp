@@ -1,6 +1,8 @@
 ﻿@using Entities.Concrete;
 @{
     ViewData["Title"] = "Index";
+    var selectedPage = Context.Request.Path;
+    string isactive = "";
 }
 @section head {
     <!-- Global stylesheets -->
@@ -37,7 +39,7 @@
         @if (User.IsInRole("Hasta Modülü » Hasta Ekranı.Read"))
         {
             <li class="nav-item">
-                <a href="#js-tab1" class="nav-link active" data-bs-toggle="tab">
+                <a href="#js-tab1" class="nav-link @{isactive=(selectedPage == "/Patient/Index") ? "active" : "";@isactive;} " data-bs-toggle="tab">
                     <i class="ph-user-circle me-2"></i>
                     Hasta
                 </a>
@@ -46,7 +48,7 @@
         @if (User.IsInRole("Hasta Modülü » Tedavi Ekranı.Read"))
         {
             <li class="nav-item">
-                <a href="#" class="nav-link ">
+                <a href="/Patient/Oral" class="nav-link ">
                     <i class="ph-user-circle me-2"></i>
                     Tedavi
                 </a>
@@ -55,7 +57,7 @@
         @if (User.IsInRole("Hasta Modülü » Hesap Ekranı.Read"))
         {
             <li class="nav-item">
-                <a href="#" class="nav-link ">
+                <a href="#js-tab3" class="nav-link ">
                     <i class="ph-user-circle me-2"></i>
                     Hesap
                 </a>
@@ -64,7 +66,7 @@
         @if (User.IsInRole("Hasta Modülü » Fatura Ekranı.Read"))
         {
             <li class="nav-item">
-                <a href="#" class="nav-link ">
+                <a href="#js-tab4" class="nav-link ">
                     <i class="ph-user-circle me-2"></i>
                     Fatura
                 </a>
@@ -73,7 +75,7 @@
         @if (User.IsInRole("Hasta Modülü » Reçete Ekranı.Read"))
         {
             <li class="nav-item">
-                <a href="#" class="nav-link ">
+                <a href="#js-tab5" class="nav-link ">
                     <i class="ph-user-circle me-2"></i>
                     Reçete
                 </a>
@@ -82,7 +84,7 @@
         @if (User.IsInRole("Hasta Modülü » Görüntü Ekranı.Read"))
         {
             <li class="nav-item">
-                <a href="#" class="nav-link ">
+                <a href="#js-tab6" class="nav-link ">
                     <i class="ph-user-circle me-2"></i>
                     Görüntü
                 </a>
@@ -91,7 +93,7 @@
         @if (User.IsInRole("Hasta Modülü » Randevu Ekranı.Read"))
         {
             <li class="nav-item">
-                <a href="#" class="nav-link ">
+                <a href="#js-tab7" class="nav-link ">
                     <i class="ph-user-circle me-2"></i>
                     Randevu
                 </a>
