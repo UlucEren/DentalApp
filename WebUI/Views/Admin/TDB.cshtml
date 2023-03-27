@@ -1,0 +1,233 @@
+﻿@using Entities.Concrete;
+@{
+    ViewData["Title"] = "TDB";
+}
+@model List<TDBCostNames>;
+@section head {
+    <!-- Global stylesheets -->
+    @*<link href="~/content/Limitless-40/assets/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">*@
+    <!-- /global stylesheets -->
+    <!-- Theme JS files -->
+    <script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>
+    <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/datatables.min.js"></script>
+    <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/extensions/responsive.min.js"></script>
+    @*<script src="~/content/Limitless-40/assets/demo/pages/datatables_extension_responsive.js"></script>*@
+    @*<script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/extensions/buttons.min.js"></script>*@
+    @*<script src="~/content/Limitless-40/assets/demo/pages/datatables_extension_buttons_init.js"></script>*@
+    <!-- /theme JS files -->
+    @*<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>*@
+    @*<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>*@
+
+    <style>
+        .table-container {
+            position: relative;
+        }
+
+            .table-container .pagination {
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                zoom: 0.7;
+                transform: translate(-50%,+120%);
+            }
+    </style>
+}
+
+<div class="card">
+    <div class="card-header">
+        <div style="float: left;">
+            <h4 class="mb-0">TDB Fiyat Listesi</h4>
+        </div>
+        <div style="float: right;">
+            <button class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#modal_default"><i class="fas fa-user-plus">&nbsp;</i>Excel'den Liste Ekle</button>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="table-container">
+                    <table id="TDB-Name" class="table">
+                        <thead>
+                            <tr>
+                                <th>Fiyat Listesi Adı</th>
+                                <th>Kayıt Tarihi</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (TDBCostNames item in Model)
+                            {
+                                <tr data-id="@item.Id" class="process-TDB-Name">
+                                    <td>@item.TDBCostName</td>
+                                    <td>@item.CreateDate</td>
+                                    <td>@item.Comment</td>                                    
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                &nbsp;&nbsp;
+            </div>
+            <div class="col-lg-8">               
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-floating">
+                            <select class="form-select" id="tdbcostnamecategory">
+                                <option value="">BOŞ</option>
+                                @*<option value="2">TEŞHİS VE TEDAVİ PLANLAMASI</option>
+                                <option value="3">TEDAVİ VE ENDODONTİ</option>
+                                <option value="4">PEDODONTİ</option>
+                                <option value="5">PROTEZ</option>*@
+                            </select>
+                            <label>Kategori</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body table-container tdb-cost-list-widget">
+                    <table id="TDB-List" class="table">
+                        <thead>
+                            <tr>
+                                <th>Kategori</th>
+                                <th>Tedavi</th>
+                                <th>Fiyat</th>
+                                <th>Kdv</th>
+                                <th>Kdv'li Fiyat</th>
+                            </tr>
+                        </thead>
+                        <tbody>                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Basic modal -->
+<div id="modal_default" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="create-form" action="\Admin\CreateTDBList" method="post" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">TDB Listesi Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">TDB Liste Adı</label>
+                        <div class="col-md-8">
+                            <input name="name" type="text" class="form-control">
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Açıklama</label>
+                        <div class="col-md-8">
+                            <textarea name="aciklama" type="text" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-form-label col-md-4">Excel Dosyası</label>
+                        <div class="col-md-8">
+                            <input name="excelFile" type="file" class="form-control" accept=".xlsx, .xls">
+                            <div class="form-text">Sadece Excel Dosyası</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                    <button type="submit" id="targetclick" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /basic modal -->
+
+<script>
+    $('#TDB-List').DataTable({
+        dom: '<"top"f><"middle"rt><"bottom"ip><"clear">',
+        language: {
+            search: "",
+            lengthMenu: "Sayfa Başına _MENU_ Kayıt Göster",
+            zeroRecords: "Eşleşen Kayıt Bulunamadı",
+            info: "Toplam _TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor.",
+            infoEmpty: "Kayıt Yok",
+            infoFiltered: "(_MAX_ kayıt içerisinden filtrelendi)",
+            paginate: {
+                first: "İlk",
+                last: "Son",
+                next: "Sonraki",
+                previous: "Önceki"
+            },
+            searchPlaceholder: "Arama yapmak için yazın"
+        },        
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true
+    });
+    $('#TDB-Name').DataTable({
+        dom: '<"top"f><"middle"rt><"bottom"ip><"clear">',
+        language: {
+            search: "",
+            lengthMenu: "Sayfa Başına _MENU_ Kayıt Göster",
+            zeroRecords: "Eşleşen Kayıt Bulunamadı",
+            info: "Toplam _TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor.",
+            infoEmpty: "Kayıt Yok",
+            infoFiltered: "(_MAX_ kayıt içerisinden filtrelendi)",
+            paginate: {
+                first: "İlk",
+                last: "Son",
+                next: "Sonraki",
+                previous: "Önceki"
+            },
+            searchPlaceholder: "Arama yapmak için yazın"
+        },
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true
+    });
+</script>
+<script>
+    $("#TDB-Name tr").click(function () {
+        if (this.classList.contains('process-TDB-Name')) {
+            //$(this).toggleClass('selected').siblings().removeClass('selected');
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var TDBCostNameId= $(this).data('id');
+            $.get("/Admin/GetTDBCostNameCategories", { id: TDBCostNameId }, function (data) {                
+                var veriler = data;
+                $("#tdbcostnamecategory").empty();
+                var optionElementi = $('<option>').attr('value', '').text("Seçiniz");
+                $("#tdbcostnamecategory").append(optionElementi);
+                var optionElementi = $('<option>').attr('value', 0).text("TÜMÜ");
+                $("#tdbcostnamecategory").append(optionElementi);
+                $.each(veriler, function (i, veri) {
+                    var optionElementi = $('<option>').attr('value', veri.id).text(veri.tdbCategoryName);
+                    $("#tdbcostnamecategory").append(optionElementi);
+                });
+                
+            });
+            $('#tdbcostnamecategory').val('1');
+        }
+    });
+    $("#tdbcostnamecategory").change(function () {
+        var selectedValue = $(this).val();
+        $.get("/Admin/GetTDBCostListWidget", { id: selectedValue }, function (data) {
+            $(".tdb-cost-list-widget").html('');
+            $(".tdb-cost-list-widget").html(data);
+        });
+    });
+</script>

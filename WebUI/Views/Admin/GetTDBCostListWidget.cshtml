@@ -1,0 +1,52 @@
+﻿@using Entities.Dtos;
+@model List<TDBCostListCategoriesDto>;
+<table id="TDB-List" class="table">
+    <thead>
+        <tr>
+            <th>Kategori</th>
+            <th>Tedavi</th>
+            <th>Fiyat</th>
+            <th>Kdv</th>
+            <th>Kdv'li Fiyat</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TDBCategoryName</td>
+                <td>@item.Treatment</td>
+                <td>@item.Price</td>
+                <td>@item.Vat</td>
+                <td>@item.PriceWithVat</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $('#TDB-List').DataTable({
+        dom: '<"top"f><"middle"rt><"bottom"ip><"clear">',
+        language: {
+            search: "",
+            lengthMenu: "Sayfa Başına _MENU_ Kayıt Göster",
+            zeroRecords: "Eşleşen Kayıt Bulunamadı",
+            info: "Toplam _TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor.",
+            infoEmpty: "Kayıt Yok",
+            infoFiltered: "(_MAX_ kayıt içerisinden filtrelendi)",
+            paginate: {
+                first: "İlk",
+                last: "Son",
+                next: "Sonraki",
+                previous: "Önceki"
+            },
+            searchPlaceholder: "Arama yapmak için yazın"
+        },        
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true
+    });
+</script>

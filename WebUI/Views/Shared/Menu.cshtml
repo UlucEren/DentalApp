@@ -28,6 +28,14 @@
             <li class="nav-item"><a href="../../../LTR/clean/full/index.html" class="nav-link">Clean</a></li>
         </ul>
     </li>
+     <li class="nav-item">
+        <a href="\Admin\TDB" class="nav-link @{isactive=(selectedPage == "/Admin/TBD") ? "active" : "";@isactive;} ">
+            <i class="ph-house"></i>
+            <span>
+                TDB Fiyat listesi Kaydetme
+            </span>
+        </a>
+    </li>
 }
 @if (User.IsInRole("Hasta Modülü.Read"))
 {

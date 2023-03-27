@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Entities.Concrete;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,8 @@ namespace WebUI.Models.AppIdentityDb
         //    optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-Q2ICC8E\\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Initial Catalog=DentalAppDB ; Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
         //}
         public virtual DbSet<RoleTableIndexs> RoleTableIndexs { get; set; }
+        public virtual DbSet<TDBCostNames> TDBCostNames { get; set; }
+        public virtual DbSet<TDBCostNameCategories> TDBCostNameCategories { get; set; }
+        public virtual DbSet<TDBCostLists> TDBCostLists { get; set; }
     }
 }
