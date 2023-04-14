@@ -289,7 +289,7 @@ namespace WebUI.Controllers
                 {
                     TDBCostNameCategories category = new TDBCostNameCategories();
                     category.TDBCategoryName = rowData[1];
-                    category.TDBCostNameId = _tDBCostNames.Id;
+                    category.TDBCostNames_Id_Fk = _tDBCostNames.Id;
                     context.TDBCostNameCategories.Add(category);
                     context.SaveChanges();
                     _categoryId = category.Id;
@@ -303,7 +303,7 @@ namespace WebUI.Controllers
                     _TDBCostList.Price = Convert.ToDecimal(rowData[2]);
                     _TDBCostList.Vat = _vat;
                     _TDBCostList.PriceWithVat = Convert.ToDecimal(rowData[3]);
-                    _TDBCostList.TDBCostNameCategoryId = _categoryId;
+                    _TDBCostList.TDBCostNameCategories_Id_Fk = _categoryId;
                     context.TDBCostLists.Add(_TDBCostList);
                     context.SaveChanges();
                 }
@@ -316,7 +316,7 @@ namespace WebUI.Controllers
         public JsonResult GetTDBCostNameCategories(int id)
         {
             AppIdentityDbContext context = new AppIdentityDbContext(options);
-            List<TDBCostNameCategories> categories = context.TDBCostNameCategories.Where(x => x.TDBCostNameId == id).ToList();
+            List<TDBCostNameCategories> categories = context.TDBCostNameCategories.Where(x => x.TDBCostNames_Id_Fk == id).ToList();
             return Json(categories);
         }
         //[HttpGet]
@@ -369,15 +369,15 @@ namespace WebUI.Controllers
                                                                  Price = i.Price,
                                                                  Vat = i.Vat,
                                                                  PriceWithVat = i.PriceWithVat,
-                                                                 TDBCostNameCategoryId = i.TDBCostNameCategoryId,
+                                                                 TDBCostNameCategories_Id_Fk = i.TDBCostNameCategories_Id_Fk,
                                                                  TDBCategoryName = (from y in context.TDBCostNameCategories
-                                                                                    where y.Id == i.TDBCostNameCategoryId
+                                                                                    where y.Id == i.TDBCostNameCategories_Id_Fk
                                                                                     select y.TDBCategoryName).FirstOrDefault()
                                                              }).ToList();
                 return PartialView(_costLists);
             }
             List<TDBCostListCategoriesDto> costLists = (from i in context.TDBCostLists
-                                                        where i.TDBCostNameCategoryId == id
+                                                        where i.TDBCostNameCategories_Id_Fk == id
                                                         select new TDBCostListCategoriesDto
                                                         {
                                                             Id = i.Id,
@@ -385,9 +385,9 @@ namespace WebUI.Controllers
                                                             Price = i.Price,
                                                             Vat = i.Vat,
                                                             PriceWithVat = i.PriceWithVat,
-                                                            TDBCostNameCategoryId = i.TDBCostNameCategoryId,
+                                                            TDBCostNameCategories_Id_Fk = i.TDBCostNameCategories_Id_Fk,
                                                             TDBCategoryName = (from y in context.TDBCostNameCategories
-                                                                               where y.Id == i.TDBCostNameCategoryId
+                                                                               where y.Id == i.TDBCostNameCategories_Id_Fk
                                                                                select y.TDBCategoryName).FirstOrDefault()
                                                         }).ToList();
             return PartialView(costLists);

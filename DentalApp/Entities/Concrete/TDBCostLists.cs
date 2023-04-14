@@ -13,7 +13,7 @@ namespace Entities.Concrete
         public decimal Price { get; set; }
         public int Vat { get; set; }
         public decimal PriceWithVat { get; set; }
-        public int TDBCostNameCategoryId { get; set; }
+        public int TDBCostNameCategories_Id_Fk { get; set; }
 
     }
 }

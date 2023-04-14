@@ -10,6 +10,6 @@ namespace Entities.Concrete
     {
         public int Id { get; set; }
         public string TDBCategoryName { get; set; }
-        public int TDBCostNameId { get; set; }
+        public int TDBCostNames_Id_Fk { get; set; }
     }
 }

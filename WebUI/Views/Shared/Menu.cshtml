@@ -25,7 +25,6 @@
         <ul class="nav-group-sub collapse">
             <li class="nav-item"><a href="\Admin\Users" class="nav-link @{isactive=(selectedPage == "/Admin/Users") ? "active" : "";@isactive;}">Kullanıcı Listesi</a></li>
             <li class="nav-item"><a href="\Admin\Rol" class="nav-link @{isactive=(selectedPage == "/Admin/Rol") ? "active" : "";@isactive;}">Rol Listesi</a></li>
-            <li class="nav-item"><a href="../../../LTR/clean/full/index.html" class="nav-link">Clean</a></li>
         </ul>
     </li>
      <li class="nav-item">
@@ -92,10 +91,10 @@
         </a>
     </li>
 }
-@if (User.IsInRole("Hasta Modülü.Read"))
+@if (User.IsInRole("Ayarlar Modülü » Tanımlamalar"))
 {
     <li class="nav-item">
-        <a href="\Patient\Index" class="nav-link @{isactive=(selectedPage == "/Patient/Index") ? "active" : "";@isactive;} ">
+        <a href="\Setting\Tariff" class="nav-link @{isactive=(selectedPage == "/Setting/Tariff") ? "active" : "";@isactive;} ">
             <i class="ph-tag"></i>
             <span>
                 Tanımlamalar                
