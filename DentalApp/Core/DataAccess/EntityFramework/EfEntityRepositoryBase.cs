@@ -45,6 +45,14 @@ namespace Core.DataAccess.EntityFramework
             }
         }
 
+        public TEntity GetSync(Expression<Func<TEntity, bool>> filter)
+        {
+            using (var context = new TContext())
+            {
+                return context.Set<TEntity>().SingleOrDefault(filter);
+            }
+        }
+
         public async Task Update(TEntity entity)
         {
             using (var context = new TContext())

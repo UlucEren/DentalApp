@@ -1,0 +1,80 @@
+﻿@using Entities.Concrete;
+@model List<TDBCostNames>;
+<div class="table-container">
+    <table id="TDB-Name" class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>#</th>
+                <th>#</th>
+                <th>Fiyat Listesi Adı</th>
+                <th>Kayıt Tarihi</th>
+                <th>Açıklama</th>                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (TDBCostNames item in Model)
+            {
+                <tr data-id="@item.Id" class="process-TDB-Name" style="cursor:pointer;">
+                    <td>#</td>
+                    <td>#</td>
+                    <td>#</td>
+                    <td>@item.TDBCostName</td>
+                    <td>@item.CreateDate</td>
+                    <td>@item.Comment</td>                    
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $('#TDB-Name').DataTable({
+        //dom: '<"top"f><"middle"rt><"bottom"ip><"clear">',
+        language: {
+            search: "",
+            lengthMenu: "Sayfa Başına _MENU_ Kayıt Göster",
+            zeroRecords: "Eşleşen Kayıt Bulunamadı",
+            info: "Toplam _TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor.",
+            infoEmpty: "Kayıt Yok",
+            infoFiltered: "(_MAX_ kayıt içerisinden filtrelendi)",
+            paginate: {
+                first: "İlk",
+                last: "Son",
+                next: "Sonraki",
+                previous: "Önceki"
+            },
+            searchPlaceholder: "Arama yapmak için yazın"
+        },
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        columnDefs: [ // datatable sqript hata var 3 sütun fazladan görüyor sütunları ekleyerek gizliyerek sorunu giderdim
+            {
+                targets: [0],
+                visible: false
+            },
+            {
+                targets: [1],
+                visible: false
+            },
+            {
+                targets: [2],
+                visible: false
+            }
+        ]
+        
+    });
+</script> 
+<script>
+    $("#TDB-Name tr").click(function () {
+        if (this.classList.contains('process-TDB-Name')) {
+            //$(this).toggleClass('selected').siblings().removeClass('selected');
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var TDBCostNameId = $(this).data('id');            
+        }
+    });
+</script>

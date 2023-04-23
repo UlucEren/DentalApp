@@ -17,8 +17,8 @@ using WebUI.Models.AppIdentityDb;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-//builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();

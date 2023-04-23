@@ -1,4 +1,4 @@
-﻿using Entities.Concrete;
+using Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Context.EntityFramework
@@ -14,5 +14,9 @@ namespace DataAccess.Context.EntityFramework
         public DbSet<OperationClaim> OperationClaims { get; set; }
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
         public DbSet<EmailParameter> EmailParameters { get; set; }
+        public DbSet<AccountsTariffNames> AccountsTariffNames { get; set; }
+        public DbSet<AccountsTariffNamesCategories> AccountsTariffNamesCategories { get; set; }
+        public DbSet<AccountsTariffLists> AccountsTariffLists { get; set; }
+        public DbSet<TDBCostNames> TDBCostNames { get; set; }
     }
 }

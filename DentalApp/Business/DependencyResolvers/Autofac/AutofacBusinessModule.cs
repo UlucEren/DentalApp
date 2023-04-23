@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using Autofac.Extras.DynamicProxy;
 using Business.Abstract;
 using Business.Authentication;
@@ -13,6 +13,14 @@ using DataAccess.Repositories.OperationClaimRepository;
 using DataAccess.Repositories.UserOperationClaimRepository;
 using DataAccess.Repositories.UserRepository;
 using Entities.Concrete;
+using Business.Repositories.AccountsTariffNamesRepository;
+using DataAccess.Repositories.AccountsTariffNamesRepository;
+using Business.Repositories.AccountsTariffNamesCategoriesRepository;
+using DataAccess.Repositories.AccountsTariffNamesCategoriesRepository;
+using Business.Repositories.AccountsTariffListsRepository;
+using DataAccess.Repositories.AccountsTariffListsRepository;
+using Business.Repositories.TDBCostNamesRepository;
+using DataAccess.Repositories.TDBCostNamesRepository;
 using Microsoft.AspNetCore.Identity;
 
 namespace Business.DependencyResolvers.Autofac
@@ -42,6 +50,18 @@ namespace Business.DependencyResolvers.Autofac
 
 
 			//builder.RegisterType<AuthenticationManager>().As<IAuthenticationService>();
+
+            builder.RegisterType<AccountsTariffNamesManager>().As<IAccountsTariffNamesService>().SingleInstance();
+            builder.RegisterType<EfAccountsTariffNamesDal>().As<IAccountsTariffNamesDal>().SingleInstance();
+
+            builder.RegisterType<AccountsTariffNamesCategoriesManager>().As<IAccountsTariffNamesCategoriesService>().SingleInstance();
+            builder.RegisterType<EfAccountsTariffNamesCategoriesDal>().As<IAccountsTariffNamesCategoriesDal>().SingleInstance();
+
+            builder.RegisterType<AccountsTariffListsManager>().As<IAccountsTariffListsService>().SingleInstance();
+            builder.RegisterType<EfAccountsTariffListsDal>().As<IAccountsTariffListsDal>().SingleInstance();
+
+            builder.RegisterType<TDBCostNamesManager>().As<ITDBCostNamesService>().SingleInstance();
+            builder.RegisterType<EfTDBCostNamesDal>().As<ITDBCostNamesDal>().SingleInstance();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

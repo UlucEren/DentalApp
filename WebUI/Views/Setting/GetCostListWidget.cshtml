@@ -1,0 +1,105 @@
+﻿@using Entities.Dtos;
+@model List<AccountsTariffListsDto>;
+<table id="Cost-List" class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Kategori</th>
+            <th>Tedavi</th>
+            <th>Fiyat</th>
+            <th>Kdv</th>
+            <th>Kdv'li Fiyat</th>
+            <th>Masraf</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr data-id="@item.Id">
+                <td>@item.Queue</td>                
+                <td>@item.CategoryName</td>
+                <td>@item.Treatment</td>
+                <td>@item.Price</td>
+                <td>@item.Vat</td>
+                <td>@item.PriceWithVat</td>
+                <td>@item.Cost</td>
+                <td class="text-center">
+                    <div class="d-inline-flex">
+                        <div class="dropdown">
+                            <a href="#" class="text-body" data-bs-toggle="dropdown">
+                                <i class="ph-list"></i>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="#" class="dropdown-item">
+                                    <i class="ph-file-pdf me-2"></i>
+                                    Export to .pdf
+                                </a>
+                                <a href="#" class="dropdown-item">
+                                    <i class="ph-file-csv me-2"></i>
+                                    Export to .csv
+                                </a>
+                                <a href="#" class="dropdown-item">
+                                    <i class="ph-file-doc me-2"></i>
+                                    Export to .doc
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    var table = $('#Cost-List').DataTable({
+        //dom: '<"top"f><"middle"rt><"bottom"ip><"clear">',
+        dom: '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"B>><"middle"rt><"bottom"ip><"clear">',
+        language: {
+            search: "",
+            lengthMenu: "Sayfa Başına _MENU_ Kayıt Göster",
+            zeroRecords: "Eşleşen Kayıt Bulunamadı",
+            info: "Toplam _TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor.",
+            infoEmpty: "Kayıt Yok",
+            infoFiltered: "(_MAX_ kayıt içerisinden filtrelendi)",
+            paginate: {
+                first: "İlk",
+                last: "Son",
+                next: "Sonraki",
+                previous: "Önceki"
+            },
+            searchPlaceholder: "Arama yapmak için yazın"
+        },        
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        "rowReorder": true,
+        buttons: [
+            {
+                text: '<i class="fas fa-save"></i> Fiyat Sıralamasını Kaydet',
+                className: 'btn btn-teal',
+                action: function (e, dt, node, config) {
+                    alert($("#tariffnamecategory").val());
+                }
+            }
+        ]
+        
+    });
+    table.on('responsive-resize', function (e, datatable, columns) {
+        if (table.responsive.rebuild(), table.responsive.hasHidden()) {
+            // responsive butonu gösterildiğinde rowreorder özelliğini devre dışı bırak
+            table.rowReorder.disable();
+        } else {
+            // responsive butonu gizlendiğinde rowreorder özelliğini yeniden etkinleştir
+            table.rowReorder.enable();
+        }
+    });
+    var data = table.rows().data();
+    console.log(data);
+
+</script>
