@@ -58,7 +58,7 @@
         <li class="nav-item">
             <a href="#js-tab3" class="nav-link @{
                 isactive=(selectedPage == "/Setting/Tariff") ? "active" : "";
-                            @isactive
+                                @isactive
 ;
 }" data-bs-toggle="tab">
                 <i class="ph-user-circle me-1"></i>
@@ -118,15 +118,16 @@
 
                     <div class="card border-top border-top-width-3 border-top-primary border-bottom border-bottom-width-3 border-bottom-primary rounded-0">
                         <div class="card-body">
-                            <div class="row">                                
+                            <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <div class="input-group">
                                                 <i class="input-group-text fa fa-random"></i>
                                                 <select class="form-control select" id="tariffname" data-width="1%">
-                                                    @foreach(AccountsTariffNames item in Model){
-                                                    <option value=@item.Id>@item.TariffName</option>                                                    
+                                                    @foreach (AccountsTariffNames item in Model)
+                                                    {
+                                                        <option value=@item.Id>@item.TariffName</option>
                                                     }
                                                 </select>
                                             </div>
@@ -160,10 +161,10 @@
                                                 <i class="fa fa-pencil-alt"></i> <span class="hidden-xs">Tarife Düzelt</span>
                                             </button>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row cost-list-widget">                                
+                            <div class="row cost-list-widget">
                             </div>
                         </div>
                     </div>
@@ -179,21 +180,21 @@
 <!-- Basic modal -->
 <div id="modal_tdblist" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content">            
-                <div class="modal-header">
-                    <h5 class="modal-title">TDB Fiyat Listesi Uygula</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">TDB Fiyat Listesi Uygula</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
 
-                <div class="modal-body">
-                    <div class="row mb-3" id="modal_tdblisttable-widget">
-                    </div>
+            <div class="modal-body">
+                <div class="row mb-3" id="modal_tdblisttable-widget">
                 </div>
+            </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
-                    <button type="submit" id="targetclick" class="btn btn-primary">Kaydet</button>
-                </div>            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" id="tdbmodalclick" class="btn btn-primary">Uygula</button>
+            </div>
         </div>
     </div>
 </div>
@@ -203,7 +204,7 @@
     $(document).ready(function () {
         var firstValue = $("#tariffname").val();
         fillCategoryDropdown(firstValue, $("#tariffnamecategory"));
-        
+
         $("#btn-tdb-tarife-getir").click(function () {
             var categoryId = $("#tariffnamecategory").val();
             $.ajax({
@@ -218,6 +219,31 @@
             });
             $("#modal_tdblist").modal('show');
         });
+
+        $("#tdbmodalclick").click(function () {
+            const tdb_list = document.querySelector('#TDB-Name');
+            const selected_tdb_list = tdb_list.querySelectorAll('.selected');
+            if (selected_tdb_list.length == 0) {
+                alert("Fiyat Listesi Seçiniz.");
+                return;
+            }
+            //console.log(selected_tdb_list[0].dataset.id);
+            //console.log($("#tariffname").val());
+            var tariffNameId = $("#tariffname").val();
+            var tdbId = selected_tdb_list[0].dataset.id;
+            $.ajax({
+                async: false,
+                url: "/Setting/TariffListToTDBList",
+                type: "POST",
+                data: { tariffNameId: tariffNameId, tdbId: tdbId },
+                success: function (data) {
+                    alert(data);
+                }
+            });
+            $("#modal_tdblist").modal('hide');
+            location.reload();
+        });
+
     });
     $("#tariffname").change(function () {
         var selectedValue = $(this).val();
@@ -234,7 +260,7 @@
     function fillCategoryDropdown(selectedValue, dropdownList) {
         dropdownList.empty();
         $.ajax({
-            async:false,
+            async: false,
             url: "/Setting/GetTariffNameCategories",
             type: "GET",
             data: { id: selectedValue },
@@ -252,4 +278,3 @@
         });
     }
 </script>
-                                                  

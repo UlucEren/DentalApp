@@ -21,6 +21,10 @@ using Business.Repositories.AccountsTariffListsRepository;
 using DataAccess.Repositories.AccountsTariffListsRepository;
 using Business.Repositories.TDBCostNamesRepository;
 using DataAccess.Repositories.TDBCostNamesRepository;
+using Business.Repositories.TDBCostNameCategoriesRepository;
+using DataAccess.Repositories.TDBCostNameCategoriesRepository;
+using Business.Repositories.TDBCostListsRepository;
+using DataAccess.Repositories.TDBCostListsRepository;
 using Microsoft.AspNetCore.Identity;
 
 namespace Business.DependencyResolvers.Autofac
@@ -62,6 +66,12 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<TDBCostNamesManager>().As<ITDBCostNamesService>().SingleInstance();
             builder.RegisterType<EfTDBCostNamesDal>().As<ITDBCostNamesDal>().SingleInstance();
+
+            builder.RegisterType<TDBCostNameCategoriesManager>().As<ITDBCostNameCategoriesService>().SingleInstance();
+            builder.RegisterType<EfTDBCostNameCategoriesDal>().As<ITDBCostNameCategoriesDal>().SingleInstance();
+
+            builder.RegisterType<TDBCostListsManager>().As<ITDBCostListsService>().SingleInstance();
+            builder.RegisterType<EfTDBCostListsDal>().As<ITDBCostListsDal>().SingleInstance();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
