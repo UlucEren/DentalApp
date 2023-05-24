@@ -36,9 +36,9 @@ namespace Business.Repositories.AccountsTariffNamesRepository
             return new SuccessResult(AccountsTariffNamesMessages.Added);
         }
 
-        [SecuredAspect()]
-        [ValidationAspect(typeof(AccountsTariffNamesValidator))]
-        [RemoveCacheAspect("IAccountsTariffNamesService.Get")]
+        //[SecuredAspect()]
+        //[ValidationAspect(typeof(AccountsTariffNamesValidator))]
+        //[RemoveCacheAspect("IAccountsTariffNamesService.Get")]
 
         public async Task<IResult> Update(AccountsTariffNames accountsTariffNames)
         {
@@ -63,8 +63,8 @@ namespace Business.Repositories.AccountsTariffNamesRepository
             return new SuccessDataResult<List<AccountsTariffNames>>(await _accountsTariffNamesDal.GetAll());
         }
 
-        [SecuredAspect()]
-        public async Task<IDataResult<AccountsTariffNames>> GetById(int id)
+        //[SecuredAspect()]
+        public async Task<IDataResult<AccountsTariffNames>> GetById(long id)
         {
             return new SuccessDataResult<AccountsTariffNames>(await _accountsTariffNamesDal.Get(p => p.Id == id));
         }

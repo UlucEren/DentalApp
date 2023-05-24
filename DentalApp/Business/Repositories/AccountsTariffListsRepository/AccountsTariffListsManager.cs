@@ -36,9 +36,9 @@ namespace Business.Repositories.AccountsTariffListsRepository
             return new SuccessResult(AccountsTariffListsMessages.Added);
         }
 
-        [SecuredAspect()]
-        [ValidationAspect(typeof(AccountsTariffListsValidator))]
-        [RemoveCacheAspect("IAccountsTariffListsService.Get")]
+        //[SecuredAspect()]
+        //[ValidationAspect(typeof(AccountsTariffListsValidator))]
+        //[RemoveCacheAspect("IAccountsTariffListsService.Get")]
 
         public async Task<IResult> Update(AccountsTariffLists accountsTariffLists)
         {

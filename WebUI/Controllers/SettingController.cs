@@ -210,6 +210,48 @@ namespace WebUI.Controllers
 
                 return Json("İşlem Başarılı.");
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> UpdateTariff(string name, long tariff_id, string ratio, string degisim_turu)
+        {
+            var tariffNames = await _accountsTariffNamesService.GetById(tariff_id);
+            AccountsTariffNames accountsTariffNames = new AccountsTariffNames();
+            accountsTariffNames.Id = tariffNames.Data.Id;
+            accountsTariffNames.TariffName = name;
+            accountsTariffNames.CreateDate = tariffNames.Data.CreateDate;
+            accountsTariffNames.Accounts_AspNetUsersIdFk_Fk = tariffNames.Data.Accounts_AspNetUsersIdFk_Fk;
+            await _accountsTariffNamesService.Update(accountsTariffNames);
 
+            if (ratio != null) //oran yazıldığı zaman işlem yapılacak  //fiyatı yüzdelik olarak arttır azalt
+            {
+                var category = await _accountsTariffNamesCategoriesService.GetByAccountsTariffNames_Id_Fk(tariff_id);
+                foreach (var item in category)
+                {
+                    var list = await _accountsTariffListsService.GetListByCategories_Id(item.Id);
+                    foreach (var item1 in list)
+                    {
+                        AccountsTariffLists updateAccountsTariffLists = new AccountsTariffLists();
+                        updateAccountsTariffLists.Id = item1.Id;
+                        updateAccountsTariffLists.Treatment = item1.Treatment;
+                        if (degisim_turu == "1")
+                        {
+                            updateAccountsTariffLists.Price = item1.Price + (item1.Price / 100 * Convert.ToDecimal(ratio));
+                        }
+                        else if (degisim_turu == "-1")
+                        {
+                            updateAccountsTariffLists.Price = item1.Price - (item1.Price / 100 * Convert.ToDecimal(ratio));
+                        }
+                        updateAccountsTariffLists.Vat=item1.Vat;
+                        updateAccountsTariffLists.PriceWithVat = updateAccountsTariffLists.Price + (updateAccountsTariffLists.Price / 100 * Convert.ToDecimal(item1.Vat));
+                        updateAccountsTariffLists.Cost = item1.Cost;
+                        updateAccountsTariffLists.Queue = item1.Queue;
+                        updateAccountsTariffLists.AccountsTariffNamesCategories_Id_Fk = item1.AccountsTariffNamesCategories_Id_Fk;
+                        
+                        await _accountsTariffListsService.Update(updateAccountsTariffLists);
+                    }
+                }
+            } 
+            return RedirectToAction("Tariff");
+        }
     }
 }
