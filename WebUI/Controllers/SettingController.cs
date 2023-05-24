@@ -189,19 +189,13 @@ namespace WebUI.Controllers
         {
             AccountsTariffNames accountsTariffNames = new AccountsTariffNames();
             accountsTariffNames.Id = Convert.ToInt64(id);
-            //accountsTariffNames.CreateDate = DateTime.Now;
-            //accountsTariffNames.Accounts_AspNetUsersIdFk_Fk = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
-            //AccountsTariffNames accountsTariffNames = await _accountsTariffNamesService.GetById(id);
-
-            //long _accountTariffNamesId = Convert.ToInt64(transferredtariff);
+            
             var category = await _accountsTariffNamesCategoriesService.GetByAccountsTariffNames_Id_Fk(id);
 
             foreach (var item in category)
             {
                 AccountsTariffNamesCategories newAccountsTariffNamesCategories = new AccountsTariffNamesCategories();
-                newAccountsTariffNamesCategories.Id = item.Id;//yeni names id
-                //    newAccountsTariffNamesCategories.CategoryName = item.CategoryName;
-                //    await _accountsTariffNamesCategoriesService.Add(newAccountsTariffNamesCategories);
+                newAccountsTariffNamesCategories.Id = item.Id;                
 
                 var list = await _accountsTariffListsService.GetListByCategories_Id(item.Id);//kayıtlı list tespiti
                 foreach (var item1 in list)
