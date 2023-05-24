@@ -26,9 +26,9 @@ namespace Business.Repositories.AccountsTariffNamesRepository
             _accountsTariffNamesDal = accountsTariffNamesDal;
         }
 
-        [SecuredAspect()]
-        [ValidationAspect(typeof(AccountsTariffNamesValidator))]
-        [RemoveCacheAspect("IAccountsTariffNamesService.Get")]
+        //[SecuredAspect()]
+        //[ValidationAspect(typeof(AccountsTariffNamesValidator))]
+        //[RemoveCacheAspect("IAccountsTariffNamesService.Get")]
 
         public async Task<IResult> Add(AccountsTariffNames accountsTariffNames)
         {
@@ -46,8 +46,8 @@ namespace Business.Repositories.AccountsTariffNamesRepository
             return new SuccessResult(AccountsTariffNamesMessages.Updated);
         }
 
-        [SecuredAspect()]
-        [RemoveCacheAspect("IAccountsTariffNamesService.Get")]
+        //[SecuredAspect()]
+        //[RemoveCacheAspect("IAccountsTariffNamesService.Get")]
 
         public async Task<IResult> Delete(AccountsTariffNames accountsTariffNames)
         {

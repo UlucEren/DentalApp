@@ -6,12 +6,14 @@ using Business.Repositories.TDBCostNameCategoriesRepository;
 using Business.Repositories.TDBCostNamesRepository;
 using Core.Utilities.Result.Abstract;
 using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Entities.Concrete;
 using Entities.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.Extensions.Options;
 using System.Collections;
 using System.Collections.Generic;
@@ -126,6 +128,93 @@ namespace WebUI.Controllers
                 
             }
             return Json("İşlem Başarılı.");
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateTariff(string name,string transferredtariff,string ratio,string degisim_turu)
+        {
+            AccountsTariffNames accountsTariffNames=new AccountsTariffNames();
+            accountsTariffNames.TariffName=name;
+            accountsTariffNames.CreateDate= DateTime.Now;
+			accountsTariffNames.Accounts_AspNetUsersIdFk_Fk= HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            await _accountsTariffNamesService.Add(accountsTariffNames);	
+
+            long _accountTariffNamesId = Convert.ToInt64(transferredtariff);
+            var oldcategory = await _accountsTariffNamesCategoriesService.GetByAccountsTariffNames_Id_Fk(_accountTariffNamesId);
+
+            foreach (var item in oldcategory)
+            {
+                AccountsTariffNamesCategories newAccountsTariffNamesCategories = new AccountsTariffNamesCategories();
+                newAccountsTariffNamesCategories.AccountsTariffNames_Id_Fk = accountsTariffNames.Id;//yeni names id
+                newAccountsTariffNamesCategories.CategoryName = item.CategoryName;
+                await _accountsTariffNamesCategoriesService.Add(newAccountsTariffNamesCategories);
+
+                var oldlist = await _accountsTariffListsService.GetListByCategories_Id(item.Id);//kayıtlı list tespiti
+                foreach (var item1 in oldlist)
+                {
+                    AccountsTariffLists newAccountsTariffLists = new AccountsTariffLists();
+                    newAccountsTariffLists.Treatment = item1.Treatment;
+                    if (ratio!=null) //oran yazıldığı zaman işlem yapılacak  //fiyatı yüzdelik olarak arttır azalt
+					{
+                        if (degisim_turu=="1")
+                        {
+							newAccountsTariffLists.Price = item1.Price + (item1.Price/100*Convert.ToDecimal(ratio));
+						}
+                        else if (degisim_turu=="-1")
+                        {
+							newAccountsTariffLists.Price = item1.Price - (item1.Price / 100 * Convert.ToDecimal(ratio));
+						}
+						newAccountsTariffLists.PriceWithVat = newAccountsTariffLists.Price + (newAccountsTariffLists.Price/100*Convert.ToDecimal(item1.Vat));
+
+					}
+					else //oran yazılmadığı zaman işlem yapılmayacak
+					{
+						newAccountsTariffLists.Price = item1.Price;
+						newAccountsTariffLists.PriceWithVat = item1.PriceWithVat;
+					}                   
+                    
+                    newAccountsTariffLists.Vat = item1.Vat;
+                    
+                    newAccountsTariffLists.Cost = item1.Cost;
+                    newAccountsTariffLists.Queue = item1.Queue;
+                    newAccountsTariffLists.AccountsTariffNamesCategories_Id_Fk = newAccountsTariffNamesCategories.Id;
+					await _accountsTariffListsService.Add(newAccountsTariffLists);
+				}
+            }
+
+            
+            return RedirectToAction("Tariff");
+        }
+        [HttpPost]
+        public async Task<JsonResult> DelTariffName(int id)
+        {
+            AccountsTariffNames accountsTariffNames = new AccountsTariffNames();
+            accountsTariffNames.Id = Convert.ToInt64(id);
+            //accountsTariffNames.CreateDate = DateTime.Now;
+            //accountsTariffNames.Accounts_AspNetUsersIdFk_Fk = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            //AccountsTariffNames accountsTariffNames = await _accountsTariffNamesService.GetById(id);
+
+            //long _accountTariffNamesId = Convert.ToInt64(transferredtariff);
+            var category = await _accountsTariffNamesCategoriesService.GetByAccountsTariffNames_Id_Fk(id);
+
+            foreach (var item in category)
+            {
+                AccountsTariffNamesCategories newAccountsTariffNamesCategories = new AccountsTariffNamesCategories();
+                newAccountsTariffNamesCategories.Id = item.Id;//yeni names id
+                //    newAccountsTariffNamesCategories.CategoryName = item.CategoryName;
+                //    await _accountsTariffNamesCategoriesService.Add(newAccountsTariffNamesCategories);
+
+                var list = await _accountsTariffListsService.GetListByCategories_Id(item.Id);//kayıtlı list tespiti
+                foreach (var item1 in list)
+                {
+                    AccountsTariffLists newAccountsTariffLists = new AccountsTariffLists();
+                    newAccountsTariffLists.Id = item1.Id;
+                    await _accountsTariffListsService.Delete(newAccountsTariffLists);                    
+                }
+                await _accountsTariffNamesCategoriesService.Delete(newAccountsTariffNamesCategories);
+            }
+            await _accountsTariffNamesService.Delete(accountsTariffNames);
+
+                return Json("İşlem Başarılı.");
         }
 
     }

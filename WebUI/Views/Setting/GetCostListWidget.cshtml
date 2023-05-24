@@ -17,7 +17,7 @@
         @foreach (var item in Model)
         {
             <tr data-id="@item.Id">
-                <td>@item.Queue</td>                
+                <td>@item.Queue</td>
                 <td>@item.CategoryName</td>
                 <td>@item.Treatment</td>
                 <td>@item.Price</td>
@@ -31,7 +31,7 @@
                                 <i class="ph-list"></i>
                             </a>
 
-                            <div class="dropdown-menu dropdown-menu-end">
+                           @* <div class="dropdown-menu dropdown-menu-end">
                                 <a href="#" class="dropdown-item">
                                     <i class="ph-file-pdf me-2"></i>
                                     Export to .pdf
@@ -44,6 +44,16 @@
                                     <i class="ph-file-doc me-2"></i>
                                     Export to .doc
                                 </a>
+                            </div>*@
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="#" class="dropdown-item">
+                                    <i class="fa fa-pencil-alt me-2"></i>
+                                    Tedavi Düzelt
+                                </a>
+                                <a href="#" class="dropdown-item">
+                                    <i class="fas fa-trash me-2"></i>
+                                    Tedavi Sil
+                                </a>                                
                             </div>
                         </div>
                     </div>
@@ -70,7 +80,7 @@
                 previous: "Önceki"
             },
             searchPlaceholder: "Arama yapmak için yazın"
-        },        
+        },
         "paging": true,
         "lengthChange": false,
         "searching": true,
@@ -81,14 +91,64 @@
         "rowReorder": true,
         buttons: [
             {
-                text: '<i class="fas fa-save"></i> Fiyat Sıralamasını Kaydet',
-                className: 'btn btn-teal',
+                text: '<i class="fas fa-save"></i>Sıralamayı Kaydet',
+                className: 'btn btn-dark',
                 action: function (e, dt, node, config) {
                     alert($("#tariffnamecategory").val());
+                },
+                // Buton arasında boşluk bırakmak için CSS özelliklerini değiştiriyoruz
+                init: function (api, node, config) {
+                    $(node).css('margin-right', '10px');
+                }
+            },
+            {
+                text: '<i class="fa fa-plus"></i>Yeni Tedavi Ekle',
+                className: 'btn btn-primary',
+                action: function (e, dt, node, config) {
+                    alert('Kaydedildi!');
+                },
+                // Buton arasında boşluk bırakmak için CSS özelliklerini değiştiriyoruz
+                init: function (api, node, config) {
+                    $(node).css('margin-right', '10px');
+                }
+            },
+            {
+                text: '<i class="fas fa-trash"></i>Tümünü Sil',
+                className: 'btn btn-danger',
+                action: function (e, dt, node, config) {
+                    alert('Tümü Silindi!');
+                },
+                // Buton arasında boşluk bırakmak için CSS özelliklerini değiştiriyoruz
+                init: function (api, node, config) {
+                    $(node).css('margin-right', '10px');
                 }
             }
+            //{
+            //    extend: 'collection',
+            //    text: '<i class="fas fa-trash"></i>Tedavi Sil',
+            //    className: 'btn btn-danger',
+            //    buttons: [
+            //        {
+            //            text: 'Sadece Seçiliyi Sil',
+            //            action: function (e, dt, node, config) {                            
+            //                alert('Sadece seçili olan siliniyor!');
+            //            }
+            //        },
+            //        {
+            //            text: 'Tümünü Sil',
+            //            action: function (e, dt, node, config) {
+            //                alert('Tümü siliniyor!');                            
+                           
+            //            }
+            //        }
+            //    ],                
+            //    // Buton arasında boşluk bırakmak için CSS özelliklerini değiştiriyoruz
+            //    init: function (api, node, config) {
+            //        $(node).css('margin-right', '10px');
+            //    }
+            //}
         ]
-        
+
     });
     table.on('responsive-resize', function (e, datatable, columns) {
         if (table.responsive.rebuild(), table.responsive.hasHidden()) {
@@ -100,6 +160,6 @@
         }
     });
     var data = table.rows().data();
-    //console.log(data);
+            //console.log(data);
 
 </script>

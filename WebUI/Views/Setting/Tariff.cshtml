@@ -58,7 +58,7 @@
         <li class="nav-item">
             <a href="#js-tab3" class="nav-link @{
                 isactive=(selectedPage == "/Setting/Tariff") ? "active" : "";
-                                @isactive
+                                    @isactive
 ;
 }" data-bs-toggle="tab">
                 <i class="ph-user-circle me-1"></i>
@@ -150,7 +150,7 @@
                                             <button type="button" id="btn-tdb-tarife-getir" class="btn btn-outline-dark">
                                                 <i class="fa fa-undo"></i> <span class="hidden-xs">TDB Tarife Getir</span>
                                             </button>
-                                            <button id="btn-new" class="btn btn-outline-primary" style="margin-left: 10px;">
+                                            <button type="button" id="btn-new" class="btn btn-outline-primary" style="margin-left: 10px;">
                                                 <i class="fa fa-plus"></i> <span class="hidden-xs">Yeni Tarife</span>
                                             </button>
                                             <button type="button" id="btn-delete" class="btn btn-outline-danger" style="margin-left: 10px;">
@@ -177,7 +177,7 @@
 
 </div>
 
-<!-- Basic modal -->
+<!-- TDB Fiyat Listesi Uygula modal -->
 <div id="modal_tdblist" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -198,10 +198,72 @@
         </div>
     </div>
 </div>
-<!-- /basic modal -->
+<!-- /TDB Fiyat Listesi Uygula modal -->
+<!-- Yeni Tarife modal -->
+<div id="modal_yenitarife" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="\Setting\CreateTariff" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Yeni Tarife</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Tarife Adı</label>
+                        <div class="col-md-8">
+                            <input name="name" type="text" class="form-control">
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Aktarılacak Tarife</label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                @*<i class="input-group-text fa fa-random"></i>*@
+                                <select name="transferredtariff" class="form-control select" data-width="1%">
+                                    @foreach (AccountsTariffNames item in Model)
+                                    {
+                                        <option value=@item.Id>@item.TariffName</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-text text-muted">Yeni tarife, seçilen tarifedeki tedavilerden oluşacak</div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Fiyat Değişim Oranı</label>
+                        <div class="col-md-8">
+                            <input name="ratio" type="text" class="form-control">
+                            <div class="form-text text-muted">Yeni tarife fiyatlarını yüzdelik oranda toplu güncelleme. Fiyatların aynı kalmasını istiyorsanız boş bırakabilirsiniz</div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label"></label>
+                        <div class="col-md-8">
+                            <input type="radio" name="degisim_turu" id="artir" value="1" tabindex="3" checked>
+                            <label>Artır</label>
+                            <input type="radio" name="degisim_turu" id="azalt" value="-1" tabindex="3">
+                            <label>Azalt</label>
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Yeni Tarife modal -->
 
 <script>
     $(document).ready(function () {
+        //tarife category doldurmak için
         var firstValue = $("#tariffname").val();
         fillCategoryDropdown(firstValue, $("#tariffnamecategory"));
 
@@ -244,11 +306,49 @@
             location.reload();
         });
 
+        $("#btn-new").click(function () {
+            $("#modal_yenitarife").modal('show');
+        });
+        $("#btn-delete").click(function () {
+            var dropdown = document.getElementById("tariffname");
+            var selectedOption = dropdown.options[dropdown.selectedIndex].text;            
+            var cevap = confirm(selectedOption + " tarifesinin silinmesine emin misiniz?");
+            if (cevap) {
+                var tariffNameId = $("#tariffname").val();
+                $.ajax({
+                    async: false,
+                    url: "/Setting/DelTariffName",
+                    type: "POST",
+                    data: { id: tariffNameId },
+                    success: function (data) {
+                        alert(data);
+
+                        var dropdown = document.getElementById("tariffname");
+                        var selectedValue = tariffNameId;
+
+                        for (var i = 0; i < dropdown.options.length; i++) {
+                            if (dropdown.options[i].value === selectedValue) {
+                                dropdown.remove(i);
+                                break;
+                            }
+                        }
+                        var firstValue = $("#tariffname").val();
+                        fillCategoryDropdown(firstValue, $("#tariffnamecategory"));
+                    }
+                });                
+
+            } else {
+                alert("İptal Edildi!");
+            }
+        });
+
     });
+
     $("#tariffname").change(function () {
         var selectedValue = $(this).val();
         fillCategoryDropdown(selectedValue, $("#tariffnamecategory"));
     });
+
     $("#tariffnamecategory").change(function () {
         var selectedValue = $(this).val();
         //console.log(selectedValue);
@@ -257,6 +357,7 @@
             $(".cost-list-widget").html(data);
         });
     });
+
     function fillCategoryDropdown(selectedValue, dropdownList) {
         dropdownList.empty();
         $.ajax({
