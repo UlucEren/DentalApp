@@ -11,16 +11,14 @@ namespace WebUI.ViewComponents
             
             if (action == "New")
             {
-                Patient patient = new Patient();
-                patient.FirstName = "";
-                patient.LastName = "";
+                AccountPatients patient = new AccountPatients();
+                patient.NameSurname = "";                
                 return View(patient);
             }
             if (patientId != null)
             {
-                Patient patient = new Patient();
-                patient.FirstName = "Ferhat";
-                patient.LastName = "Işık";
+                AccountPatients patient = new AccountPatients();
+                patient.NameSurname = "Ferhat Işık";                
                 ViewBag.PatientIndexUpdateWidgetSave = "/Patient/PatientIndexUpdateWidgetSave";
                 return View(patient);
             }

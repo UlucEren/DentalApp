@@ -15,7 +15,7 @@
     <link href="~/content/Limitless-40/assets/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">
     <!-- /global stylesheets -->
     <!-- Theme JS files -->
-    <script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>
+    @*<script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>*@
     <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/datatables.min.js"></script>
     <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/extensions/responsive.min.js"></script>
     <script src="~/content/Limitless-40/assets/demo/pages/datatables_extension_responsive.js"></script>
@@ -38,7 +38,7 @@
         }
     </style>
 }
-@model Patient;
+@model AccountPatients;
 <div class="row">
     <div class="page-header page-header-light border rounded mb-3">
         <div class="page-header-content">
@@ -46,7 +46,7 @@
                 <h5 class="mb-0">Hasta</h5>
                 @if (Model != null)
                 {
-                    <div class="text-muted mt-1">@Model.FirstName @Model.LastName</div>
+                    <div class="text-muted mt-1">@Model.NameSurname</div>
                 }
                 else
                 {

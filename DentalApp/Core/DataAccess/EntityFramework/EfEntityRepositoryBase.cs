@@ -43,9 +43,8 @@ namespace Core.DataAccess.EntityFramework
                     ? await context.Set<TEntity>().ToListAsync()
                     : await context.Set<TEntity>().Where(filter).ToListAsync();
             }
-        }
-
-        public TEntity GetSync(Expression<Func<TEntity, bool>> filter)
+        }			
+		public TEntity GetSync(Expression<Func<TEntity, bool>> filter)
         {
             using (var context = new TContext())
             {

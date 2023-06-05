@@ -20,5 +20,8 @@ namespace DataAccess.Context.EntityFramework
         public DbSet<TDBCostNames> TDBCostNames { get; set; }
         public DbSet<TDBCostNameCategories> TDBCostNameCategories { get; set; }
         public DbSet<TDBCostLists> TDBCostLists { get; set; }
+        public DbSet<AccountPatients> AccountPatients { get; set; }
+        public DbSet<Accounts> Accounts { get; set; }
+        public DbSet<SubAccounts> SubAccounts { get; set; }
     }
 }

@@ -46,6 +46,11 @@ namespace WebUI.Controllers
         public async Task<IActionResult> Tariff()
         {
             //userId tespitinden sonra ana hesap tespit edilip ona göre işlem yapılmalı.Bu yazılan geçiçi
+            //ilk girdimi alt hesabı kontrol et varmı 
+            //var fk ile ana hesaba yönlendir tariff çek
+            //yok hesap ana hesap olabilir ana hesabı kontrol et
+            //var tariff listesini çek
+            //yok erişim engeli koy açma
 			string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
             List<AccountsTariffNames> accountsTariffNames = await _accountsTariffNamesService.GetByAccountsIdList(userId);
 			return View(accountsTariffNames);

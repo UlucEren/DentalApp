@@ -1,5 +1,5 @@
 ﻿@using Entities.Concrete;
-@model Patient;
+@model AccountPatients;
  <div class="col-xs-12 col-sm-6 col-md-4">
      <div class="card">
          <div class="card-header bg-primary bg-opacity-10 text-primary">
@@ -45,7 +45,7 @@
                                                 <div class="col-lg-8 input-group">
                                                     <label class="col-lg-4 col-form-label text-lg-end">Ad Soyad: </label>
                                                     &nbsp;&nbsp;
-                                                    <input type="text" class="form-control patient-index-input" placeholder="col-lg-6" disabled="disabled" value="@{string a = (Model != null)?Model.FirstName+" "+Model.LastName:"";@a;}">
+                                                    <input type="text" class="form-control patient-index-input" placeholder="col-lg-6" disabled="disabled" value="@{string a = (Model != null)?Model.NameSurname:"";@a;}">
                                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                                 </div>
                                             </div>

@@ -9,10 +9,10 @@
     <link href="~/content/Limitless-40/assets/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">
     <!-- /global stylesheets -->
     <!-- Theme JS files -->
-    <script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>
+    @*<script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>*@
     <!-- /theme JS files -->
 }
-@model Patient;
+@model AccountPatients;
 <div class="row">
     <div class="page-header page-header-light border rounded mb-3">
         <div class="page-header-content">
@@ -20,7 +20,7 @@
                 <h5 class="mb-0">Hasta</h5>
                 @if (Model != null)
                 {
-                    <div class="text-muted mt-1">@Model.FirstName @Model.LastName</div>
+                    <div class="text-muted mt-1">@Model.NameSurname</div>
                 }
                 else
                 {
@@ -47,57 +47,75 @@
         }
         @if (User.IsInRole("Hasta Modülü » Tedavi Ekranı.Read"))
         {
-            <li class="nav-item">
-                <a href="/Patient/Oral" class="nav-link ">
+            @if (Model != null)
+            {
+                <li class="nav-item">
+                    <a href="/Patient/Oral" class="nav-link ">
                     <i class="ph-user-circle me-2"></i>
                     Tedavi
                 </a>
-            </li>
+                </li>
+            }
         }
         @if (User.IsInRole("Hasta Modülü » Hesap Ekranı.Read"))
         {
-            <li class="nav-item">
-                <a href="#js-tab3" class="nav-link ">
+            @if (Model != null)
+            {
+                <li class="nav-item">
+                    <a href="#js-tab3" class="nav-link ">
                     <i class="ph-user-circle me-2"></i>
                     Hesap
                 </a>
-            </li>
+                </li>
+            }
         }
         @if (User.IsInRole("Hasta Modülü » Fatura Ekranı.Read"))
         {
-            <li class="nav-item">
-                <a href="#js-tab4" class="nav-link ">
+            @if (Model != null)
+            {
+                <li class="nav-item">
+                    <a href="#js-tab4" class="nav-link ">
                     <i class="ph-user-circle me-2"></i>
                     Fatura
                 </a>
-            </li>
+                </li>
+            }
         }
         @if (User.IsInRole("Hasta Modülü » Reçete Ekranı.Read"))
         {
-            <li class="nav-item">
-                <a href="#js-tab5" class="nav-link ">
+            @if (Model != null)
+            {
+                <li class="nav-item">
+                    <a href="#js-tab5" class="nav-link ">
                     <i class="ph-user-circle me-2"></i>
                     Reçete
                 </a>
-            </li>
+                </li>
+            }
         }
         @if (User.IsInRole("Hasta Modülü » Görüntü Ekranı.Read"))
         {
-            <li class="nav-item">
-                <a href="#js-tab6" class="nav-link ">
+            @if (Model != null)
+            {
+                <li class="nav-item">
+                    <a href="#js-tab6" class="nav-link ">
                     <i class="ph-user-circle me-2"></i>
                     Görüntü
                 </a>
-            </li>
+                </li>
+            }
         }
         @if (User.IsInRole("Hasta Modülü » Randevu Ekranı.Read"))
         {
-            <li class="nav-item">
-                <a href="#js-tab7" class="nav-link ">
+            @if (Model != null)
+            {
+                <li class="nav-item">
+                    <a href="#js-tab7" class="nav-link ">
                     <i class="ph-user-circle me-2"></i>
                     Randevu
                 </a>
-            </li>
+                </li>
+            }
         }
     </ul>
 
@@ -109,7 +127,7 @@
                 @*tab içerik başlangış*@
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="buton-grup d-flex justify-content-end">
-                        <button type="button" id="btn-back" class="btn btn-outline-dark" style="display: none;">
+                        <button data-pid="@ViewBag.PatientId" type="button" id="btn-back" class="btn btn-outline-dark" style="display: none;">
                             <i class="fa fa-undo"></i> <span class="hidden-xs">Geri Al</span>
                         </button>
                         @if (User.IsInRole("Hasta Modülü » Hasta Ekranı.Create"))
@@ -135,7 +153,7 @@
                 </div>
                 &nbsp;&nbsp;
                 <div class="row patient-index-widget">
-                    @await Component.InvokeAsync("PatientIndex", new { patientId = ViewBag.PatientId });
+                    @*@await Component.InvokeAsync("PatientIndex", new { patientId = ViewBag.PatientId });*@
                 </div>
                 @*tab içerik bitiş*@
             </div>
@@ -145,18 +163,19 @@
 </div>
 <script>
     $(document).ready(function myfunction() {
-        //$.ajax({
-        //    type: "GET",
-        //    url: "/Patient/PatientIndexReadWidget",
-        //    data: { patientId: "6b25f39f-c6ca-4b63-9539-eb693b65e38c" },
-        //    success: function myfunction(veri) {
-        //        $(".patient-index-widget").html('');
-        //        $(".patient-index-widget").html(veri);
-        //    },
-        //    error: function myfunction(veri) {
-        //        alert("error");
-        //    }
-        //});
+        var pId = $("#btn-back").data("pid");
+        $.ajax({
+            type: "GET",
+            url: "/Patient/PatientIndexReadWidget",
+            data: { patientId: pId },
+            success: function myfunction(veri) {
+                $(".patient-index-widget").html('');
+                $(".patient-index-widget").html(veri);
+            },
+            error: function myfunction(veri) {
+                alert("error");
+            }
+        });
         $("#btn-new").click(function () {
             $.ajax({
                 type: "GET",
@@ -180,18 +199,27 @@
         });
         $("#btn-back").click(function () {
             var whbtn = $("#btn-back").data("btn");
+            var pId = $("#btn-back").data("pid");            
             if (whbtn == "btn-new") {
                 $.ajax({
                     type: "GET",
                     url: "/Patient/PatientIndexReadWidget",
-                    data: { patientId: "6b25f39f-c6ca-4b63-9539-eb693b65e38c" },
+                    data: { patientId: pId },
                     success: function myfunction(veri) {
                         $(".patient-index-widget").html('');
                         $(".patient-index-widget").html(veri);
                         $('#btn-back').hide();
                         $("#btn-save").prop("disabled", true);
-                        $("#btn-update").prop("disabled", false);
-                        $("#btn-delete").prop("disabled", false);
+                        if(pId=="")
+                        {
+                            $("#btn-update").prop("disabled", true);
+                            $("#btn-delete").prop("disabled", true);
+                        }
+                        else
+                        {
+                            $("#btn-update").prop("disabled", false);
+                            $("#btn-delete").prop("disabled", false);
+                        }                        
                         $("#btn-new").prop("disabled", false);
                     },
                     error: function myfunction(veri) {
@@ -221,6 +249,7 @@
             $(".patient-index-input:input").prop("disabled", false);
         });
         $("#btn-save").click(function () {
+            $("#formsubmitnew").trigger("submit");
             alert("save");
         });
     });

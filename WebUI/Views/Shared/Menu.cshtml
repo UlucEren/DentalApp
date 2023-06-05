@@ -47,10 +47,10 @@
         </a>
     </li>
 }
-@if (User.IsInRole("Hasta Modülü.Read"))
+@if (User.IsInRole("Hasta Modülü » Randevu Ekranı.Read"))
 {
     <li class="nav-item">
-        <a href="\Patient\Index" class="nav-link @{isactive=(selectedPage == "/Patient/Index") ? "active" : "";@isactive;} ">
+        <a href="\" class="nav-link @{isactive=(selectedPage == "/") ? "active" : "";@isactive;} ">
             <i class="ph-calendar"></i>
             <span>
                 Randevular                
@@ -58,10 +58,10 @@
         </a>
     </li>
 }
-@if (User.IsInRole("Hasta Modülü.Read"))
+@if (User.IsInRole("Muhasebe » Gider Ekranı.Read"))
 {
     <li class="nav-item">
-        <a href="\Patient\Index" class="nav-link @{isactive=(selectedPage == "/Patient/Index") ? "active" : "";@isactive;} ">
+        <a href="\" class="nav-link @{isactive=(selectedPage == "/") ? "active" : "";@isactive;} ">
             <i class="ph-book-bookmark"></i>
             <span>
                 Gider                
@@ -69,10 +69,10 @@
         </a>
     </li>
 }
-@if (User.IsInRole("Hasta Modülü.Read"))
+@if (User.IsInRole("Laboratuvar » Laboratuvar Ekranı.Read"))
 {
     <li class="nav-item">
-        <a href="\Patient\Index" class="nav-link @{isactive=(selectedPage == "/Patient/Index") ? "active" : "";@isactive;} ">
+        <a href="\" class="nav-link @{isactive=(selectedPage == "/") ? "active" : "";@isactive;} ">
             <i class="ph-flask"></i>
             <span>
                 Laboratuvar                
@@ -80,10 +80,10 @@
         </a>
     </li>
 }
-@if (User.IsInRole("Hasta Modülü.Read"))
+@if (User.IsInRole("Rapor Modülü"))
 {
     <li class="nav-item">
-        <a href="\Patient\Index" class="nav-link @{isactive=(selectedPage == "/Patient/Index") ? "active" : "";@isactive;} ">
+        <a href="\" class="nav-link @{isactive=(selectedPage == "/") ? "active" : "";@isactive;} ">
             <i class="ph-chart-pie-slice"></i>
             <span>
                 Raporlama                
@@ -102,10 +102,10 @@
         </a>
     </li>
 }
-@if (User.IsInRole("Hasta Modülü.Read"))
+@if (User.IsInRole("Ayarlar Modülü » Ayarlar"))
 {
     <li class="nav-item">
-        <a href="\Patient\Index" class="nav-link @{isactive=(selectedPage == "/Patient/Index") ? "active" : "";@isactive;} ">
+        <a href="\" class="nav-link @{isactive=(selectedPage == "/") ? "active" : "";@isactive;} ">
             <i class="ph-wrench"></i>
             <span>
                 Ayarlar                
@@ -113,19 +113,18 @@
         </a>
     </li>
 }
-@if (User.IsInRole("Hasta Modülü.Read"))
-{
+
     <li class="nav-item">
-        <a href="\Patient\Index" class="nav-link @{isactive=(selectedPage == "/Patient/Index") ? "active" : "";@isactive;} ">
+        <a href="\" class="nav-link @{isactive=(selectedPage == "/") ? "active" : "";@isactive;} ">
             <i class="ph-house"></i>
             <span>
                 Genel Görünüm                
             </span>
         </a>
     </li>
-}
+
     <li class="nav-item">
-        <a href="\Patient\Index" class="nav-link @{isactive=(selectedPage == "/Patient/Index") ? "active" : "";@isactive;} ">
+        <a href="\" class="nav-link @{isactive=(selectedPage == "/") ? "active" : "";@isactive;} ">
         <i class="ph-sign-out"></i>
             <span>
                 Çıkış                

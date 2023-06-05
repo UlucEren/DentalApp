@@ -1,261 +1,309 @@
 ﻿@using Entities.Concrete;
-@model Patient;
- <div class="col-xs-12 col-sm-6 col-md-4">
-     <div class="card">
-         <div class="card-header bg-primary bg-opacity-10 text-primary">
-             <h6 class="mb-0">Hasta Resmi</h6>
-         </div>
-         <div class="card-body">
-             @*------*@
-             <form method="post" enctype="multipart/form-data" id="hasta-resim-form">
-                 <div style="text-align: center;">
-                     @*<div id="onizleme"></div>*@
-                     <img class="hasta-no-photo" src="https://via.placeholder.com/298x224/FFFFFF?text=Resim+Yok" alt="Ferhat Işık" style="border: 2px solid blue; width: 224px; height: 171px;">
-                 </div>
-                 <div>&nbsp;&nbsp</div>
-                 <div style="text-align:center;">
-                     <label class="btn btn-outline-dark">
-                         <i class="fa fa-cloud-upload-alt"></i> Yükle<input type="file" class="hasta-fileUpload" id="btn-yukle" accept="image/*" name="hasta-resim" style="display: none;">
-                     </label>
-                     <button type="button" tabindex="-1" id="btn-kamera" class="btn btn-outline-primary hidden-xs hidden-sm" title="Kamera">
-                                            <i class="fa fa-camera fa-fw"></i> Kamera
-                                        </button>
-                                        <button type="button" tabindex="-1" id="btn-hasta-resim-sil" data-id="3" disabled="" class="btn btn-outline-danger waves-effect waves-light" title="Sil">
-                                            <i class="fa fa-trash fa-fw"></i> Sil
-                                        </button>
-                                    </div>
-                                </form>
-                                    @*----------*@
-								</div>
-							</div>
-                            </div>
-                    <div class="col-xs-12 col-sm-6 col-md-8">
-                        <form method="post" action="@ViewBag.PatientIndexUpdateWidgetSave">
-                        <div class="row">                            
-                            <div class="card">
-                                <div class="card-header bg-primary bg-opacity-10 text-primary">
-                                    <h6 class="mb-0">Hasta Bilgileri</h6>
-                                </div>
+@model AccountPatients;
+<div class="col-xs-12 col-sm-6 col-md-4">
+    <div class="card">
+        <div class="card-header bg-primary bg-opacity-10 text-primary">
+            <h6 class="mb-0">Hasta Resmi</h6>
+        </div>
+        <div class="card-body">
+            @*------*@
+            <form method="post" enctype="multipart/form-data" id="hasta-resim-form">
+                <div style="text-align: center;">
+                    @*<div id="onizleme"></div>*@
+                    <img class="hasta-no-photo" src="https://via.placeholder.com/298x224/FFFFFF?text=Resim+Yok" alt="Ferhat Işık" style="border: 2px solid blue; width: 224px; height: 171px;">
+                </div>
+                <div>&nbsp;&nbsp</div>
+                <div style="text-align:center;">
+                    <label class="btn btn-outline-dark">
+                        <i class="fa fa-cloud-upload-alt"></i> Yükle<input type="file" class="hasta-fileUpload" id="btn-yukle" accept="image/*" name="hasta-resim" style="display: none;">
+                    </label>
+                    <button type="button" tabindex="-1" id="btn-kamera" class="btn btn-outline-primary hidden-xs hidden-sm" title="Kamera">
+                        <i class="fa fa-camera fa-fw"></i> Kamera
+                    </button>
+                    <button type="button" tabindex="-1" id="btn-hasta-resim-sil" data-id="3" disabled="" class="btn btn-outline-danger waves-effect waves-light" title="Sil">
+                        <i class="fa fa-trash fa-fw"></i> Sil
+                    </button>
+                </div>
+            </form>
+            @*----------*@
+        </div>
+    </div>
+</div>
+<div class="col-xs-12 col-sm-6 col-md-8">
+    <form method="post" action="@ViewBag.PatientIndexUpdateWidgetSave">
+        <div class="row">
+            <div class="card">
+                <div class="card-header bg-primary bg-opacity-10 text-primary">
+                    <h6 class="mb-0">Hasta Bilgileri</h6>
+                </div>
 
-                                <div class="card-body">
-                                    @*------------*@
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Ad Soyad: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control patient-index-input" placeholder="col-lg-6" disabled="disabled" value="@{string a = (Model != null)?Model.FirstName+" "+Model.LastName:"";@a;}">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Diş Hekimi: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Cinsiyet: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Uyruk: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Doğum Tarihi: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Tc Kimlik: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @*------------*@
-                                </div>                                
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header bg-primary bg-opacity-10 text-primary">
-                                    <h6 class="mb-0">İletişim</h6>
-                                </div>
-
-                                <div class="card-body">
-                                    @*------------*@
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Cep Telefonu: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Şehir: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Sabit Telefonu: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">İlçe: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Mail Adresi: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Adres: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @*------------*@
-                                </div>
-                                </div>
-                            <div class="card">
-                                <div class="card-header bg-primary bg-opacity-10 text-primary">
-                                    <h6 class="mb-0">Ek Bilgiler</h6>
-                                </div>
-
-                                <div class="card-body">
-                                    @*------------*@
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Tarife: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Kan Grubu: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Tedavi Durumu: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="row mb-3">
-
-                                                <div class="col-lg-8 input-group">
-                                                    <label class="col-lg-4 col-form-label text-lg-end">Kurum Sicil No: </label>
-                                                    &nbsp;&nbsp;
-                                                    <input type="text" class="form-control" placeholder="col-lg-6">
-                                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    @*------------*@
+                <div class="card-body">
+                    @*------------*@
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Ad Soyad: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control patient-index-input" disabled="disabled" value="@{
+                                        string namesurname = (Model != null)?Model.NameSurname:"";
+                                                                @namesurname
+;
+}">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Diş Hekimi: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    </form>
-                </div>  
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Cinsiyet: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled" value="@{
+                                        string gender = (Model != null)?Model.Gender:"";
+                                                                @gender
+;
+}">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Uyruk: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled" value="@{
+                                        string nationality = (Model != null)?Model.Nationality:"";
+                                                                        @nationality
+;
+}">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Doğum Tarihi: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled" value="@{
+                                        string birtday = (Model != null)?Convert.ToString(Model.Birthday):"";
+                                                                                @birtday
+;
+}">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Tc Kimlik: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled" value="@{
+                                        string identityNumber = (Model != null)?Model.IdentityNumber:"";
+                                                                                        @identityNumber
+;
+}">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*------------*@
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-primary bg-opacity-10 text-primary">
+                    <h6 class="mb-0">İletişim</h6>
+                </div>
+
+                <div class="card-body">
+                    @*------------*@
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Cep Telefonu: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled" value="@{
+                                        string mobilePhone = (Model != null)?Model.MobilePhone:"";
+                                                                                                @mobilePhone
+;
+}">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Şehir: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled" value="@{
+                                        string city = (Model != null)?Model.City:"";
+                                        @city
+;
+}">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Sabit Telefonu: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled" value="@{
+                                        string landPhone = (Model != null)?Model.LandPhone:"";
+                                        @landPhone
+;
+}">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">İlçe: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled" value="@{
+                                        string district = (Model != null)?Model.District:"";
+                                        @district
+;
+}">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Mail Adresi: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled" value="@{
+                                        string email = (Model != null)?Model.Email:"";
+                                            @email
+;
+}">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Adres: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled" value="@{
+                                        string address = (Model != null)?Model.Address:"";
+                                                    @address
+;
+}">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*------------*@
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-primary bg-opacity-10 text-primary">
+                    <h6 class="mb-0">Ek Bilgiler</h6>
+                </div>
+
+                <div class="card-body">
+                    @*------------*@
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Tarife: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Kan Grubu: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled" value="@{
+                                        string blood = (Model != null)?Model.Blood:"";
+                                                        @blood
+;
+}">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Tedavi Durumu: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="row mb-3">
+
+                                <div class="col-lg-8 input-group">
+                                    <label class="col-lg-4 col-form-label text-lg-end">Kurum Sicil No: </label>
+                                    &nbsp;&nbsp;
+                                    <input type="text" class="form-control" disabled="disabled">
+                                    <span class="input-group-text"><i class="ph-user-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*------------*@
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
