@@ -14,6 +14,7 @@ namespace Business.Repositories.AccountPatientsRepository
         Task<IResult> Update(AccountPatients accountPatients);
         Task<IResult> Delete(AccountPatients accountPatients);
         Task<IDataResult<List<AccountPatients>>> GetList();
-        Task<IDataResult<AccountPatients>> GetByPatient(string patientId,string accountId);        
+        Task<IDataResult<AccountPatients>> GetByPatient(string patientId,string accountId);
+        Task<IDataResult<List<AccountPatients>>> GetSearchList(string patientName,string accountId);
     }
 }

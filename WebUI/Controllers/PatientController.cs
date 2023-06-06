@@ -185,5 +185,32 @@ namespace WebUI.Controllers
         {
             return View();
         }
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<PartialViewResult> PatientSearchWidget(string patientName)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            string _findAccount = await findAccount(userId);
+            var patient = await _iAccountPatientsService.GetSearchList(patientName, _findAccount);
+
+            //AccountPatients _patient = new AccountPatients();
+            //_patient.NameSurname = "Ferhat Işık";
+            //_patient.MobilePhone = "0000000000";
+            //_patient.Id = "6ea1da47-0660-4caf-b0e1-20535fba4a99";
+            //List<AccountPatients> patient = new List<AccountPatients>();
+            //patient.Add(_patient);
+            //AccountPatients _patient1 = new AccountPatients();
+            //_patient1.NameSurname = "Mehmet Arslanoğlu";
+            //_patient1.MobilePhone = "0000000000";
+            //_patient1.Id = "936237a3-e3ab-4953-a47f-0000000000000";
+            //patient.Add(_patient1);
+            //AccountPatients _patient2 = new AccountPatients();
+            //_patient2.NameSurname = "Uluç Eren";
+            //_patient2.MobilePhone = "05301137203";
+            //_patient2.Id = "936237a3-e3ab-4953-a47f-feb18f193535";
+            //patient.Add(_patient2);
+            return PartialView(patient.Data);
+        }
     }
 }

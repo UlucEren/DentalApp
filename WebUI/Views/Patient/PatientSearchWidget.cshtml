@@ -1,0 +1,30 @@
+﻿@using Entities.Concrete;
+@model List<AccountPatients>;
+@foreach (var item in Model)
+{
+    <div id="search_link_@item.Id" class="dropdown-item cursor-pointer">
+        <div class="me-3">
+                <img src="~/content/Limitless-40/assets/images/demo/users/face3.jpg" class="w-32px h-32px rounded-pill" alt="">
+            </div>
+
+            <div class="d-flex flex-column flex-grow-1">
+                <div class="fw-semibold">@item.NameSurname</div>
+                <span class="fs-sm text-muted">@item.MobilePhone</span>
+            </div>
+
+            <div class="d-inline-flex">
+                <a href="/Patient/Index?patientId=@item.Id" class="text-body ms-2">
+                    <i class="ph-user-circle"></i>
+                </a>
+            </div>
+    </div>    
+}
+<script>
+    var searchLinks = document.querySelectorAll('[id^="search_link_"]');
+    searchLinks.forEach(function (searchLink) {
+        searchLink.addEventListener('click', function () {
+            var link = this.querySelector('a').getAttribute('href');
+            window.open(link, '_blank');
+        });
+    });
+</script>

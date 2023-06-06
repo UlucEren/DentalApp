@@ -14,6 +14,7 @@ using Business.Repositories.AccountPatientsRepository.Constants;
 using Core.Utilities.Result.Abstract;
 using Core.Utilities.Result.Concrete;
 using DataAccess.Repositories.AccountPatientsRepository;
+using System.ComponentModel;
 
 namespace Business.Repositories.AccountPatientsRepository
 {
@@ -66,6 +67,10 @@ namespace Business.Repositories.AccountPatientsRepository
 		{
 			return new SuccessDataResult<AccountPatients>(await _accountPatientsDal.Get(p => p.Id == patientId && p.Accounts_AspNetUsersIdFk_Fk == accountId));
 		}
-		
-	}
+
+        public async Task<IDataResult<List<AccountPatients>>> GetSearchList(string patientName, string accountId)
+        {
+            return new SuccessDataResult<List<AccountPatients>>(await _accountPatientsDal.GetAll(x=>x.NameSurname.Contains(patientName) && x.Accounts_AspNetUsersIdFk_Fk== accountId));
+        }
+    }
 }

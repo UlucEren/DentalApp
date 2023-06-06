@@ -1,309 +1,216 @@
 ﻿<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Limitless - Responsive Web Application Kit by Eugene Kopyov</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Limitless - Responsive Web Application Kit by Eugene Kopyov</title>
 
-	<!-- Global stylesheets -->
-	<link href="~/content/Limitless-40/assets/fonts/inter/inter.css" rel="stylesheet" type="text/css">
-	<link href="~/content/Limitless-40/assets/icons/phosphor/styles.min.css" rel="stylesheet" type="text/css">
-	<link href="~/content/Limitless-40/html/layout_1/full/assets/css/ltr/all.min.css" id="stylesheet" rel="stylesheet" type="text/css">
-	<!-- /global stylesheets -->
-
-	<!-- Core JS files -->	
-	<script src="~/content/Limitless-40/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
-	<!-- /core JS files -->
-
-	<!-- Theme JS files -->	
-	<script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>
-	<script src="~/content/Limitless-40/html/layout_1/full/assets/js/app.js"></script>	
-	<!-- /theme JS files -->
-
-	@await RenderSectionAsync("head", required: false)
+    <!-- Global stylesheets -->
+    <link href="~/content/Limitless-40/assets/fonts/inter/inter.css" rel="stylesheet" type="text/css">
+    <link href="~/content/Limitless-40/assets/icons/phosphor/styles.min.css" rel="stylesheet" type="text/css">
+    <link href="~/content/Limitless-40/html/layout_1/full/assets/css/ltr/all.min.css" id="stylesheet" rel="stylesheet" type="text/css">
+    <!-- /global stylesheets -->
+    <!-- Core JS files -->
+    <script src="~/content/Limitless-40/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+    <!-- /core JS files -->
+    <!-- Theme JS files -->
+    <script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>
+    <script src="~/content/Limitless-40/html/layout_1/full/assets/js/app.js"></script>
+    <!-- /theme JS files -->
+    @await RenderSectionAsync("head", required: false)
 </head>
 
 <body>
 
-	<!-- Main navbar -->
-	<div class="navbar navbar-expand-lg navbar-static border-bottom border-bottom-dark border-opacity-10 bg-primary bg-opacity-10">
-		<div class="container-fluid">
-			<div class="d-flex d-lg-none me-2">
-				<button type="button" class="navbar-toggler sidebar-mobile-main-toggle rounded-pill">
-					<i class="ph-list"></i>
-				</button>
-			</div>
+    <!-- Main navbar -->
+    <div class="navbar navbar-expand-lg navbar-static border-bottom border-bottom-dark border-opacity-10 bg-primary bg-opacity-10">
+        <div class="container-fluid">
+            <div class="d-flex d-lg-none me-2">
+                <button type="button" class="navbar-toggler sidebar-mobile-main-toggle rounded-pill">
+                    <i class="ph-list"></i>
+                </button>
+            </div>
 
-			<div class="navbar-brand flex-1 flex-lg-0">
-				<a href="index.html" class="d-inline-flex align-items-center">
-					<img src="~/content/Limitless-40/assets/images/logo_icon.svg" alt="">
-					<img src="~/content/Limitless-40/assets/images/logo_text_dark.svg" class="d-none d-sm-inline-block h-16px ms-3" alt="">
-				</a>
-			</div>
-
-
-			<div class="navbar-collapse justify-content-center flex-lg-1 order-2 order-lg-1 collapse" id="navbar_search">
-				<div class="navbar-search flex-fill position-relative mt-2 mt-lg-0 mx-lg-3">
-					<div class="form-control-feedback form-control-feedback-start flex-grow-1" data-color-theme="light">
-						<input id="mySearchInput" type="text" class="form-control bg-transparent rounded-pill" placeholder="Search" data-bs-toggle="dropdown">
-						<div class="form-control-feedback-icon">
-							<i class="ph-magnifying-glass"></i>
-						</div>
-						<div class="dropdown-menu w-100" data-color-theme="light">
-							<button type="button" class="dropdown-item">
-								<div class="text-center w-32px me-3">
-									<i class="ph-magnifying-glass"></i>
-								</div>
-								<span>Search <span class="fw-bold">"in"</span> everywhere</span>
-							</button>
-
-							<div class="dropdown-divider"></div>
-
-							<div class="dropdown-menu-scrollable-lg">
-								<div class="dropdown-header">
-									Contacts
-									<a href="#" class="float-end">
-										See all
-										<i class="ph-arrow-circle-right ms-1"></i>
-									</a>
-								</div>
-
-								<div class="dropdown-item cursor-pointer">
-									<div class="me-3">
-										<img src="~/content/Limitless-40/assets/images/demo/users/face3.jpg" class="w-32px h-32px rounded-pill" alt="">
-									</div>
-
-									<div class="d-flex flex-column flex-grow-1">
-										<div class="fw-semibold">Christ<mark>in</mark>e Johnson</div>
-										<span class="fs-sm text-muted">c.johnson@awesomecorp.com</span>
-									</div>
-
-									<div class="d-inline-flex">
-										<a href="#" class="text-body ms-2">
-											<i class="ph-user-circle"></i>
-										</a>
-									</div>
-								</div>
-
-								<div class="dropdown-item cursor-pointer">
-									<div class="me-3">
-										<img src="~/content/Limitless-40/assets/images/demo/users/face24.jpg" class="w-32px h-32px rounded-pill" alt="">
-									</div>
-
-									<div class="d-flex flex-column flex-grow-1">
-										<div class="fw-semibold">Cl<mark>in</mark>ton Sparks</div>
-										<span class="fs-sm text-muted">c.sparks@awesomecorp.com</span>
-									</div>
-
-									<div class="d-inline-flex">
-										<a href="#" class="text-body ms-2">
-											<i class="ph-user-circle"></i>
-										</a>
-									</div>
-								</div>
-
-								<div class="dropdown-divider"></div>
-
-								<div class="dropdown-header">
-									Clients
-									<a href="#" class="float-end">
-										See all
-										<i class="ph-arrow-circle-right ms-1"></i>
-									</a>
-								</div>
-
-								<div class="dropdown-item cursor-pointer">
-									<div class="me-3">
-										<img src="~/content/Limitless-40/assets/images/brands/adobe.svg" class="w-32px h-32px rounded-pill" alt="">
-									</div>
-
-									<div class="d-flex flex-column flex-grow-1">
-										<div class="fw-semibold">Adobe <mark>In</mark>c.</div>
-										<span class="fs-sm text-muted">Enterprise license</span>
-									</div>
-
-									<div class="d-inline-flex">
-										<a href="#" class="text-body ms-2">
-											<i class="ph-briefcase"></i>
-										</a>
-									</div>
-								</div>
-
-								<div class="dropdown-item cursor-pointer">
-									<div class="me-3">
-										<img src="~/content/Limitless-40/assets/images/brands/holiday-inn.svg" class="w-32px h-32px rounded-pill" alt="">
-									</div>
-
-									<div class="d-flex flex-column flex-grow-1">
-										<div class="fw-semibold">Holiday-<mark>In</mark>n</div>
-										<span class="fs-sm text-muted">On-premise license</span>
-									</div>
-
-									<div class="d-inline-flex">
-										<a href="#" class="text-body ms-2">
-											<i class="ph-briefcase"></i>
-										</a>
-									</div>
-								</div>
-
-								<div class="dropdown-item cursor-pointer">
-									<div class="me-3">
-										<img src="~/content/Limitless-40/assets/images/brands/ing.svg" class="w-32px h-32px rounded-pill" alt="">
-									</div>
-
-									<div class="d-flex flex-column flex-grow-1">
-										<div class="fw-semibold"><mark>IN</mark>G Group</div>
-										<span class="fs-sm text-muted">Perpetual license</span>
-									</div>
-
-									<div class="d-inline-flex">
-										<a href="#" class="text-body ms-2">
-											<i class="ph-briefcase"></i>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<ul class="nav flex-row justify-content-end order-1 order-lg-2">
-				<li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2">
-					<a href="#" class="navbar-nav-link align-items-center rounded-pill p-1" data-bs-toggle="dropdown">
-						<div class="status-indicator-container">
-							<img src="~/content/Limitless-40/assets/images/demo/users/face1.jpg" class="w-32px h-32px rounded-pill" alt="">
-							<span class="status-indicator bg-success"></span>
-						</div>
-						<span class="d-none d-lg-inline-block mx-lg-2">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(User.Identity.Name)</span>
-					</a>
-
-					<div class="dropdown-menu dropdown-menu-end">
-						<a href="#" class="dropdown-item">
-							<i class="ph-user-circle me-2"></i>
-							My profile
-						</a>
-						<a href="#" class="dropdown-item">
-							<i class="ph-currency-circle-dollar me-2"></i>
-							My subscription
-						</a>
-						<a href="#" class="dropdown-item">
-							<i class="ph-shopping-cart me-2"></i>
-							My orders
-						</a>
-						<a href="#" class="dropdown-item">
-							<i class="ph-envelope-open me-2"></i>
-							My inbox
-							<span class="badge bg-primary rounded-pill ms-auto">26</span>
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-							<i class="ph-gear me-2"></i>
-							Account settings
-						</a>
-						<a href="\Account\Logout" class="dropdown-item">
-							<i class="ph-sign-out me-2"></i>
-							Logout
-						</a>
-					</div>
-				</li>
-			</ul>
-		</div>
-	</div>
-	<!-- /main navbar -->
+            <div class="navbar-brand flex-1 flex-lg-0">
+                <a href="index.html" class="d-inline-flex align-items-center">
+                    <img src="~/content/Limitless-40/assets/images/logo_icon.svg" alt="">
+                    <img src="~/content/Limitless-40/assets/images/logo_text_dark.svg" class="d-none d-sm-inline-block h-16px ms-3" alt="">
+                </a>
+            </div>
 
 
-	<!-- Page content -->
-	<div class="page-content">
+            <div class="navbar-collapse justify-content-center flex-lg-1 order-2 order-lg-1 collapse" id="navbar_search">
+                <div class="navbar-search flex-fill position-relative mt-2 mt-lg-0 mx-lg-3">
+                    <div class="form-control-feedback form-control-feedback-start flex-grow-1" data-color-theme="light">
+                        <input id="mySearchInput" type="text" class="form-control bg-transparent rounded-pill" placeholder="Search" data-bs-toggle="dropdown">
+                        <div class="form-control-feedback-icon">
+                            <i class="ph-magnifying-glass"></i>
+                        </div>
+                        <div id="patient_search_widget1">
+                            <div class="dropdown-menu w-100" data-color-theme="light">
+                                @*<button type="button" class="dropdown-item">
+                                    <div class="text-center w-32px me-3">
+                                        <i class="ph-magnifying-glass"></i>
+                                    </div>
+                                    <span>Search <span class="fw-bold">"in"</span> everywhere</span>
+                                </button>
 
-		<!-- Main sidebar -->
-		<div class="sidebar sidebar-main sidebar-expand-lg">
+                                <div class="dropdown-divider"></div>*@
 
-			<!-- Sidebar content -->
-			<div class="sidebar-content">
+                                <div class="dropdown-menu-scrollable-lg">
+                                    <div class="dropdown-header">
+                                        Hastalar
+                                        <a href="#" class="float-end">
+                                            Tümünü Göster
+                                            <i class="ph-arrow-circle-right ms-1"></i>
+                                        </a>
+                                    </div>
+                                    <div id="patient_search_widget">
+                                    </div>                         
+                                </div>
+                            </div>
 
-				<!-- Sidebar header -->
-				<div class="sidebar-section">
-					<div class="sidebar-section-body d-flex justify-content-center">
-						<h5 class="sidebar-resize-hide flex-grow-1 my-auto">Navigation</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-						<div>
-							<button type="button" class="btn btn-flat-black btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-main-resize d-none d-lg-inline-flex">
-								<i class="ph-arrows-left-right"></i>
-							</button>
+            <ul class="nav flex-row justify-content-end order-1 order-lg-2">
+                <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2">
+                    <a href="#" class="navbar-nav-link align-items-center rounded-pill p-1" data-bs-toggle="dropdown">
+                        <div class="status-indicator-container">
+                            <img src="~/content/Limitless-40/assets/images/demo/users/face1.jpg" class="w-32px h-32px rounded-pill" alt="">
+                            <span class="status-indicator bg-success"></span>
+                        </div>
+                        <span class="d-none d-lg-inline-block mx-lg-2">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(User.Identity.Name)</span>
+                    </a>
 
-							<button type="button" class="btn btn-flat-black btn-icon btn-sm rounded-pill border-transparent sidebar-mobile-main-toggle d-lg-none">
-								<i class="ph-x"></i>
-							</button>
-						</div>
-					</div>
-				</div>
-				<!-- /sidebar header -->
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <a href="#" class="dropdown-item">
+                            <i class="ph-user-circle me-2"></i>
+                            My profile
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="ph-currency-circle-dollar me-2"></i>
+                            My subscription
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="ph-shopping-cart me-2"></i>
+                            My orders
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="ph-envelope-open me-2"></i>
+                            My inbox
+                            <span class="badge bg-primary rounded-pill ms-auto">26</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="ph-gear me-2"></i>
+                            Account settings
+                        </a>
+                        <a href="\Account\Logout" class="dropdown-item">
+                            <i class="ph-sign-out me-2"></i>
+                            Logout
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- /main navbar -->
+    <!-- Page content -->
+    <div class="page-content">
 
+        <!-- Main sidebar -->
+        <div class="sidebar sidebar-main sidebar-expand-lg">
 
-				<!-- Main navigation -->
-				<div class="sidebar-section">
-					<ul class="nav nav-sidebar" data-nav-type="accordion">
+            <!-- Sidebar content -->
+            <div class="sidebar-content">
 
-						 @await Html.PartialAsync("Menu")
+                <!-- Sidebar header -->
+                <div class="sidebar-section">
+                    <div class="sidebar-section-body d-flex justify-content-center">
+                        <h5 class="sidebar-resize-hide flex-grow-1 my-auto">Navigation</h5>
 
-					</ul>
-				</div>
-				<!-- /main navigation -->
+                        <div>
+                            <button type="button" class="btn btn-flat-black btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-main-resize d-none d-lg-inline-flex">
+                                <i class="ph-arrows-left-right"></i>
+                            </button>
 
-			</div>
-			<!-- /sidebar content -->
+                            <button type="button" class="btn btn-flat-black btn-icon btn-sm rounded-pill border-transparent sidebar-mobile-main-toggle d-lg-none">
+                                <i class="ph-x"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /sidebar header -->
+                <!-- Main navigation -->
+                <div class="sidebar-section">
+                    <ul class="nav nav-sidebar" data-nav-type="accordion">
 
-		</div>
-		<!-- /main sidebar -->
+                        @await Html.PartialAsync("Menu")
 
+                    </ul>
+                </div>
+                <!-- /main navigation -->
 
-		<!-- Main content -->
-		<div class="content-wrapper">
+            </div>
+            <!-- /sidebar content -->
 
-			<!-- Inner content -->
-			<div class="content-inner">
+        </div>
+        <!-- /main sidebar -->
+        <!-- Main content -->
+        <div class="content-wrapper">
 
-				<!-- Content area -->
-				<div class="content">
-					@RenderBody()
-				</div>
-				<!-- /content area -->
+            <!-- Inner content -->
+            <div class="content-inner">
 
+                <!-- Content area -->
+                <div class="content">
+                    @RenderBody()
+                </div>
+                <!-- /content area -->
+                <!-- Footer -->
+                <div class="navbar navbar-sm navbar-footer border-top">
+                    <div class="container-fluid">
+                        <span>&copy; 2022</span>
+                    </div>
+                </div>
+                <!-- /footer -->
 
-				<!-- Footer -->
-				<div class="navbar navbar-sm navbar-footer border-top">
-					<div class="container-fluid">
-						<span>&copy; 2022</span>
-					</div>
-				</div>
-				<!-- /footer -->
+            </div>
+            <!-- /inner content -->
 
-			</div>
-			<!-- /inner content -->
+        </div>
+        <!-- /main content -->
 
-		</div>
-		<!-- /main content -->
-
-	</div>
-	<!-- /page content -->
-	@await RenderSectionAsync("Scripts", required: false)
-	<script>
-		$(document).ready(function () {
-			$('#mySearchInput').on('input', function () {
-				var inputText = $(this).val();
-
-				// İşlemlerinizi burada yapabilirsiniz
-				// Örnek olarak, girilen her kelimeyi konsola yazdıralım
-				var words = inputText.split(' ');
-				for (var i = 0; i < words.length; i++) {
-					console.log(words[i]);
-				}
-
-				// Diğer işlemleri buraya ekleyebilirsiniz
-			});
-		});
-	</script>
+    </div>
+    <!-- /page content -->
+    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            $('#mySearchInput').on('input', function () {
+                var inputText = $(this).val();
+                if (inputText.length>=2)
+                {
+                    $.ajax({
+                        type: "Post",
+                        url: "/Patient/PatientSearchWidget",
+                        data: { patientName: inputText },
+                        success: function myfunction(veri) {
+                            $("#patient_search_widget").html('');
+                            $("#patient_search_widget").html(veri);
+                        },
+                        error: function myfunction(veri) {
+                            alert("error");
+                        }
+                    });
+                }
+                
+                // Diğer işlemleri buraya ekleyebilirsiniz
+            });
+        });
+    </script>
 </body>
 </html>
