@@ -45,7 +45,7 @@ container.addEventListener('click', function (e) {
         if (document.getElementById('treatments-table-body').rows[0].cells.item(1).innerHTML == "Sistemde Kayitli Veri Bulunamadi") {
             document.getElementById('treatments-table-body').deleteRow(0);
         }
-        $('#treatments-table-body').append('<tr><td>' + selected_oral_treatment_list[0].dataset.tedaviId + '</td><td>' + ThisDate + '</td><td>' + result_teet + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviAdi + '</td><td>Doktor</td><td>' + selected_oral_treatment_list[0].dataset.tedaviFiyat + '</td></tr>'); 
+        $('#treatments-table-body').append('<tr data-tedavi-id="' + selected_oral_treatment_list[0].dataset.tedaviId + '"><td>' + ThisDate + '</td><td>' + result_teet + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviAdi + '</td><td>Doktor</td><td>' + selected_oral_treatment_list[0].dataset.tedaviFiyat + '</td></tr>'); 
     }
 });
 

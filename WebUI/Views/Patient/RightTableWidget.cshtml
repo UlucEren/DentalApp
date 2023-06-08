@@ -1,0 +1,82 @@
+﻿@using Entities.Dtos;
+@model List<AccountsTariffListsDto>;
+<div class="card-body table-container">
+    <table id="oral-treatment-list" class="table datatable-responsive oral-treatment-list">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>#</th>
+                <th class="hidden-xs">#</th>
+                <th>Tedavi</th>
+                <th class="tedavi-diagnoz-fiyat text-right">Fiyat</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="process-treatment" data-tedavi-id="@item.Id" data-tedavi-adi="@item.Treatment" data-tedavi-masraf="@item.Cost" data-tedavi-fiyat="@item.PriceWithVat" data-tedavi-kdv="@item.Vat">
+                    <td>#</td>
+                    <td>#</td>
+                    <td class="hidden-xs"><strong>@item.Queue</strong></td>
+                    <td>@item.Treatment</td>
+                    <td class="mevcut-fiyat text-right">@item.PriceWithVat</td>
+                    <td>TRY</td>
+                </tr>
+            }                      
+        </tbody>
+    </table>
+</div>
+<!-- /.card-body -->
+@*<script src="~/Teeth/js/script.js"></script>*@
+<script>
+    //bu kısım scrip yok ise bir sefer ekliyor
+    var scripts = document.getElementsByTagName("script");
+    var alreadyLoaded = false;
+    for (var i = 0; i < scripts.length; i++) {        
+        if (scripts[i].src.includes("/Teeth/js/script.js")) {            
+            alreadyLoaded = true;
+            break;
+        }
+    }
+    if (!alreadyLoaded) {
+        document.write('<script src="/Teeth/js/script.js"><\/script>');
+    }
+</script>
+<script>
+    $('#oral-treatment-list').DataTable({
+        dom: '<"top"f><"middle"rt><"bottom"ip><"clear">',
+        language: {
+            search: "",
+            lengthMenu: "Sayfa Başına _MENU_ Kayıt Göster",
+            zeroRecords: "Eşleşen Kayıt Bulunamadı",
+            info: "Toplam _TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor.",
+            infoEmpty: "Kayıt Yok",
+            infoFiltered: "(_MAX_ kayıt içerisinden filtrelendi)",
+            paginate: {
+                first: "İlk",
+                last: "Son",
+                next: "Sonraki",
+                previous: "Önceki"
+            },
+            searchPlaceholder: "Arama yapmak için yazın"
+        },
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        columnDefs: [ // datatable sqript hata var 2 sütun fazladan görüyor sütunları ekleyerek gizliyerek sorunu giderdim
+            {
+                targets: [0],
+                visible: false
+            },
+            {
+                targets: [1],
+                visible: false
+            }
+        ]
+    });
+</script>

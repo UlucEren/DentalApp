@@ -5,7 +5,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-9" style="float: left;">
-                        <select class="form-control form-control-select2">
+                        <select id="actionlist" class="form-control form-control-select2">
                             @foreach (var item in ViewBag.ActionList)
                             {
                                 <option value="@item.Id">@item.ActionName</option>
@@ -50,8 +50,8 @@
             </div>
         </div>
         <div class="card border-top border-top-width-3 border-top-primary border-bottom border-bottom-width-3 border-bottom-primary rounded-0">
-            <div class="card-body">
-                @Html.Partial("/Views/Patient/Left_Table.cshtml")
+            <div class="card-body" id="left_table">
+                @*@Html.Partial("/Views/Patient/Left_Table.cshtml")*@
             </div>
         </div>
 
@@ -85,11 +85,11 @@
                         </select>
                     </div>
                     <div class="col-lg-6">
-                        <select class="form-control form-control-select2" data-container-css-class="border-primary">
+                        <select id="tariffnames" class="form-control form-control-select2" data-container-css-class="border-primary">
                             @foreach (var item in ViewBag.TariffNames)
                             {
                                 <option value="@item.Id">@item.TariffName</option>
-                            }                           
+                            }
                         </select>
                     </div>
                 </div>
@@ -99,57 +99,114 @@
             <div class="card-body">
                 <h6>TEDAVİLER</h6>
                 <div class="row">
-                    <select class="form-control form-control-select2" data-container-css-class="border-primary">
-                        <optgroup label="Mountain Time Zone">
-                            <option value="AZ">Cerrahi</option>
-                            <option value="CO">Colorado</option>
-                            <option value="ID">Idaho</option>
-                            <option value="WY">Wyoming</option>
-                        </optgroup>
-                        <optgroup label="Central Time Zone">
-                            <option value="AL">Alabama</option>
-                            <option value="IA">Iowa</option>
-                            <option value="KS">Kansas</option>
-                            <option value="KY">Kentucky</option>
-                        </optgroup>
-                        <optgroup label="Eastern Time Zone">
-                            <option value="CT">Connecticut</option>
-                            <option value="FL">Florida</option>
-                            <option value="MA">Massachusetts</option>
-                            <option value="WV">West Virginia</option>
-                        </optgroup>
+                    <select id="AccounttariffNamesCategories" class="form-control form-control-select2" data-container-css-class="border-primary">
+
+                        <option value="Boş">BOŞ</option>
+
                     </select>
                 </div>
-                @Html.Partial("/Views/Patient/Right_Table.cshtml")
+                <div id="right_table"> 
+                @*@Html.Partial("/Views/Patient/Right_Table.cshtml")*@
+                </div>
             </div>
         </div>
     </div>
 </div>
-<script src="~/Teeth/js/script.js"></script>
 <script>
-    $('#oral-treatment-list').DataTable({
-        dom: '<"top"f><"middle"rt><"bottom"ip><"clear">',
-        language: {
-            search: "",
-            lengthMenu: "Sayfa Başına _MENU_ Kayıt Göster",
-            zeroRecords: "Eşleşen Kayıt Bulunamadı",
-            info: "Toplam _TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor.",
-            infoEmpty: "Kayıt Yok",
-            infoFiltered: "(_MAX_ kayıt içerisinden filtrelendi)",
-            paginate: {
-                first: "İlk",
-                last: "Son",
-                next: "Sonraki",
-                previous: "Önceki"
-            },
-            searchPlaceholder: "Arama yapmak için yazın"
+    $.ajax({
+        async: false,
+        type: "POST",
+        url: "/Patient/LeftTableWidget",
+        //data: { patientId: pId },
+        success: function myfunction(veri) {
+            $("#left_table").html('');
+            $("#left_table").html(veri);
         },
-        "paging": true,
-        "lengthChange": false,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
+        error: function myfunction(veri) {
+            alert("error");
+        }
+    });
+</script>
+<script>
+    $("#actionlist").change(function () {
+        var selectedValue = $(this).val();
+        console.log(selectedValue);
+        if (selectedValue == 1) {
+
+        }
+        else {
+
+        }
+        //$.get("/Admin/GetTDBCostListWidget", { id: selectedValue }, function (data) {
+        //    $(".tdb-cost-list-widget").html('');
+        //    $(".tdb-cost-list-widget").html(data);
+        //});
+    });
+</script>
+<script>
+    $("#tariffnames").change(function () {
+        var selectedValue = $(this).val();
+        $.get("/Patient/GetAccountTariffNamesCategories", { id: selectedValue }, function (data) {
+            var veriler = data;
+            $("#AccounttariffNamesCategories").empty();
+            $.each(veriler, function (i, veri) {
+                var optionElementi = $('<option>').attr('value', veri.id).text(veri.categoryName);
+                $("#AccounttariffNamesCategories").append(optionElementi);
+            });
+        });
+    });
+</script>
+<script>
+    //$(document).ready(function myfunction() {
+        var selectedValue = $("#tariffnames").val();
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: "/Patient/GetAccountTariffNamesCategories",
+            data: { id: selectedValue },
+            success: function myfunction(data) {
+                var veriler = data;
+                $("#AccounttariffNamesCategories").empty();
+                $.each(veriler, function (i, veri) {
+                    var optionElementi = $('<option>').attr('value', veri.id).text(veri.categoryName);
+                    $("#AccounttariffNamesCategories").append(optionElementi);
+                });
+            },
+            error: function myfunction(veri) {
+                alert("error");
+            }
+        });
+        var categoryValue = $("#AccounttariffNamesCategories").val();        
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "/Patient/RightTableWidget",
+            data: { categoryId: categoryValue },
+            success: function myfunction(data) {
+                $("#right_table").html('');
+                $("#right_table").html(data);
+            },
+            error: function myfunction(veri) {
+                alert("error");
+            }
+        });
+    //});
+</script>
+<script>
+    $("#AccounttariffNamesCategories").change(function () {
+        var selectedValue = $(this).val();        
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "/Patient/RightTableWidget",
+            data: { categoryId: selectedValue },
+            success: function myfunction(data) {
+                $("#right_table").html('');
+                $("#right_table").html(data);
+            },
+            error: function myfunction(veri) {
+                alert("error");
+            }
+        });
     });
 </script>

@@ -1,5 +1,7 @@
 ﻿using Business.Repositories.AccountPatientsRepository;
 using Business.Repositories.AccountsRepository;
+using Business.Repositories.AccountsTariffListsRepository;
+using Business.Repositories.AccountsTariffNamesCategoriesRepository;
 using Business.Repositories.AccountsTariffNamesRepository;
 using Business.Repositories.ActionListRepository;
 using Business.Repositories.SubAccountsRepository;
@@ -7,6 +9,7 @@ using Castle.Components.DictionaryAdapter.Xml;
 using DataAccess.Context.EntityFramework;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Entities.Concrete;
+using Entities.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,14 +29,18 @@ namespace WebUI.Controllers
         private readonly ISubAccountsService _iSubAccountsService;
         private readonly IActionListsService _iActionListService;
         private readonly IAccountsTariffNamesService _accountsTariffNamesService;
+        private readonly IAccountsTariffNamesCategoriesService _accountsTariffNamesCategoriesService;
+        private readonly IAccountsTariffListsService _accountsTariffListsService;
 
-        public PatientController(IAccountPatientsService iAccountPatientsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService, IActionListsService iActionListService, IAccountsTariffNamesService iAccountsTariffNamesService)
+        public PatientController(IAccountPatientsService iAccountPatientsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService, IActionListsService iActionListService, IAccountsTariffNamesService iAccountsTariffNamesService, IAccountsTariffNamesCategoriesService accountsTariffNamesCategoriesService, IAccountsTariffListsService accountsTariffListsService)
         {
             _iAccountPatientsService = iAccountPatientsService;
             _iAccountsService = iAccountsService;
             _iSubAccountsService = iSubAccountsService;
             _iActionListService = iActionListService;
             _accountsTariffNamesService = iAccountsTariffNamesService;
+            _accountsTariffNamesCategoriesService = accountsTariffNamesCategoriesService;
+            _accountsTariffListsService = accountsTariffListsService;
         }
         private async Task<string> findAccount(string _guid)
         {
@@ -237,7 +244,7 @@ namespace WebUI.Controllers
             //patient.Add(_patient2);
             return PartialView(patient.Data);
         }
-        [HttpGet]
+        [HttpPost]
         public async Task<PartialViewResult> TreatmentWidget()
         {
             var result = await _iActionListService.GetList();
@@ -248,6 +255,42 @@ namespace WebUI.Controllers
             ViewBag.TariffNames = result1.ToList();
 
             return PartialView();
+        }
+        [HttpPost]
+        public async Task<PartialViewResult> LeftTableWidget()
+        {
+            var result = await _iActionListService.GetList();
+            ViewBag.ActionList = result.Data;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string _findAccount = await findAccount(userId);
+            var result1 = await _accountsTariffNamesService.GetByAccountsIdList(_findAccount);
+            ViewBag.TariffNames = result1.ToList();
+
+            return PartialView();
+        }
+        [HttpGet]
+        public async Task<JsonResult> GetAccountTariffNamesCategories(long id)
+        {
+            List<AccountsTariffNamesCategories> accountsTariffNamesCategories = await _accountsTariffNamesCategoriesService.GetByAccountsTariffNames_Id_Fk(id);
+            return Json(accountsTariffNamesCategories);
+        }
+        [HttpPost]
+        public async Task<PartialViewResult> RightTableWidget(long categoryId)
+        {
+            List<AccountsTariffListsDto> costLists = (from i in await _accountsTariffListsService.GetListByCategories_Id(categoryId)
+                                                      select new AccountsTariffListsDto
+                                                      {
+                                                          Id = i.Id,
+                                                          CategoryName = _accountsTariffNamesCategoriesService.GetCategoryName(i.AccountsTariffNamesCategories_Id_Fk),
+                                                          Treatment = i.Treatment,
+                                                          Price = i.Price,
+                                                          Vat = i.Vat,
+                                                          PriceWithVat = i.PriceWithVat,
+                                                          Cost = i.Cost,
+                                                          Queue = i.Queue,
+                                                          AccountsTariffNamesCategories_Id_Fk = i.AccountsTariffNamesCategories_Id_Fk
+                                                      }).ToList();
+            return PartialView(costLists);
         }
     }
 }
