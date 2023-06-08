@@ -1,5 +1,7 @@
 ﻿using Business.Repositories.AccountPatientsRepository;
 using Business.Repositories.AccountsRepository;
+using Business.Repositories.AccountsTariffNamesRepository;
+using Business.Repositories.ActionListRepository;
 using Business.Repositories.SubAccountsRepository;
 using Castle.Components.DictionaryAdapter.Xml;
 using DataAccess.Context.EntityFramework;
@@ -22,12 +24,16 @@ namespace WebUI.Controllers
         private readonly IAccountPatientsService _iAccountPatientsService;
         private readonly IAccountsService _iAccountsService;
         private readonly ISubAccountsService _iSubAccountsService;
+        private readonly IActionListsService _iActionListService;
+        private readonly IAccountsTariffNamesService _accountsTariffNamesService;
 
-        public PatientController(IAccountPatientsService iAccountPatientsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService)
+        public PatientController(IAccountPatientsService iAccountPatientsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService, IActionListsService iActionListService, IAccountsTariffNamesService iAccountsTariffNamesService)
         {
             _iAccountPatientsService = iAccountPatientsService;
             _iAccountsService = iAccountsService;
             _iSubAccountsService = iSubAccountsService;
+            _iActionListService = iActionListService;
+            _accountsTariffNamesService = iAccountsTariffNamesService;
         }
         private async Task<string> findAccount(string _guid)
         {
@@ -157,33 +163,52 @@ namespace WebUI.Controllers
                 string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
                 string _findAccount = await findAccount(userId);
-                patient.Accounts_AspNetUsersIdFk_Fk = _findAccount;               
-                var result = await _iAccountPatientsService.Add(patient);                   
-                
-                patientId = patient.Id;                
+                patient.Accounts_AspNetUsersIdFk_Fk = _findAccount;
+                var result = await _iAccountPatientsService.Add(patient);
+
+                patientId = patient.Id;
             }
             //var jsonResult = new JsonResult(new { Result = result, PatientId = patientId });
-            return RedirectToAction("Index", new { patientId = patientId });
+            //return RedirectToAction("Index", new { patientId = patientId });
+            return Redirect($"/Patient/Index?patientId={patientId}");
         }
 
         [Authorize(Roles = "Hasta Modülü » Hasta Ekranı.Update")]
         [HttpPost]
-        public JsonResult PatientIndexUpdateWidgetSave(AccountPatients patient)
+        public async Task<IActionResult> PatientIndexUpdateWidgetSave(AccountPatients patient)
         {
-            bool result = false;
             string patientId = "";
             if (patient != null)
             {
-                patientId = "6b25f39f-c6ca-4b63-9539-eb693b65e38c";
-                result = true;
+                await _iAccountPatientsService.Update(patient);
+                patientId = patient.Id;
             }
-            var jsonResult = new JsonResult(new { Result = result, PatientId = patientId });
-            return Json(jsonResult);
+            return Redirect($"/Patient/Index?patientId={patientId}");
         }
 
-        public IActionResult Oral()
+        public async Task<IActionResult> Oral()
         {
-            return View();
+            string patientId = Request.Query["patientId"].SingleOrDefault();
+            Guid n;
+            if (!Guid.TryParse(patientId, out n))
+            {
+                return RedirectToAction("Error404");
+            }
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            string _findAccount = await findAccount(userId);
+            if (_findAccount == "0")
+            {
+                return RedirectToAction("Error404");
+            }
+            var patient = await _iAccountPatientsService.GetByPatient(patientId, _findAccount);
+            if (patient.Data != null)
+            {
+                ViewBag.PatientId = patient.Data.Id;
+            }
+            else
+                ViewBag.PatientId = "";
+            return View(patient.Data);
         }
         [AllowAnonymous]
         [HttpPost]
@@ -211,6 +236,18 @@ namespace WebUI.Controllers
             //_patient2.Id = "936237a3-e3ab-4953-a47f-feb18f193535";
             //patient.Add(_patient2);
             return PartialView(patient.Data);
+        }
+        [HttpGet]
+        public async Task<PartialViewResult> TreatmentWidget()
+        {
+            var result = await _iActionListService.GetList();
+            ViewBag.ActionList = result.Data;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string _findAccount = await findAccount(userId);
+            var result1 = await _accountsTariffNamesService.GetByAccountsIdList(_findAccount);
+            ViewBag.TariffNames = result1.ToList();
+
+            return PartialView();
         }
     }
 }

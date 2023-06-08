@@ -1,7 +1,7 @@
 ﻿@using Entities.Concrete;
 @{
     ViewData["Title"] = "Index";
-    var selectedPage = Context.Request.Path;
+    string selectedPage = Context.Request.Path;
     string isactive = "";
 }
 @section head {
@@ -39,7 +39,11 @@
         @if (User.IsInRole("Hasta Modülü » Hasta Ekranı.Read"))
         {
             <li class="nav-item">
-                <a href="#js-tab1" class="nav-link @{isactive=(selectedPage == "/Patient/Index") ? "active" : "";@isactive;} " data-bs-toggle="tab">
+                <a href="#js-tab1" class="nav-link @{
+                isactive=(selectedPage.Contains("/Patient/Index")) ? "active" : "";
+                @isactive
+;
+} " data-bs-toggle="tab">
                     <i class="ph-user-circle me-2"></i>
                     Hasta
                 </a>
@@ -50,7 +54,7 @@
             @if (Model != null)
             {
                 <li class="nav-item">
-                    <a href="/Patient/Oral" class="nav-link ">
+                    <a href="/Patient/Oral?patientId=@ViewBag.PatientId" class="nav-link ">
                     <i class="ph-user-circle me-2"></i>
                     Tedavi
                 </a>
@@ -249,8 +253,15 @@
             $(".patient-index-input:input").prop("disabled", false);
         });
         $("#btn-save").click(function () {
+            var whbtn = $("#btn-back").data("btn");
+            if (whbtn == "btn-new") {
             $("#formsubmitnew").trigger("submit");
             alert("save");
+            }
+            if (whbtn == "btn-update") {
+                $("#formsubmitupdate").trigger("submit");
+                alert("save");
+            }
         });
     });
 </script>

@@ -31,6 +31,8 @@ using Business.Repositories.AccountsRepository;
 using DataAccess.Repositories.AccountsRepository;
 using Business.Repositories.SubAccountsRepository;
 using DataAccess.Repositories.SubAccountsRepository;
+using Business.Repositories.ActionListRepository;
+using DataAccess.Repositories.ActionListRepository;
 using Microsoft.AspNetCore.Identity;
 
 namespace Business.DependencyResolvers.Autofac
@@ -87,6 +89,9 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<SubAccountsManager>().As<ISubAccountsService>().SingleInstance();
             builder.RegisterType<EfSubAccountsDal>().As<ISubAccountsDal>().SingleInstance();
+
+            builder.RegisterType<ActionListsManager>().As<IActionListsService>().SingleInstance();
+            builder.RegisterType<EfActionListsDal>().As<IActionListsDal>().SingleInstance();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

@@ -1,12 +1,11 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Oral";
 }
 
 @using Entities.Concrete;
 @{
     ViewData["Title"] = "Index";
-    var selectedPage = Context.Request.Path;
+    string selectedPage = Context.Request.Path;
     string isactive = "";
 }
 @section head {
@@ -15,7 +14,7 @@
     <link href="~/content/Limitless-40/assets/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">
     <!-- /global stylesheets -->
     <!-- Theme JS files -->
-    @*<script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>*@
+            @*<script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>*@
     <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/datatables.min.js"></script>
     <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/extensions/responsive.min.js"></script>
     <script src="~/content/Limitless-40/assets/demo/pages/datatables_extension_responsive.js"></script>
@@ -28,14 +27,14 @@
         .table-container {
             position: relative;
         }
-        
-        .table-container .pagination {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            zoom: 0.7;
-            transform: translate(-50%,+120%);
-        }
+
+            .table-container .pagination {
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                zoom: 0.7;
+                transform: translate(-50%,+120%);
+            }
     </style>
 }
 @model AccountPatients;
@@ -65,7 +64,7 @@
         @if (User.IsInRole("Hasta Modülü » Hasta Ekranı.Read"))
         {
             <li class="nav-item">
-                <a href="/Patient/Index" class="nav-link">
+                <a href="/Patient/Index?patientId=@ViewBag.PatientId" class="nav-link">
                     <i class="ph-user-circle me-2"></i>
                     Hasta
                 </a>
@@ -74,7 +73,11 @@
         @if (User.IsInRole("Hasta Modülü » Tedavi Ekranı.Read"))
         {
             <li class="nav-item">
-                <a href="#js-tab2" class="nav-link @{isactive=(selectedPage == "/Patient/Oral") ? "active" : "";@isactive;}" data-bs-toggle="tab">
+                <a href="#js-tab2" class="nav-link @{
+                isactive=(selectedPage.Contains("/Patient/Oral")) ? "active" : "";
+                @isactive
+;
+}" data-bs-toggle="tab">
                     <i class="ph-user-circle me-2"></i>
                     Tedavi
                 </a>
@@ -133,7 +136,7 @@
         <div class="tab-content">
             <div class="tab-pane fade show active" id="js-tab2">
                 @*tab içerik başlangış*@
-                @Html.Partial("/Views/Patient/Treatment.cshtml")
+                @*@Html.Partial("/Views/Patient/Treatment.cshtml")*@
                 @*tab içerik bitiş*@
             </div>
         </div>
@@ -141,32 +144,25 @@
     }
 </div>
 @section scripts{
-    <script src="~/Teeth/js/script.js"></script>
+    @*<script src="~/Teeth/js/script.js"></script>*@
     <script>
-        $('#oral-treatment-list').DataTable({
-            dom: '<"top"f><"middle"rt><"bottom"ip><"clear">',
-            language: {
-                search: "",
-                lengthMenu: "Sayfa Başına _MENU_ Kayıt Göster",
-                zeroRecords: "Eşleşen Kayıt Bulunamadı",
-                info: "Toplam _TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor.",
-                infoEmpty: "Kayıt Yok",
-                infoFiltered: "(_MAX_ kayıt içerisinden filtrelendi)",
-                paginate: {
-                    first: "İlk",
-                    last: "Son",
-                    next: "Sonraki",
-                    previous: "Önceki"
-                },
-                searchPlaceholder: "Arama yapmak için yazın"
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: "/Patient/TreatmentWidget",
+            //data: { patientId: pId },
+            success: function myfunction(veri) {
+                $("#js-tab2").html('');
+                $("#js-tab2").html(veri);                
             },
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
+            error: function myfunction(veri) {
+                alert("error");
+            }
         });
+        //$(document).ready(function myfunction() {
+           
+            
+        //});
     </script>
+
 }

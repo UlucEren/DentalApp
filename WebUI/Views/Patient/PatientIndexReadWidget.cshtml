@@ -30,7 +30,10 @@
     </div>
 </div>
 <div class="col-xs-12 col-sm-6 col-md-8">
-    <form method="post" action="@ViewBag.PatientIndexUpdateWidgetSave">
+    <form id="formsubmitupdate" method="post" action="@ViewBag.PatientIndexUpdateWidgetSave">
+        <input asp-for="@Model.Id" type="hidden" class="form-control">
+        <input asp-for="@Model.LastAccessTime" type="hidden" class="form-control">
+        <input asp-for="@Model.Accounts_AspNetUsersIdFk_Fk" type="hidden" class="form-control">
         <div class="row">
             <div class="card">
                 <div class="card-header bg-primary bg-opacity-10 text-primary">
@@ -45,11 +48,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Ad Soyad: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control patient-index-input" disabled="disabled" value="@{
-                                        string namesurname = (Model != null)?Model.NameSurname:"";
-                                                                @namesurname
-;
-}">
+                                    <input asp-for="@Model.NameSurname" type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -60,7 +59,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Diş Hekimi: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled">
+                                    <input type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -73,11 +72,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Cinsiyet: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled" value="@{
-                                        string gender = (Model != null)?Model.Gender:"";
-                                                                @gender
-;
-}">
+                                    <input asp-for="@Model.Gender" type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -89,11 +84,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Uyruk: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled" value="@{
-                                        string nationality = (Model != null)?Model.Nationality:"";
-                                                                        @nationality
-;
-}">
+                                    <input asp-for="@Model.Nationality" type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -106,11 +97,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Doğum Tarihi: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled" value="@{
-                                        string birtday = (Model != null)?Convert.ToString(Model.Birthday):"";
-                                                                                @birtday
-;
-}">
+                                    <input asp-for="@Model.Birthday" type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -121,11 +108,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Tc Kimlik: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled" value="@{
-                                        string identityNumber = (Model != null)?Model.IdentityNumber:"";
-                                                                                        @identityNumber
-;
-}">
+                                    <input asp-for="@Model.IdentityNumber" type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -148,11 +131,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Cep Telefonu: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled" value="@{
-                                        string mobilePhone = (Model != null)?Model.MobilePhone:"";
-                                                                                                @mobilePhone
-;
-}">
+                                    <input asp-for="@Model.MobilePhone" type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -163,11 +142,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Şehir: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled" value="@{
-                                        string city = (Model != null)?Model.City:"";
-                                        @city
-;
-}">
+                                    <input asp-for="@Model.City" type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -180,11 +155,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Sabit Telefonu: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled" value="@{
-                                        string landPhone = (Model != null)?Model.LandPhone:"";
-                                        @landPhone
-;
-}">
+                                    <input asp-for="@Model.LandPhone" type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -196,11 +167,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">İlçe: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled" value="@{
-                                        string district = (Model != null)?Model.District:"";
-                                        @district
-;
-}">
+                                    <input asp-for="@Model.District" type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -213,11 +180,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Mail Adresi: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled" value="@{
-                                        string email = (Model != null)?Model.Email:"";
-                                            @email
-;
-}">
+                                    <input asp-for="@Model.Email" type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -228,11 +191,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Adres: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled" value="@{
-                                        string address = (Model != null)?Model.Address:"";
-                                                    @address
-;
-}">
+                                    <input asp-for="@Model.Address" type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -254,7 +213,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Tarife: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled">
+                                    <input type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -265,11 +224,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Kan Grubu: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled" value="@{
-                                        string blood = (Model != null)?Model.Blood:"";
-                                                        @blood
-;
-}">
+                                    <input asp-for="@Model.Blood" type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -282,7 +237,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Tedavi Durumu: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled">
+                                    <input type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>
@@ -294,7 +249,7 @@
                                 <div class="col-lg-8 input-group">
                                     <label class="col-lg-4 col-form-label text-lg-end">Kurum Sicil No: </label>
                                     &nbsp;&nbsp;
-                                    <input type="text" class="form-control" disabled="disabled">
+                                    <input type="text" class="form-control patient-index-input" disabled="disabled">
                                     <span class="input-group-text"><i class="ph-user-circle"></i></span>
                                 </div>
                             </div>

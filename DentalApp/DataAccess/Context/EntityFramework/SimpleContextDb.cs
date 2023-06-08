@@ -23,5 +23,6 @@ namespace DataAccess.Context.EntityFramework
         public DbSet<AccountPatients> AccountPatients { get; set; }
         public DbSet<Accounts> Accounts { get; set; }
         public DbSet<SubAccounts> SubAccounts { get; set; }
+        public DbSet<ActionLists> ActionLists { get; set; }
     }
 }

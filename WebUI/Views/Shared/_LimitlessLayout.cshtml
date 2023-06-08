@@ -192,8 +192,8 @@
         $(document).ready(function () {
             $('#mySearchInput').on('input', function () {
                 var inputText = $(this).val();
-                if (inputText.length>=2)
-                {
+                //if (inputText.length>=2)
+                //{
                     $.ajax({
                         type: "Post",
                         url: "/Patient/PatientSearchWidget",
@@ -206,7 +206,7 @@
                             alert("error");
                         }
                     });
-                }
+                //}
                 
                 // Diğer işlemleri buraya ekleyebilirsiniz
             });
