@@ -64,7 +64,7 @@ namespace Business.Repositories.AccountsTariffListsRepository
         }
 
         [SecuredAspect()]
-        public async Task<IDataResult<AccountsTariffLists>> GetById(int id)
+        public async Task<IDataResult<AccountsTariffLists>> GetById(string id)
         {
             return new SuccessDataResult<AccountsTariffLists>(await _accountsTariffListsDal.Get(p => p.Id == id));
         }

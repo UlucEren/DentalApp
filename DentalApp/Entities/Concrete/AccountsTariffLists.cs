@@ -1,8 +1,11 @@
-﻿namespace Entities.Concrete
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Entities.Concrete
 {
     public class AccountsTariffLists
     {
-        public long Id { get; set; }
+        [Key]
+        public string Id { get; set; }
         public string Treatment { get; set; }
         public decimal Price { get; set; }
         public int Vat { get; set; }

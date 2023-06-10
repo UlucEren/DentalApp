@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string Page = Context.Request.Path;
+    string isTreatmentPage = "";
+}
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
@@ -50,10 +54,10 @@
                         <div id="patient_search_widget1">
                             <div class="dropdown-menu w-100" data-color-theme="light">
                                 @*<button type="button" class="dropdown-item">
-                                    <div class="text-center w-32px me-3">
-                                        <i class="ph-magnifying-glass"></i>
-                                    </div>
-                                    <span>Search <span class="fw-bold">"in"</span> everywhere</span>
+                                <div class="text-center w-32px me-3">
+                                <i class="ph-magnifying-glass"></i>
+                                </div>
+                                <span>Search <span class="fw-bold">"in"</span> everywhere</span>
                                 </button>
 
                                 <div class="dropdown-divider"></div>*@
@@ -67,7 +71,7 @@
                                         </a>
                                     </div>
                                     <div id="patient_search_widget">
-                                    </div>                         
+                                    </div>
                                 </div>
                             </div>
 
@@ -123,7 +127,11 @@
     <div class="page-content">
 
         <!-- Main sidebar -->
-        <div class="sidebar sidebar-main sidebar-expand-lg">
+        <div class="sidebar sidebar-main sidebar-expand-lg @{
+                isTreatmentPage=(Page.Contains("/Patient/Oral")) ? "sidebar-main-resized" : "";
+                    @isTreatmentPage
+;
+}">
 
             <!-- Sidebar content -->
             <div class="sidebar-content">
@@ -194,20 +202,20 @@
                 var inputText = $(this).val();
                 //if (inputText.length>=2)
                 //{
-                    $.ajax({
-                        type: "Post",
-                        url: "/Patient/PatientSearchWidget",
-                        data: { patientName: inputText },
-                        success: function myfunction(veri) {
-                            $("#patient_search_widget").html('');
-                            $("#patient_search_widget").html(veri);
-                        },
-                        error: function myfunction(veri) {
-                            alert("error");
-                        }
-                    });
+                $.ajax({
+                    type: "Post",
+                    url: "/Patient/PatientSearchWidget",
+                    data: { patientName: inputText },
+                    success: function myfunction(veri) {
+                        $("#patient_search_widget").html('');
+                        $("#patient_search_widget").html(veri);
+                    },
+                    error: function myfunction(veri) {
+                        alert("error");
+                    }
+                });
                 //}
-                
+
                 // Diğer işlemleri buraya ekleyebilirsiniz
             });
         });

@@ -2,7 +2,7 @@
 {
     public class AccountsTariffListsDto
     {
-        public long Id { get; set; }
+        public string Id { get; set; }
         public string CategoryName { get; set; }
         public string Treatment { get; set; }
         public decimal Price { get; set; }

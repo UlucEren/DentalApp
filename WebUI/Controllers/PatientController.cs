@@ -289,7 +289,7 @@ namespace WebUI.Controllers
                                                           Cost = i.Cost,
                                                           Queue = i.Queue,
                                                           AccountsTariffNamesCategories_Id_Fk = i.AccountsTariffNamesCategories_Id_Fk
-                                                      }).ToList();
+                                                      }).OrderBy(x => x.Queue).ToList();
             return PartialView(costLists);
         }
     }

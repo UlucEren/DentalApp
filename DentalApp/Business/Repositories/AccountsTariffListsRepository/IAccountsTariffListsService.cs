@@ -14,7 +14,7 @@ namespace Business.Repositories.AccountsTariffListsRepository
         Task<IResult> Update(AccountsTariffLists accountsTariffLists);
         Task<IResult> Delete(AccountsTariffLists accountsTariffLists);
         Task<IDataResult<List<AccountsTariffLists>>> GetList();
-        Task<IDataResult<AccountsTariffLists>> GetById(int id);
+        Task<IDataResult<AccountsTariffLists>> GetById(string id);
         Task<List<AccountsTariffLists>> GetListByCategories_Id(long id);
     }
 }

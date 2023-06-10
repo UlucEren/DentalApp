@@ -117,6 +117,7 @@ namespace WebUI.Controllers
                     //long _listId= list.Id;
                     //add list
                     AccountsTariffLists _accountsTariffLists = new AccountsTariffLists();
+                    _accountsTariffLists.Id = Guid.NewGuid().ToString(); ;
                     _accountsTariffLists.Treatment=list.Treatment;
                     _accountsTariffLists.Price=list.Price;
                     _accountsTariffLists.Vat=list.Vat;
@@ -157,6 +158,7 @@ namespace WebUI.Controllers
                 foreach (var item1 in oldlist)
                 {
                     AccountsTariffLists newAccountsTariffLists = new AccountsTariffLists();
+                    newAccountsTariffLists.Id= Guid.NewGuid().ToString();
                     newAccountsTariffLists.Treatment = item1.Treatment;
                     if (ratio!=null) //oran yazıldığı zaman işlem yapılacak  //fiyatı yüzdelik olarak arttır azalt
 					{
