@@ -1,4 +1,6 @@
-﻿<table class="table" id="treatments-table">
+﻿@using Entities.Dtos;
+@model List<AccountTreatmentsDto>
+<table class="table" id="treatments-table">
     <thead>
         <tr>
             
@@ -11,12 +13,28 @@
         </tr>
     </thead>
     <tbody id="treatments-table-body">
-
-        <tr class="disabled">
-            <td></td>
-            <td colspan="5" class="text-center">Sistemde Kayitli Veri Bulunamadi</td>
-            <td class="tedavi-fiyat"><span>0.00</span></td>
-        </tr>
+        @if (Model.Count>0)
+        {
+            foreach (var item in Model)
+            {
+                <tr class="disabled">
+                    <td>@item.Date</td>
+                    <td>@item.Teeth</td>
+                    <td>@item.Treatment</td>
+                    <td>@item.Doctor_SubAccounts_AspNetUsers_Id_Fk_Name</td>
+                    <td class="tedavi-fiyat"><span>@item.PriceWithVat</span></td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr class="disabled">
+                <td></td>
+                <td colspan="3" class="text-center">Sistemde Kayitli Veri Bulunamadi</td>
+                <td class="tedavi-fiyat"><span>0.00</span></td>
+            </tr>
+        }
+       
     </tbody>
     <tfoot>
         <tr>

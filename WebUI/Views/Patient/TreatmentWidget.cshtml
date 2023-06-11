@@ -113,11 +113,13 @@
     </div>
 </div>
 <script>
+    var actionListValue=$("#actionlist").val();
+    var _patientId = '@ViewBag.PatientId';
     $.ajax({
         async: false,
         type: "POST",
         url: "/Patient/LeftTableWidget",
-        //data: { patientId: pId },
+        data: { actionListId: actionListValue, patientId: _patientId },
         success: function myfunction(veri) {
             $("#left_table").html('');
             $("#left_table").html(veri);

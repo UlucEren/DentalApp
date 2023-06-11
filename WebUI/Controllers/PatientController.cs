@@ -3,8 +3,11 @@ using Business.Repositories.AccountsRepository;
 using Business.Repositories.AccountsTariffListsRepository;
 using Business.Repositories.AccountsTariffNamesCategoriesRepository;
 using Business.Repositories.AccountsTariffNamesRepository;
+using Business.Repositories.AccountTreatmentsRepository;
 using Business.Repositories.ActionListRepository;
+using Business.Repositories.AspNetUsersRepository;
 using Business.Repositories.SubAccountsRepository;
+using Business.Repositories.UserRepository;
 using Castle.Components.DictionaryAdapter.Xml;
 using DataAccess.Context.EntityFramework;
 using DocumentFormat.OpenXml.Office2010.Excel;
@@ -31,8 +34,10 @@ namespace WebUI.Controllers
         private readonly IAccountsTariffNamesService _accountsTariffNamesService;
         private readonly IAccountsTariffNamesCategoriesService _accountsTariffNamesCategoriesService;
         private readonly IAccountsTariffListsService _accountsTariffListsService;
+        private readonly IAccountTreatmentsService _iAccountTreatmentsService;        
+        private readonly IAspNetUsersService _iAspNetUsersService;        
 
-        public PatientController(IAccountPatientsService iAccountPatientsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService, IActionListsService iActionListService, IAccountsTariffNamesService iAccountsTariffNamesService, IAccountsTariffNamesCategoriesService accountsTariffNamesCategoriesService, IAccountsTariffListsService accountsTariffListsService)
+        public PatientController(IAccountPatientsService iAccountPatientsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService, IActionListsService iActionListService, IAccountsTariffNamesService iAccountsTariffNamesService, IAccountsTariffNamesCategoriesService accountsTariffNamesCategoriesService, IAccountsTariffListsService accountsTariffListsService, IAccountTreatmentsService accountTreatmentsService, IAspNetUsersService aspNetUsersService)
         {
             _iAccountPatientsService = iAccountPatientsService;
             _iAccountsService = iAccountsService;
@@ -41,6 +46,8 @@ namespace WebUI.Controllers
             _accountsTariffNamesService = iAccountsTariffNamesService;
             _accountsTariffNamesCategoriesService = accountsTariffNamesCategoriesService;
             _accountsTariffListsService = accountsTariffListsService;
+            _iAccountTreatmentsService = accountTreatmentsService;
+            _iAspNetUsersService = aspNetUsersService;
         }
         private async Task<string> findAccount(string _guid)
         {
@@ -245,7 +252,7 @@ namespace WebUI.Controllers
             return PartialView(patient.Data);
         }
         [HttpPost]
-        public async Task<PartialViewResult> TreatmentWidget()
+        public async Task<PartialViewResult> TreatmentWidget(string patientId)
         {
             var result = await _iActionListService.GetList();
             ViewBag.ActionList = result.Data;
@@ -253,20 +260,42 @@ namespace WebUI.Controllers
             string _findAccount = await findAccount(userId);
             var result1 = await _accountsTariffNamesService.GetByAccountsIdList(_findAccount);
             ViewBag.TariffNames = result1.ToList();
-
+            ViewBag.PatientId = patientId;
             return PartialView();
         }
         [HttpPost]
-        public async Task<PartialViewResult> LeftTableWidget()
+        public async Task<PartialViewResult> LeftTableWidget(int actionListId, string patientId)
         {
-            var result = await _iActionListService.GetList();
-            ViewBag.ActionList = result.Data;
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
             string _findAccount = await findAccount(userId);
-            var result1 = await _accountsTariffNamesService.GetByAccountsIdList(_findAccount);
-            ViewBag.TariffNames = result1.ToList();
+            if (_findAccount == "0")
+            {
+                return PartialView();
+            }
+            var result = await _iAccountTreatmentsService.GetTreatmentListByActionId(_findAccount, actionListId, patientId);
+            List<AccountTreatmentsDto> treatment = (from i in _iAccountTreatmentsService.GetTreatmentListByActionId(_findAccount, actionListId, patientId).Result.Data
+                                                    select new AccountTreatmentsDto
+                                                    {
+                                                        Id = i.Id,
+                                                        Treatment = i.Treatment,
+                                                        Price = i.Price,
+                                                        Vat = i.Vat,
+                                                        PriceWithVat = i.PriceWithVat,
+                                                        Cost = i.Cost,
+                                                        Date= i.Date,
+                                                        Teeth = i.Teeth,
+                                                        Accounts_AspNetUsers_Id_Fk = i.Accounts_AspNetUsers_Id_Fk,
+                                                        AccountPatients_Id_Fk = i.AccountPatients_Id_Fk,
+                                                        AccountsTariffLists_Id_Fk= i.AccountsTariffLists_Id_Fk,
+                                                        ActionLists_Id_Fk = i.ActionLists_Id_Fk,
+                                                        Doctor_SubAccounts_AspNetUsers_Id_Fk= i.Doctor_SubAccounts_AspNetUsers_Id_Fk,
+                                                        Doctor_SubAccounts_AspNetUsers_Id_Fk_Name = _iAspNetUsersService.GetUserName(i.Doctor_SubAccounts_AspNetUsers_Id_Fk)
 
-            return PartialView();
+                                                    }).ToList();
+
+
+            return PartialView(treatment);
         }
         [HttpGet]
         public async Task<JsonResult> GetAccountTariffNamesCategories(long id)

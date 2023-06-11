@@ -146,11 +146,12 @@
 @section scripts{
     @*<script src="~/Teeth/js/script.js"></script>*@
     <script>
+        var _patientId = '@ViewBag.PatientId';        
         $.ajax({
             async: false,
             type: "POST",
             url: "/Patient/TreatmentWidget",
-            //data: { patientId: pId },
+            data: { patientId: _patientId },
             success: function myfunction(veri) {
                 $("#js-tab2").html('');
                 $("#js-tab2").html(veri);                
