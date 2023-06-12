@@ -26,9 +26,9 @@ namespace Business.Repositories.AccountTreatmentsRepository
             _accountTreatmentsDal = accountTreatmentsDal;
         }
 
-        [SecuredAspect()]
-        [ValidationAspect(typeof(AccountTreatmentsValidator))]
-        [RemoveCacheAspect("IAccountTreatmentsService.Get")]
+        //[SecuredAspect()]
+        //[ValidationAspect(typeof(AccountTreatmentsValidator))]
+        //[RemoveCacheAspect("IAccountTreatmentsService.Get")]
 
         public async Task<IResult> Add(AccountTreatments accountTreatments)
         {

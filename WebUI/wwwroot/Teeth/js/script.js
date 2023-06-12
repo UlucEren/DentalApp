@@ -45,7 +45,25 @@ container.addEventListener('click', function (e) {
         if (document.getElementById('treatments-table-body').rows[0].cells.item(1).innerHTML == "Sistemde Kayitli Veri Bulunamadi") {
             document.getElementById('treatments-table-body').deleteRow(0);
         }
-        $('#treatments-table-body').append('<tr data-tedavi-id="' + selected_oral_treatment_list[0].dataset.tedaviId + '"><td>' + ThisDate + '</td><td>' + result_teet + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviAdi + '</td><td>Doktor</td><td>' + selected_oral_treatment_list[0].dataset.tedaviFiyat + '</td></tr>'); 
+        var actionListValue = $("#actionlist").val();
+        var _patientId = selected_oral_treatment_list[0].dataset.patientid;
+        var _doctorId = $("#doctor").val();
+        var _doctorName = $("#doctor").text();
+        var treatmentId="";
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "/Patient/TreatmentSaveDb",
+            data: { tariffList: selected_oral_treatment_list[0].dataset.tedaviId, teet: result_teet, actionListId: actionListValue, patientId: _patientId, doctorId: _doctorId },
+            success: function myfunction(veri) {                
+                treatmentId = veri.treatmentId;
+            },
+            error: function myfunction(veri) {
+                alert("error");
+            }
+        });
+        $('#treatments-table-body').append('<tr data-treatment-id="' + treatmentId + '" data-treatmentlist-id="' + selected_oral_treatment_list[0].dataset.tedaviId + '"><td>' + ThisDate + '</td><td>' + result_teet + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviAdi + '</td><td>' + _doctorName + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviFiyat + '</td></tr>'); 
+
     }
 });
 

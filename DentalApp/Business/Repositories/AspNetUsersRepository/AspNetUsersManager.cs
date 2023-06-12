@@ -55,9 +55,9 @@ namespace Business.Repositories.AspNetUsersRepository
             return new SuccessResult(AspNetUsersMessages.Deleted);
         }
 
-        [SecuredAspect()]
-        [CacheAspect()]
-        [PerformanceAspect()]
+        //[SecuredAspect()]
+        //[CacheAspect()]
+        //[PerformanceAspect()]
         public async Task<IDataResult<List<AspNetUsers>>> GetList()
         {
             return new SuccessDataResult<List<AspNetUsers>>(await _aspNetUsersDal.GetAll());
@@ -71,8 +71,8 @@ namespace Business.Repositories.AspNetUsersRepository
         public string GetUserName(string id)
         {
             var temp = _aspNetUsersDal.GetSync(p => p.Id == id);
-            string categoryName = temp.UserName;
-            return categoryName;
+            string Name = temp.UserName;
+            return Name;
         }
 
     }

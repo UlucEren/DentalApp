@@ -9,12 +9,14 @@ using Business.Repositories.AspNetUsersRepository;
 using Business.Repositories.SubAccountsRepository;
 using Business.Repositories.UserRepository;
 using Castle.Components.DictionaryAdapter.Xml;
+using Core.Utilities.Result.Concrete;
 using DataAccess.Context.EntityFramework;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Entities.Concrete;
 using Entities.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Data;
@@ -255,11 +257,18 @@ namespace WebUI.Controllers
         public async Task<PartialViewResult> TreatmentWidget(string patientId)
         {
             var result = await _iActionListService.GetList();
-            ViewBag.ActionList = result.Data;
+            ViewBag.ActionList = result.Data;      
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             string _findAccount = await findAccount(userId);
             var result1 = await _accountsTariffNamesService.GetByAccountsIdList(_findAccount);
             ViewBag.TariffNames = result1.ToList();
+            
+            List<SelectListItem> doctor = new List<SelectListItem>();
+            doctor.Add(new SelectListItem { Value = _findAccount, Text = _iAspNetUsersService.GetUserName(_findAccount) });
+            //subaccountlarda doktorları tespit edilip eklenecek
+            ViewBag.Doctor = doctor;
+
             ViewBag.PatientId = patientId;
             return PartialView();
         }
@@ -284,7 +293,7 @@ namespace WebUI.Controllers
                                                         PriceWithVat = i.PriceWithVat,
                                                         Cost = i.Cost,
                                                         Date= i.Date,
-                                                        Teeth = i.Teeth,
+                                                        Teeth = i.Teet,
                                                         Accounts_AspNetUsers_Id_Fk = i.Accounts_AspNetUsers_Id_Fk,
                                                         AccountPatients_Id_Fk = i.AccountPatients_Id_Fk,
                                                         AccountsTariffLists_Id_Fk= i.AccountsTariffLists_Id_Fk,
@@ -292,7 +301,7 @@ namespace WebUI.Controllers
                                                         Doctor_SubAccounts_AspNetUsers_Id_Fk= i.Doctor_SubAccounts_AspNetUsers_Id_Fk,
                                                         Doctor_SubAccounts_AspNetUsers_Id_Fk_Name = _iAspNetUsersService.GetUserName(i.Doctor_SubAccounts_AspNetUsers_Id_Fk)
 
-                                                    }).ToList();
+                                                    }).OrderByDescending(x=>x.Date).ToList();
 
 
             return PartialView(treatment);
@@ -304,7 +313,7 @@ namespace WebUI.Controllers
             return Json(accountsTariffNamesCategories);
         }
         [HttpPost]
-        public async Task<PartialViewResult> RightTableWidget(long categoryId)
+        public async Task<PartialViewResult> RightTableWidget(long categoryId,string patientId)
         {
             List<AccountsTariffListsDto> costLists = (from i in await _accountsTariffListsService.GetListByCategories_Id(categoryId)
                                                       select new AccountsTariffListsDto
@@ -319,7 +328,35 @@ namespace WebUI.Controllers
                                                           Queue = i.Queue,
                                                           AccountsTariffNamesCategories_Id_Fk = i.AccountsTariffNamesCategories_Id_Fk
                                                       }).OrderBy(x => x.Queue).ToList();
+            ViewBag.PatientId = patientId;
             return PartialView(costLists);
+        }
+        [HttpPost]
+        public async Task<JsonResult> TreatmentSaveDb(string tariffList,string teet, string actionListId,string patientId,string doctorId)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            string _findAccount = await findAccount(userId);
+
+            var tariff = await _accountsTariffListsService.GetById(tariffList);
+            AccountTreatments accountTreatments = new AccountTreatments();
+            accountTreatments.Id = Guid.NewGuid().ToString();
+            accountTreatments.Treatment = tariff.Data.Treatment;
+            accountTreatments.Price = tariff.Data.Price;
+            accountTreatments.Vat = tariff.Data.Vat;
+            accountTreatments.PriceWithVat = tariff.Data.PriceWithVat;
+            accountTreatments.Cost = tariff.Data.Cost;
+            accountTreatments.Date = DateTime.Now;
+            accountTreatments.Teet = teet;
+            accountTreatments.Accounts_AspNetUsers_Id_Fk = _findAccount;
+            accountTreatments.AccountPatients_Id_Fk = patientId;
+            accountTreatments.AccountsTariffLists_Id_Fk = tariffList;
+            accountTreatments.ActionLists_Id_Fk = Convert.ToInt32(actionListId);
+            accountTreatments.Doctor_SubAccounts_AspNetUsers_Id_Fk = doctorId;
+            
+            await _iAccountTreatmentsService.Add(accountTreatments);
+                 
+            return Json(new { TreatmentId = accountTreatments.Id });
         }
     }
 }

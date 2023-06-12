@@ -15,7 +15,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr class="process-treatment" data-tedavi-id="@item.Id" data-tedavi-adi="@item.Treatment" data-tedavi-masraf="@item.Cost" data-tedavi-fiyat="@item.PriceWithVat" data-tedavi-kdv="@item.Vat">
+                <tr class="process-treatment" data-patientid="@ViewBag.PatientId" data-tedavi-id="@item.Id" data-tedavi-adi="@item.Treatment" data-tedavi-masraf="@item.Cost" data-tedavi-fiyat="@item.PriceWithVat" data-tedavi-kdv="@item.Vat">
                     <td>#</td>
                     <td>#</td>
                     <td class="hidden-xs"><strong>@item.Queue</strong></td>

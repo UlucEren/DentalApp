@@ -63,7 +63,7 @@ namespace Business.Repositories.AccountsTariffListsRepository
             return new SuccessDataResult<List<AccountsTariffLists>>(await _accountsTariffListsDal.GetAll());
         }
 
-        [SecuredAspect()]
+        //[SecuredAspect()]
         public async Task<IDataResult<AccountsTariffLists>> GetById(string id)
         {
             return new SuccessDataResult<AccountsTariffLists>(await _accountsTariffListsDal.Get(p => p.Id == id));

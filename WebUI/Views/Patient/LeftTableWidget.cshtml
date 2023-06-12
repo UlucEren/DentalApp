@@ -17,7 +17,7 @@
         {
             foreach (var item in Model)
             {
-                <tr class="disabled">
+                <tr data-treatment-id="@item.Id" data-treatmentlist-id="@item.AccountsTariffLists_Id_Fk" @*class="disabled"*@>
                     <td>@item.Date</td>
                     <td>@item.Teeth</td>
                     <td>@item.Treatment</td>
