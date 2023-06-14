@@ -4,7 +4,7 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Kategori</th>
+            <th>Kategori</th>            
             <th>Tedavi</th>
             <th>Fiyat</th>
             <th>Kdv</th>
@@ -16,14 +16,14 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr data-id="@item.Id">
-                <td>@item.Queue</td>
-                <td>@item.CategoryName</td>
+            <tr data-id="@item.Id">                
+                <td>@item.Queue</td>                
+                <td>@item.CategoryName</td>                
                 <td>@item.Treatment</td>
                 <td>@item.Price</td>
                 <td>@item.Vat</td>
                 <td>@item.PriceWithVat</td>
-                <td>@item.Cost</td>
+                <td>@item.Cost</td>                
                 <td class="text-center">
                     <div class="d-inline-flex">
                         <div class="dropdown">
@@ -81,7 +81,7 @@
             },
             searchPlaceholder: "Arama yapmak için yazın"
         },
-        "paging": true,
+        "paging": false,
         "lengthChange": false,
         "searching": true,
         "ordering": true,
@@ -94,7 +94,45 @@
                 text: '<i class="fas fa-save"></i>Sıralamayı Kaydet',
                 className: 'btn btn-dark',
                 action: function (e, dt, node, config) {
-                    alert($("#tariffnamecategory").val());
+                    //alert($("#tariffnamecategory").val());
+                    
+                    var data = [];
+                    //bu şekilde data-id alabildim
+                    table.rows().every(function () {
+                        var rowNode = this.node();
+                        var rowData = this.data();
+                        var rowId = $(rowNode).data('id');
+                        rowData.push(rowId);
+                        data.push(rowData);
+                    });
+
+                    for (var i = 0; i < data.length; i++) {
+                        var rowData = data[i];
+                        var rowId = rowData[rowData.length - 1]; // Son eleman data-id değeri
+                        
+                        // Verileri okuyun ve işleyin
+                        var _queue = rowData[0];
+                        
+                        //console.log(queue);
+                        //console.log(rowId);
+                        $.ajax({
+                            async: false,
+                            url: "/Setting/SetCostListQueue",
+                            type: "POST",
+                            data: { id: rowId, queue: _queue },
+                            success: function (data) {
+                                console.log(data);
+                            },
+                            error: function (xhr, status, error) {
+                                // Hata durumunda yapılacak işlemler
+                                console.error("İstek başarısız oldu: " + error);
+                                alert("İstek başarısız oldu: " + error);
+                            }
+                        });
+                        
+                    }
+                    alert("Kaydedildi");
+                    
                 },
                 // Buton arasında boşluk bırakmak için CSS özelliklerini değiştiriyoruz
                 init: function (api, node, config) {
@@ -159,7 +197,7 @@
             table.rowReorder.enable();
         }
     });
-    var data = table.rows().data();
-            //console.log(data);
-
+    //var data = table.rows().data();
+    //        //console.log(data);
+    
 </script>

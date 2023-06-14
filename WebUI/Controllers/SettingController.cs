@@ -25,10 +25,10 @@ using WebUI.Models.AppIdentityDb;
 
 namespace WebUI.Controllers
 {
-    
+
     public class SettingController : Controller
     {
-		private readonly IAccountsTariffNamesService _accountsTariffNamesService;
+        private readonly IAccountsTariffNamesService _accountsTariffNamesService;
         private readonly IAccountsTariffNamesCategoriesService _accountsTariffNamesCategoriesService;
         private readonly IAccountsTariffListsService _accountsTariffListsService;
         private readonly ITDBCostNamesService _iTDBCostNamesService;
@@ -36,16 +36,16 @@ namespace WebUI.Controllers
         private readonly ITDBCostListsService _iTDBCostListsService;
         private readonly IAccountsService _iAccountsService;
         private readonly ISubAccountsService _iSubAccountsService;
-        public SettingController(IAccountsTariffNamesService accountsTariffNamesService, IAccountsTariffNamesCategoriesService accountsTariffNamesCategoriesService, IAccountsTariffListsService accountsTariffListsService, ITDBCostNamesService tDBCostNamesService, ITDBCostNameCategoriesService tDBCostNameCategoriesService, ITDBCostListsService tDBCostListsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService )
+        public SettingController(IAccountsTariffNamesService accountsTariffNamesService, IAccountsTariffNamesCategoriesService accountsTariffNamesCategoriesService, IAccountsTariffListsService accountsTariffListsService, ITDBCostNamesService tDBCostNamesService, ITDBCostNameCategoriesService tDBCostNameCategoriesService, ITDBCostListsService tDBCostListsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService)
         {
-			_accountsTariffNamesService = accountsTariffNamesService;
+            _accountsTariffNamesService = accountsTariffNamesService;
             _accountsTariffNamesCategoriesService = accountsTariffNamesCategoriesService;
             _accountsTariffListsService = accountsTariffListsService;
             _iTDBCostNamesService = tDBCostNamesService;
             _iTDBCostNameCategoriesService = tDBCostNameCategoriesService;
             _iTDBCostListsService = tDBCostListsService;
             _iAccountsService = iAccountsService;
-           _iSubAccountsService = iSubAccountsService;
+            _iSubAccountsService = iSubAccountsService;
         }
         private async Task<string> findAccount(string _guid)
         {
@@ -82,12 +82,12 @@ namespace WebUI.Controllers
             //var tariff listesini çek
             //yok erişim engeli koy açma
 
-			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
             string _findAccount = await findAccount(userId);
 
             List<AccountsTariffNames> accountsTariffNames = await _accountsTariffNamesService.GetByAccountsIdList(_findAccount);
-			return View(accountsTariffNames);
+            return View(accountsTariffNames);
         }
         [HttpGet]
         public async Task<JsonResult> GetTariffNameCategories(long id)
@@ -114,14 +114,14 @@ namespace WebUI.Controllers
         }
         public async Task<PartialViewResult> GetTdbListModalWidget()
         {
-            List<TDBCostNames> tDBCostNames = await _iTDBCostNamesService.GetList();            
+            List<TDBCostNames> tDBCostNames = await _iTDBCostNamesService.GetList();
             return PartialView(tDBCostNames);
         }
         [HttpPost]
         public async Task<JsonResult> TariffListToTDBList(long tariffNameId, long tdbId)
         {
             var accountsTariffNamesCategories = await _accountsTariffNamesCategoriesService.GetByAccountsTariffNames_Id_Fk(tariffNameId);
-            foreach (AccountsTariffNamesCategories category in accountsTariffNamesCategories) 
+            foreach (AccountsTariffNamesCategories category in accountsTariffNamesCategories)
             {
                 long _categoryId = category.Id;
                 var accountsTariffLists = await _accountsTariffListsService.GetListByCategories_Id(_categoryId);
@@ -132,7 +132,7 @@ namespace WebUI.Controllers
                     await _accountsTariffListsService.Delete(list);
                 }
                 //delete category
-                await _accountsTariffNamesCategoriesService.Delete(category);                
+                await _accountsTariffNamesCategoriesService.Delete(category);
             }
             //add tdb category
             //add tdb list
@@ -141,7 +141,7 @@ namespace WebUI.Controllers
             {
                 long _categoryId = category.Id;
                 var tDBCostLists = await _iTDBCostListsService.GetListByCategories_Id(_categoryId);
-                AccountsTariffNamesCategories _accountsTariffNamesCategories= new AccountsTariffNamesCategories();
+                AccountsTariffNamesCategories _accountsTariffNamesCategories = new AccountsTariffNamesCategories();
                 _accountsTariffNamesCategories.CategoryName = category.TDBCategoryName;
                 _accountsTariffNamesCategories.AccountsTariffNames_Id_Fk = tariffNameId;
                 await _accountsTariffNamesCategoriesService.Add(_accountsTariffNamesCategories);
@@ -152,31 +152,31 @@ namespace WebUI.Controllers
                     //add list
                     AccountsTariffLists _accountsTariffLists = new AccountsTariffLists();
                     _accountsTariffLists.Id = Guid.NewGuid().ToString(); ;
-                    _accountsTariffLists.Treatment=list.Treatment;
-                    _accountsTariffLists.Price=list.Price;
-                    _accountsTariffLists.Vat=list.Vat;
-                    _accountsTariffLists.PriceWithVat=list.PriceWithVat;
-                    _accountsTariffLists.Queue= _index;
-                    _accountsTariffLists.Cost= 0;
-                    _accountsTariffLists.AccountsTariffNamesCategories_Id_Fk= _accountsTariffNamesCategories.Id;
+                    _accountsTariffLists.Treatment = list.Treatment;
+                    _accountsTariffLists.Price = list.Price;
+                    _accountsTariffLists.Vat = list.Vat;
+                    _accountsTariffLists.PriceWithVat = list.PriceWithVat;
+                    _accountsTariffLists.Queue = _index;
+                    _accountsTariffLists.Cost = 0;
+                    _accountsTariffLists.AccountsTariffNamesCategories_Id_Fk = _accountsTariffNamesCategories.Id;
                     _index += 1;
                     await _accountsTariffListsService.Add(_accountsTariffLists);
 
 
                 }
                 //add category
-                
+
             }
             return Json("İşlem Başarılı.");
         }
         [HttpPost]
-        public async Task<IActionResult> CreateTariff(string name,string transferredtariff,string ratio,string degisim_turu)
+        public async Task<IActionResult> CreateTariff(string name, string transferredtariff, string ratio, string degisim_turu)
         {
-            AccountsTariffNames accountsTariffNames=new AccountsTariffNames();
-            accountsTariffNames.TariffName=name;
-            accountsTariffNames.CreateDate= DateTime.Now;
-			accountsTariffNames.Accounts_AspNetUsersIdFk_Fk= HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
-            await _accountsTariffNamesService.Add(accountsTariffNames);	
+            AccountsTariffNames accountsTariffNames = new AccountsTariffNames();
+            accountsTariffNames.TariffName = name;
+            accountsTariffNames.CreateDate = DateTime.Now;
+            accountsTariffNames.Accounts_AspNetUsersIdFk_Fk = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            await _accountsTariffNamesService.Add(accountsTariffNames);
 
             long _accountTariffNamesId = Convert.ToInt64(transferredtariff);
             var oldcategory = await _accountsTariffNamesCategoriesService.GetByAccountsTariffNames_Id_Fk(_accountTariffNamesId);
@@ -192,37 +192,37 @@ namespace WebUI.Controllers
                 foreach (var item1 in oldlist)
                 {
                     AccountsTariffLists newAccountsTariffLists = new AccountsTariffLists();
-                    newAccountsTariffLists.Id= Guid.NewGuid().ToString();
+                    newAccountsTariffLists.Id = Guid.NewGuid().ToString();
                     newAccountsTariffLists.Treatment = item1.Treatment;
-                    if (ratio!=null) //oran yazıldığı zaman işlem yapılacak  //fiyatı yüzdelik olarak arttır azalt
-					{
-                        if (degisim_turu=="1")
+                    if (ratio != null) //oran yazıldığı zaman işlem yapılacak  //fiyatı yüzdelik olarak arttır azalt
+                    {
+                        if (degisim_turu == "1")
                         {
-							newAccountsTariffLists.Price = item1.Price + (item1.Price/100*Convert.ToDecimal(ratio));
-						}
-                        else if (degisim_turu=="-1")
+                            newAccountsTariffLists.Price = item1.Price + (item1.Price / 100 * Convert.ToDecimal(ratio));
+                        }
+                        else if (degisim_turu == "-1")
                         {
-							newAccountsTariffLists.Price = item1.Price - (item1.Price / 100 * Convert.ToDecimal(ratio));
-						}
-						newAccountsTariffLists.PriceWithVat = newAccountsTariffLists.Price + (newAccountsTariffLists.Price/100*Convert.ToDecimal(item1.Vat));
+                            newAccountsTariffLists.Price = item1.Price - (item1.Price / 100 * Convert.ToDecimal(ratio));
+                        }
+                        newAccountsTariffLists.PriceWithVat = newAccountsTariffLists.Price + (newAccountsTariffLists.Price / 100 * Convert.ToDecimal(item1.Vat));
 
-					}
-					else //oran yazılmadığı zaman işlem yapılmayacak
-					{
-						newAccountsTariffLists.Price = item1.Price;
-						newAccountsTariffLists.PriceWithVat = item1.PriceWithVat;
-					}                   
-                    
+                    }
+                    else //oran yazılmadığı zaman işlem yapılmayacak
+                    {
+                        newAccountsTariffLists.Price = item1.Price;
+                        newAccountsTariffLists.PriceWithVat = item1.PriceWithVat;
+                    }
+
                     newAccountsTariffLists.Vat = item1.Vat;
-                    
+
                     newAccountsTariffLists.Cost = item1.Cost;
                     newAccountsTariffLists.Queue = item1.Queue;
                     newAccountsTariffLists.AccountsTariffNamesCategories_Id_Fk = newAccountsTariffNamesCategories.Id;
-					await _accountsTariffListsService.Add(newAccountsTariffLists);
-				}
+                    await _accountsTariffListsService.Add(newAccountsTariffLists);
+                }
             }
 
-            
+
             return RedirectToAction("Tariff");
         }
         [HttpPost]
@@ -230,28 +230,28 @@ namespace WebUI.Controllers
         {
             AccountsTariffNames accountsTariffNames = new AccountsTariffNames();
             accountsTariffNames.Id = Convert.ToInt64(id);
-            
+
             var category = await _accountsTariffNamesCategoriesService.GetByAccountsTariffNames_Id_Fk(id);
 
             foreach (var item in category)
             {
                 AccountsTariffNamesCategories newAccountsTariffNamesCategories = new AccountsTariffNamesCategories();
-                newAccountsTariffNamesCategories.Id = item.Id;                
+                newAccountsTariffNamesCategories.Id = item.Id;
 
                 var list = await _accountsTariffListsService.GetListByCategories_Id(item.Id);//kayıtlı list tespiti
                 foreach (var item1 in list)
                 {
                     AccountsTariffLists newAccountsTariffLists = new AccountsTariffLists();
                     newAccountsTariffLists.Id = item1.Id;
-                    await _accountsTariffListsService.Delete(newAccountsTariffLists);                    
+                    await _accountsTariffListsService.Delete(newAccountsTariffLists);
                 }
                 await _accountsTariffNamesCategoriesService.Delete(newAccountsTariffNamesCategories);
             }
             await _accountsTariffNamesService.Delete(accountsTariffNames);
 
-                return Json("İşlem Başarılı.");
+            return Json("İşlem Başarılı.");
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> UpdateTariff(string name, long tariff_id, string ratio, string degisim_turu)
         {
@@ -282,17 +282,36 @@ namespace WebUI.Controllers
                         {
                             updateAccountsTariffLists.Price = item1.Price - (item1.Price / 100 * Convert.ToDecimal(ratio));
                         }
-                        updateAccountsTariffLists.Vat=item1.Vat;
+                        updateAccountsTariffLists.Vat = item1.Vat;
                         updateAccountsTariffLists.PriceWithVat = updateAccountsTariffLists.Price + (updateAccountsTariffLists.Price / 100 * Convert.ToDecimal(item1.Vat));
                         updateAccountsTariffLists.Cost = item1.Cost;
                         updateAccountsTariffLists.Queue = item1.Queue;
                         updateAccountsTariffLists.AccountsTariffNamesCategories_Id_Fk = item1.AccountsTariffNamesCategories_Id_Fk;
-                        
+
                         await _accountsTariffListsService.Update(updateAccountsTariffLists);
                     }
                 }
-            } 
+            }
             return RedirectToAction("Tariff");
+        }
+        [HttpPost]
+        public async Task<JsonResult> SetCostListQueue(string id, int queue)
+        {
+            var data = await _accountsTariffListsService.GetById(id);
+
+            AccountsTariffLists updateAccountsTariffLists = new AccountsTariffLists();
+            updateAccountsTariffLists.Id = data.Data.Id;
+            updateAccountsTariffLists.Treatment = data.Data.Treatment;
+            updateAccountsTariffLists.Price = data.Data.Price;
+            updateAccountsTariffLists.Vat = data.Data.Vat;
+            updateAccountsTariffLists.PriceWithVat = data.Data.PriceWithVat;
+            updateAccountsTariffLists.Cost = data.Data.Cost;
+            updateAccountsTariffLists.Queue = queue;
+            updateAccountsTariffLists.AccountsTariffNamesCategories_Id_Fk = data.Data.AccountsTariffNamesCategories_Id_Fk;
+
+            await _accountsTariffListsService.Update(updateAccountsTariffLists);
+
+            return Json("İşlem Başarılı.");
         }
     }
 }
