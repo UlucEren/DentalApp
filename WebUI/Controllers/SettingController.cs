@@ -1,6 +1,8 @@
-﻿using Business.Repositories.AccountsTariffListsRepository;
+﻿using Business.Repositories.AccountsRepository;
+using Business.Repositories.AccountsTariffListsRepository;
 using Business.Repositories.AccountsTariffNamesCategoriesRepository;
 using Business.Repositories.AccountsTariffNamesRepository;
+using Business.Repositories.SubAccountsRepository;
 using Business.Repositories.TDBCostListsRepository;
 using Business.Repositories.TDBCostNameCategoriesRepository;
 using Business.Repositories.TDBCostNamesRepository;
@@ -32,7 +34,9 @@ namespace WebUI.Controllers
         private readonly ITDBCostNamesService _iTDBCostNamesService;
         private readonly ITDBCostNameCategoriesService _iTDBCostNameCategoriesService;
         private readonly ITDBCostListsService _iTDBCostListsService;
-        public SettingController(IAccountsTariffNamesService accountsTariffNamesService, IAccountsTariffNamesCategoriesService accountsTariffNamesCategoriesService, IAccountsTariffListsService accountsTariffListsService, ITDBCostNamesService tDBCostNamesService, ITDBCostNameCategoriesService tDBCostNameCategoriesService, ITDBCostListsService tDBCostListsService )
+        private readonly IAccountsService _iAccountsService;
+        private readonly ISubAccountsService _iSubAccountsService;
+        public SettingController(IAccountsTariffNamesService accountsTariffNamesService, IAccountsTariffNamesCategoriesService accountsTariffNamesCategoriesService, IAccountsTariffListsService accountsTariffListsService, ITDBCostNamesService tDBCostNamesService, ITDBCostNameCategoriesService tDBCostNameCategoriesService, ITDBCostListsService tDBCostListsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService )
         {
 			_accountsTariffNamesService = accountsTariffNamesService;
             _accountsTariffNamesCategoriesService = accountsTariffNamesCategoriesService;
@@ -40,6 +44,32 @@ namespace WebUI.Controllers
             _iTDBCostNamesService = tDBCostNamesService;
             _iTDBCostNameCategoriesService = tDBCostNameCategoriesService;
             _iTDBCostListsService = tDBCostListsService;
+            _iAccountsService = iAccountsService;
+           _iSubAccountsService = iSubAccountsService;
+        }
+        private async Task<string> findAccount(string _guid)
+        {
+            var subAccount = await _iSubAccountsService.GetByAspNetUsers_Id_Fk(_guid);
+            if (subAccount.Data != null)
+            {
+                var _account = await _iAccountsService.GetByAspNetUsers_Id_Fk(subAccount.Data.Accounts_AspNetUsersIdFk_Fk);
+                if (_account != null)
+                {
+                    return _account.Data.AspNetUsers_Id_Fk;
+                }
+                else
+                    return "0";
+            }
+            else
+            {
+                var account = await _iAccountsService.GetByAspNetUsers_Id_Fk(_guid);
+                if (account.Data != null)
+                {
+                    return account.Data.AspNetUsers_Id_Fk;
+                }
+                else
+                    return "0";
+            }
         }
 
         [Authorize(Roles = "Ayarlar Modülü » Tanımlamalar")]
@@ -51,8 +81,12 @@ namespace WebUI.Controllers
             //yok hesap ana hesap olabilir ana hesabı kontrol et
             //var tariff listesini çek
             //yok erişim engeli koy açma
-			string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
-            List<AccountsTariffNames> accountsTariffNames = await _accountsTariffNamesService.GetByAccountsIdList(userId);
+
+			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            string _findAccount = await findAccount(userId);
+
+            List<AccountsTariffNames> accountsTariffNames = await _accountsTariffNamesService.GetByAccountsIdList(_findAccount);
 			return View(accountsTariffNames);
         }
         [HttpGet]
