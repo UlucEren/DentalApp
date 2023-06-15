@@ -72,10 +72,18 @@
                     </div>
                     <div class="col-lg-6">
                         <select id="tariffnames" class="form-control form-control-select2" data-container-css-class="border-primary">
-                            @foreach (var item in ViewBag.TariffNames)
+                            @if (ViewBag.TariffNames.Count>0)
                             {
-                                <option value="@item.Id">@item.TariffName</option>
+                                foreach (var item in ViewBag.TariffNames)
+                                {
+                                    <option value="@item.Id">@item.TariffName</option>
+                                }
                             }
+                            else
+                            {
+                                <option value="0">Kayıt Yok!</option>
+                            }
+                            
                         </select>
                     </div>
                 </div>
@@ -160,14 +168,42 @@
 </script>
 <script>
     $("#tariffnames").change(function () {
-        var selectedValue = $(this).val();
-        $.get("/Patient/GetAccountTariffNamesCategories", { id: selectedValue }, function (data) {
-            var veriler = data;
-            $("#AccounttariffNamesCategories").empty();
-            $.each(veriler, function (i, veri) {
-                var optionElementi = $('<option>').attr('value', veri.id).text(veri.categoryName);
-                $("#AccounttariffNamesCategories").append(optionElementi);
-            });
+        var selectedValue = $(this).val();        
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: "/Patient/GetAccountTariffNamesCategories",
+            data: { id: selectedValue},
+            success: function myfunction(data) {
+                var veriler = data;
+                $("#AccounttariffNamesCategories").empty();
+                if (veriler.length == 0) {
+                    var optionElementi = $('<option>').attr('value', 0).text("Kayıt Yok!");
+                    $("#AccounttariffNamesCategories").append(optionElementi);
+                }
+                $.each(veriler, function (i, veri) {
+                    var optionElementi = $('<option>').attr('value', veri.id).text(veri.categoryName);
+                    $("#AccounttariffNamesCategories").append(optionElementi);
+                });
+            },
+            error: function myfunction(veri) {
+                alert("error");
+            }
+        });
+
+        var categoryValue = $("#AccounttariffNamesCategories").val();        
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "/Patient/RightTableWidget",
+            data: { categoryId: categoryValue, patientId: _patientId },
+            success: function myfunction(data) {
+                $("#right_table").html('');
+                $("#right_table").html(data);
+            },
+            error: function myfunction(veri) {
+                alert("error");
+            }
         });
     });
 </script>
@@ -180,8 +216,12 @@
         url: "/Patient/GetAccountTariffNamesCategories",
         data: { id: selectedValue },
         success: function myfunction(data) {
-            var veriler = data;
+            var veriler = data;            
             $("#AccounttariffNamesCategories").empty();
+            if(veriler.length==0){
+                var optionElementi = $('<option>').attr('value', 0).text("Kayıt Yok!");
+                $("#AccounttariffNamesCategories").append(optionElementi);
+            }
             $.each(veriler, function (i, veri) {
                 var optionElementi = $('<option>').attr('value', veri.id).text(veri.categoryName);
                 $("#AccounttariffNamesCategories").append(optionElementi);

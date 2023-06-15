@@ -125,10 +125,18 @@
                                             <div class="input-group">
                                                 <i class="input-group-text fa fa-random"></i>
                                                 <select class="form-control select" id="tariffname" data-width="1%">
-                                                    @foreach (AccountsTariffNames item in Model)
+                                                   @if (Model.Count>0)
                                                     {
-                                                        <option value=@item.Id>@item.TariffName</option>
+                                                        @foreach (AccountsTariffNames item in Model)
+                                                        {
+                                                            <option value=@item.Id>@item.TariffName</option>
+                                                        }
                                                     }
+                                                    else
+                                                    {
+                                                        <option value=0>Kayıt Yok!</option>
+                                                    }
+                                                    
                                                 </select>
                                             </div>
                                         </div>
@@ -223,9 +231,16 @@
                             <div class="input-group">
                                 @*<i class="input-group-text fa fa-random"></i>*@
                                 <select name="transferredtariff" class="form-control select" id="transferredtariffname" data-width="1%">
-                                    @foreach (AccountsTariffNames item in Model)
+                                    @if (Model.Count > 0)
                                     {
-                                        <option value=@item.Id>@item.TariffName</option>
+                                        @foreach (AccountsTariffNames item in Model)
+                                        {
+                                            <option value=@item.Id>@item.TariffName</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value=0>Kayıt Yok!</option>
                                     }
                                 </select>
                             </div>
@@ -379,12 +394,25 @@
                         for (var i = 0; i < dropdown.options.length; i++) {
                             if (dropdown.options[i].value === selectedValue) {
                                 dropdown.remove(i);
+                                if (dropdown.options.length === 0)
+                                {
+                                    var option = document.createElement("option");
+                                    option.text = "Kayıt Yok";
+                                    option.value = "0";
+                                    dropdown.add(option);
+                                }
                                 break;
                             }
                         }
                         for (var i = 0; i < dropdownnewtariff.options.length; i++) {
                             if (dropdownnewtariff.options[i].value === selectedValue) {
                                 dropdownnewtariff.remove(i);
+                                if (dropdownnewtariff.options.length === 0) {
+                                    var option = document.createElement("option");
+                                    option.text = "Kayıt Yok";
+                                    option.value = "0";
+                                    dropdownnewtariff.add(option);
+                                }
                                 break;
                             }
                         }
@@ -431,7 +459,11 @@
             url: "/Setting/GetTariffNameCategories",
             type: "GET",
             data: { id: selectedValue },
-            success: function (data) {
+            success: function (data) {                
+                if(data.length==0){
+                    var option = $("<option></option>").text("Kayıt Yok!").val(0);
+                    dropdownList.append(option);
+                }
                 for (var i = 0; i < data.length; i++) {
                     var option = $("<option></option>").text(data[i].categoryName).val(data[i].id);
                     dropdownList.append(option);
