@@ -4,7 +4,7 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Kategori</th>            
+            <th>Kategori</th>
             <th>Tedavi</th>
             <th>Fiyat</th>
             <th>Kdv</th>
@@ -16,44 +16,29 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr data-id="@item.Id">                
-                <td>@item.Queue</td>                
-                <td>@item.CategoryName</td>                
+            <tr data-id="@item.Id">
+                <td>@item.Queue</td>
+                <td>@item.CategoryName</td>
                 <td>@item.Treatment</td>
                 <td>@item.Price</td>
                 <td>@item.Vat</td>
                 <td>@item.PriceWithVat</td>
-                <td>@item.Cost</td>                
+                <td>@item.Cost</td>
                 <td class="text-center">
                     <div class="d-inline-flex">
                         <div class="dropdown">
                             <a href="#" class="text-body" data-bs-toggle="dropdown">
                                 <i class="ph-list"></i>
-                            </a>
-
-                           @* <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">
-                                    <i class="ph-file-pdf me-2"></i>
-                                    Export to .pdf
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <i class="ph-file-csv me-2"></i>
-                                    Export to .csv
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <i class="ph-file-doc me-2"></i>
-                                    Export to .doc
-                                </a>
-                            </div>*@
+                            </a>                           
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a href="#" class="dropdown-item">
                                     <i class="fa fa-pencil-alt me-2"></i>
                                     Tedavi Düzelt
                                 </a>
-                                <a href="#" class="dropdown-item">
+                                <a style="cursor:pointer" id="getcostlistwidgettedavisil" class="dropdown-item">
                                     <i class="fas fa-trash me-2"></i>
                                     Tedavi Sil
-                                </a>                                
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -95,7 +80,7 @@
                 className: 'btn btn-dark',
                 action: function (e, dt, node, config) {
                     //alert($("#tariffnamecategory").val());
-                    
+
                     var data = [];
                     //bu şekilde data-id alabildim
                     table.rows().every(function () {
@@ -109,10 +94,10 @@
                     for (var i = 0; i < data.length; i++) {
                         var rowData = data[i];
                         var rowId = rowData[rowData.length - 1]; // Son eleman data-id değeri
-                        
+
                         // Verileri okuyun ve işleyin
                         var _queue = rowData[0];
-                        
+
                         //console.log(queue);
                         //console.log(rowId);
                         $.ajax({
@@ -129,10 +114,10 @@
                                 alert("İstek başarısız oldu: " + error);
                             }
                         });
-                        
+
                     }
                     alert("Kaydedildi");
-                    
+
                 },
                 // Buton arasında boşluk bırakmak için CSS özelliklerini değiştiriyoruz
                 init: function (api, node, config) {
@@ -143,7 +128,8 @@
                 text: '<i class="fa fa-plus"></i>Yeni Tedavi Ekle',
                 className: 'btn btn-primary',
                 action: function (e, dt, node, config) {
-                    alert('Kaydedildi!');
+                    //alert('Kaydedildi!');
+                    $("#modal_yenitedaviekle").modal('show');
                 },
                 // Buton arasında boşluk bırakmak için CSS özelliklerini değiştiriyoruz
                 init: function (api, node, config) {
@@ -168,18 +154,18 @@
             //    buttons: [
             //        {
             //            text: 'Sadece Seçiliyi Sil',
-            //            action: function (e, dt, node, config) {                            
+            //            action: function (e, dt, node, config) {
             //                alert('Sadece seçili olan siliniyor!');
             //            }
             //        },
             //        {
             //            text: 'Tümünü Sil',
             //            action: function (e, dt, node, config) {
-            //                alert('Tümü siliniyor!');                            
-                           
+            //                alert('Tümü siliniyor!');
+
             //            }
             //        }
-            //    ],                
+            //    ],
             //    // Buton arasında boşluk bırakmak için CSS özelliklerini değiştiriyoruz
             //    init: function (api, node, config) {
             //        $(node).css('margin-right', '10px');
@@ -197,7 +183,7 @@
             table.rowReorder.enable();
         }
     });
-    //var data = table.rows().data();
-    //        //console.log(data);
-    
+        //var data = table.rows().data();
+        //        //console.log(data);
+
 </script>

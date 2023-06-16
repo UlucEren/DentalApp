@@ -313,5 +313,66 @@ namespace WebUI.Controllers
 
             return Json("İşlem Başarılı.");
         }
+        [HttpPost]
+        public async Task<JsonResult> SetTreatment(long categoryId, string treatmentName, string price, int vat, string cost)
+        {
+            var list = await _accountsTariffListsService.GetListByCategories_Id(categoryId);
+            foreach (var item1 in list)
+            {
+                AccountsTariffLists updateAccountsTariffLists = new AccountsTariffLists();
+                updateAccountsTariffLists.Id = item1.Id;
+                updateAccountsTariffLists.Treatment = item1.Treatment;
+                updateAccountsTariffLists.Price = item1.Price;
+                updateAccountsTariffLists.Vat = item1.Vat;
+                updateAccountsTariffLists.PriceWithVat = item1.Vat;
+                updateAccountsTariffLists.Cost = item1.Cost;
+                updateAccountsTariffLists.Queue = item1.Queue + 1;
+                updateAccountsTariffLists.AccountsTariffNamesCategories_Id_Fk = item1.AccountsTariffNamesCategories_Id_Fk;
+
+                await _accountsTariffListsService.Update(updateAccountsTariffLists);
+            }
+            AccountsTariffLists addAccountsTariffLists = new AccountsTariffLists();
+            addAccountsTariffLists.Id = Guid.NewGuid().ToString();
+            addAccountsTariffLists.Treatment = treatmentName;
+            price = price.Replace('.', ',');
+            addAccountsTariffLists.Price = Convert.ToDecimal(price);
+            addAccountsTariffLists.Vat = vat;
+            addAccountsTariffLists.PriceWithVat = addAccountsTariffLists.Price + (addAccountsTariffLists.Price / 100 * Convert.ToDecimal(vat));
+            cost = cost.Replace(".", ",");
+            addAccountsTariffLists.Cost = Convert.ToDecimal(cost);
+            addAccountsTariffLists.Queue = 1;
+            addAccountsTariffLists.AccountsTariffNamesCategories_Id_Fk = categoryId;
+
+            await _accountsTariffListsService.Add(addAccountsTariffLists);
+
+            return Json("İşlem Başarılı.");
+        }
+        [HttpPost]
+        public async Task<JsonResult> DelTreatment(string Id)
+        {
+            var data = await _accountsTariffListsService.GetById(Id);
+            await _accountsTariffListsService.Delete(data.Data);
+            var list = await _accountsTariffListsService.GetListByCategories_Id(data.Data.AccountsTariffNamesCategories_Id_Fk);
+            var orderList = list.OrderBy(x => x.Queue).ToList();            
+            
+            int i = 1;
+            foreach (var item1 in orderList)
+            {
+                AccountsTariffLists updateAccountsTariffLists = new AccountsTariffLists();
+                updateAccountsTariffLists.Id = item1.Id;
+                updateAccountsTariffLists.Treatment = item1.Treatment;
+                updateAccountsTariffLists.Price = item1.Price;
+                updateAccountsTariffLists.Vat = item1.Vat;
+                updateAccountsTariffLists.PriceWithVat = item1.Vat;
+                updateAccountsTariffLists.Cost = item1.Cost;
+                updateAccountsTariffLists.Queue = i;
+                updateAccountsTariffLists.AccountsTariffNamesCategories_Id_Fk = item1.AccountsTariffNamesCategories_Id_Fk;
+
+                await _accountsTariffListsService.Update(updateAccountsTariffLists);
+                i = i + 1;
+            }            
+
+            return Json("İşlem Başarılı.");
+        }
     }
 }

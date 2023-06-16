@@ -10,7 +10,7 @@
 
     <!-- /global stylesheets -->
     <!-- Theme JS files -->
-    @*<script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>*@
+        @*<script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>*@
     <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/datatables.min.js"></script>
     <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/extensions/row_reorder.min.js"></script>
     <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/extensions/responsive.min.js"></script>
@@ -58,7 +58,7 @@
         <li class="nav-item">
             <a href="#js-tab3" class="nav-link @{
                 isactive=(selectedPage == "/Setting/Tariff") ? "active" : "";
-                                    @isactive
+                                            @isactive
 ;
 }" data-bs-toggle="tab">
                 <i class="ph-user-circle me-1"></i>
@@ -125,7 +125,7 @@
                                             <div class="input-group">
                                                 <i class="input-group-text fa fa-random"></i>
                                                 <select class="form-control select" id="tariffname" data-width="1%">
-                                                   @if (Model.Count>0)
+                                                    @if (Model.Count > 0)
                                                     {
                                                         @foreach (AccountsTariffNames item in Model)
                                                         {
@@ -136,7 +136,7 @@
                                                     {
                                                         <option value=0>Kayıt Yok!</option>
                                                     }
-                                                    
+
                                                 </select>
                                             </div>
                                         </div>
@@ -294,7 +294,7 @@
                             @*<div class="form-text text-muted">Here goes your name</div>*@
                         </div>
                     </div>
-                    
+
                     <div class="row mb-3">
                         <label class="col-md-4 col-form-label">Fiyat Değişim Oranı</label>
                         <div class="col-md-8">
@@ -323,6 +323,67 @@
     </div>
 </div>
 <!-- /Tarife Düzelt modal -->
+<!-- Yeni Tedavi Ekle Modal -->
+<div id="modal_yenitedaviekle" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @* <form action="\Setting\CreateTariff" method="post">*@
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni Tedavi Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Tedavi Kategori</label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <select name="yeni-tedavi-ekle-category" class="form-control select" id="yenitedavieklecategory" data-width="1%">
+                                <option value=0>Kayıt Yok!</option>
+                            </select>
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Tedavi Adı</label>
+                    <div class="col-md-8">
+                        <input id="yeni-tedavi-ekle-name" type="text" class="form-control">
+                        @*<div class="form-text text-muted">Here goes your name</div>*@
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Fiyat</label>
+                    <div class="col-md-8">
+                        <input id="yeni-tadavi-ekle-price" type="number" class="form-control">
+                        @*<div class="form-text text-muted">Yeni tarife, seçilen tarifedeki tedavilerden oluşacak</div>*@
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">KDV</label>
+                    <div class="col-md-8">
+                        <input id="yeni-tadavi-ekle-vat" type="number" class="form-control">
+                        @*<div class="form-text text-muted">Yeni tarife fiyatlarını yüzdelik oranda toplu güncelleme. Fiyatların aynı kalmasını istiyorsanız boş bırakabilirsiniz</div>*@
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Masraf</label>
+                    <div class="col-md-8">
+                        <input id="yeni-tadavi-ekle-cost" type="number" class="form-control">
+                        @*<div class="form-text text-muted">Yeni tarife fiyatlarını yüzdelik oranda toplu güncelleme. Fiyatların aynı kalmasını istiyorsanız boş bırakabilirsiniz</div>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                <button id="yeni-tedavi-ekle-button" type="button" class="btn btn-primary">Kaydet</button>
+            </div>
+            @*</form>*@
+        </div>
+    </div>
+</div>
+<!-- /Yeni Tedavi Ekle Modal -->
 
 <script>
     $(document).ready(function () {
@@ -375,7 +436,7 @@
 
         $("#btn-delete").click(function () {
             var dropdown = document.getElementById("tariffname");
-            var selectedOption = dropdown.options[dropdown.selectedIndex].text;            
+            var selectedOption = dropdown.options[dropdown.selectedIndex].text;
             var cevap = confirm(selectedOption + " tarifesinin silinmesine emin misiniz?");
             if (cevap) {
                 var tariffNameId = $("#tariffname").val();
@@ -394,8 +455,7 @@
                         for (var i = 0; i < dropdown.options.length; i++) {
                             if (dropdown.options[i].value === selectedValue) {
                                 dropdown.remove(i);
-                                if (dropdown.options.length === 0)
-                                {
+                                if (dropdown.options.length === 0) {
                                     var option = document.createElement("option");
                                     option.text = "Kayıt Yok";
                                     option.value = "0";
@@ -419,7 +479,7 @@
                         var firstValue = $("#tariffname").val();
                         fillCategoryDropdown(firstValue, $("#tariffnamecategory"));
                     }
-                });                
+                });
 
             } else {
                 alert("İptal Edildi!");
@@ -431,9 +491,61 @@
 
             var dropdown = document.getElementById("tariffname");
             var selectedOption = dropdown.options[dropdown.selectedIndex].text;
-            $("#update_TariffName").val(selectedOption);           
-                
+            $("#update_TariffName").val(selectedOption);
+
             $("#modal_düzelttarife").modal('show');
+        });
+
+        $("#yeni-tedavi-ekle-button").click(function () {
+            var yenitedavieklecategory = $("#yenitedavieklecategory").val();
+            var yenitedavieklename = $("#yeni-tedavi-ekle-name").val();
+            var yenitadaviekleprice = $("#yeni-tadavi-ekle-price").val();
+            var yenitadavieklevat = $("#yeni-tadavi-ekle-vat").val();
+            var yenitadavieklecost = $("#yeni-tadavi-ekle-cost").val();
+            
+            if (yenitedavieklecategory==0)
+            {
+                alert("Kategori Seçilmeli!");
+                return;
+            }
+            if (yenitedavieklename == "") {
+                alert("Tedavi Adı Girilmeli!");
+                return;
+            }
+            if (yenitadaviekleprice == "") {
+                yenitadaviekleprice=0;
+            }
+            if (yenitadavieklevat == "") {
+                yenitadavieklevat = 0;
+            }
+            if (yenitadavieklecost == "") {
+                yenitadavieklecost = 0;
+            }
+            $.ajax({
+                async: false,
+                url: "/Setting/SetTreatment",
+                type: "POST",
+                data: { categoryId: yenitedavieklecategory, treatmentName: yenitedavieklename, price: yenitadaviekleprice, vat: yenitadavieklevat, cost: yenitadavieklecost },
+                success: function (data) {
+                    alert(data);
+                }
+            });
+            var selectedValue = $("#tariffnamecategory").val();
+            //console.log(selectedValue);
+            $.get("/Setting/GetCostListWidget", { id: selectedValue }, function (data) {
+                $(".cost-list-widget").html('');
+                $(".cost-list-widget").html(data);
+            });
+            $("#modal_yenitedaviekle").modal('hide');
+
+        });
+
+        var input = document.getElementById("yeni-tadavi-ekle-vat");
+
+        input.addEventListener("input", function () {
+            var value = input.value;
+            value = value.replace(/[.,]/g, "");
+            input.value = value;
         });
 
     });
@@ -454,19 +566,25 @@
 
     function fillCategoryDropdown(selectedValue, dropdownList) {
         dropdownList.empty();
+        var dropdownListyenitedavieklecategory = $("#yenitedavieklecategory");
+        dropdownListyenitedavieklecategory.empty();
         $.ajax({
             async: false,
             url: "/Setting/GetTariffNameCategories",
             type: "GET",
             data: { id: selectedValue },
-            success: function (data) {                
-                if(data.length==0){
+            success: function (data) {
+                if (data.length == 0) {
                     var option = $("<option></option>").text("Kayıt Yok!").val(0);
+                    var option1 = $("<option></option>").text("Kayıt Yok!").val(0);
                     dropdownList.append(option);
+                    dropdownListyenitedavieklecategory.append(option1);
                 }
                 for (var i = 0; i < data.length; i++) {
                     var option = $("<option></option>").text(data[i].categoryName).val(data[i].id);
+                    var option1 = $("<option></option>").text(data[i].categoryName).val(data[i].id);
                     dropdownList.append(option);
+                    dropdownListyenitedavieklecategory.append(option1);
                 }
             }
         });
@@ -476,4 +594,29 @@
             $(".cost-list-widget").html(data);
         });
     }
+</script>
+<script>
+    $(document).on('click', '#getcostlistwidgettedavisil', function (e) {
+        var tr = $(this).closest('tr');
+        var dataId = tr.data('id');
+        
+        $.ajax({
+            async: false,
+            url: "/Setting/DelTreatment",
+            type: "POST",
+            data: { Id: dataId },
+            success: function (data) {
+                tr.remove();
+            }
+        });
+
+        var selectedValue = $("#tariffnamecategory").val();
+        //console.log(selectedValue);
+
+        $.get("/Setting/GetCostListWidget", { id: selectedValue }, function (data) {
+            $(".cost-list-widget").html('');
+            $(".cost-list-widget").html(data);
+            alert("İşlem Başarılı.");
+        });
+    });
 </script>
