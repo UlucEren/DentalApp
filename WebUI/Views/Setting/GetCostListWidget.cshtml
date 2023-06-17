@@ -16,14 +16,14 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr data-id="@item.Id">
+            <tr data-id="@item.Id" data-categoryid="@item.AccountsTariffNamesCategories_Id_Fk">
                 <td>@item.Queue</td>
                 <td>@item.CategoryName</td>
                 <td>@item.Treatment</td>
-                <td>@item.Price</td>
+                <td>@item.Price.ToString("C2")</td>
                 <td>@item.Vat</td>
-                <td>@item.PriceWithVat</td>
-                <td>@item.Cost</td>
+                <td>@item.PriceWithVat.ToString("C2")</td>
+                <td>@item.Cost.ToString("C2")</td>
                 <td class="text-center">
                     <div class="d-inline-flex">
                         <div class="dropdown">
@@ -31,7 +31,7 @@
                                 <i class="ph-list"></i>
                             </a>                           
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">
+                                <a style="cursor:pointer" id="getcostlistwidgettedaviduzenle" class="dropdown-item">
                                     <i class="fa fa-pencil-alt me-2"></i>
                                     Tedavi Düzelt
                                 </a>
@@ -140,7 +140,19 @@
                 text: '<i class="fas fa-trash"></i>Tümünü Sil',
                 className: 'btn btn-danger',
                 action: function (e, dt, node, config) {
-                    alert('Tümü Silindi!');
+                    var selectedValue = $("#tariffnamecategory").val();
+                    $.ajax({
+                        async: false,
+                        url: "/Setting/DelAllTreatment",
+                        type: "POST",
+                        data: { Id: selectedValue },
+                        success: function (data) {
+                            table.clear().draw();
+                            console.log(data);
+                            alert('Tümü Silindi!');
+                        }
+                    });
+                    
                 },
                 // Buton arasında boşluk bırakmak için CSS özelliklerini değiştiriyoruz
                 init: function (api, node, config) {

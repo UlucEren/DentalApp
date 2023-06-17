@@ -25,7 +25,7 @@ using WebUI.Models.AppIdentityDb;
 
 namespace WebUI.Controllers
 {
-
+    [Authorize]
     public class SettingController : Controller
     {
         private readonly IAccountsTariffNamesService _accountsTariffNamesService;
@@ -353,8 +353,8 @@ namespace WebUI.Controllers
             var data = await _accountsTariffListsService.GetById(Id);
             await _accountsTariffListsService.Delete(data.Data);
             var list = await _accountsTariffListsService.GetListByCategories_Id(data.Data.AccountsTariffNamesCategories_Id_Fk);
-            var orderList = list.OrderBy(x => x.Queue).ToList();            
-            
+            var orderList = list.OrderBy(x => x.Queue).ToList();
+
             int i = 1;
             foreach (var item1 in orderList)
             {
@@ -370,8 +370,35 @@ namespace WebUI.Controllers
 
                 await _accountsTariffListsService.Update(updateAccountsTariffLists);
                 i = i + 1;
-            }            
+            }
 
+            return Json("İşlem Başarılı.");
+        }
+        [HttpPost]
+        public async Task<JsonResult> DelAllTreatment(long Id)
+        {
+            var list = await _accountsTariffListsService.GetListByCategories_Id(Id);
+            foreach (var item in list)
+            {
+                AccountsTariffLists delAccountsTariffLists = new AccountsTariffLists();
+                delAccountsTariffLists.Id = item.Id;
+                await _accountsTariffListsService.Delete(delAccountsTariffLists);
+            }
+
+            return Json("İşlem Başarılı.");
+        }
+        [HttpPost]
+        public async Task<JsonResult> UpdateTreatment(string treatmentId, string treatmentName, string price, int vat, string cost)
+        {
+            var data = await _accountsTariffListsService.GetById(treatmentId);
+            data.Data.Treatment = treatmentName;
+            price = price.Replace('.', ',');
+            data.Data.Price = Convert.ToDecimal(price);
+            data.Data.Vat = vat;
+            data.Data.PriceWithVat = data.Data.Price + (data.Data.Price / 100 * Convert.ToDecimal(vat));
+            cost = cost.Replace('.', ',');
+            data.Data.Cost = Convert.ToDecimal(cost);
+            await _accountsTariffListsService.Update(data.Data);
             return Json("İşlem Başarılı.");
         }
     }

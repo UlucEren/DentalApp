@@ -58,7 +58,7 @@
         <li class="nav-item">
             <a href="#js-tab3" class="nav-link @{
                 isactive=(selectedPage == "/Setting/Tariff") ? "active" : "";
-                                            @isactive
+                                                @isactive
 ;
 }" data-bs-toggle="tab">
                 <i class="ph-user-circle me-1"></i>
@@ -338,7 +338,7 @@
                     <label class="col-md-4 col-form-label">Tedavi Kategori</label>
                     <div class="col-md-8">
                         <div class="input-group">
-                            <select name="yeni-tedavi-ekle-category" class="form-control select" id="yenitedavieklecategory" data-width="1%">
+                            <select class="form-control select" id="yenitedavieklecategory" data-width="1%">
                                 <option value=0>Kayıt Yok!</option>
                             </select>
                             @*<div class="form-text text-muted">Here goes your name</div>*@
@@ -384,6 +384,67 @@
     </div>
 </div>
 <!-- /Yeni Tedavi Ekle Modal -->
+<!-- Tedavi Düzenle Modal -->
+<div id="modal_tedaviduzenle" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @* <form action="\Setting\CreateTariff" method="post">*@
+            <div class="modal-header">
+                <h5 class="modal-title">Tedavi Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Tedavi Kategori</label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <select class="form-control select" id="tedaviduzenlecategory" data-width="1%">
+                                <option value=0>Kayıt Yok!</option>
+                            </select>
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Tedavi Adı</label>
+                    <div class="col-md-8">
+                        <input id="tedaviduzenlename" type="text" class="form-control">
+                        @*<div class="form-text text-muted">Here goes your name</div>*@
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Fiyat</label>
+                    <div class="col-md-8">
+                        <input id="tedaviduzenleprice" type="number" class="form-control">
+                        @*<div class="form-text text-muted">Yeni tarife, seçilen tarifedeki tedavilerden oluşacak</div>*@
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">KDV</label>
+                    <div class="col-md-8">
+                        <input id="tedaviduzenlevat" type="number" class="form-control">
+                        @*<div class="form-text text-muted">Yeni tarife fiyatlarını yüzdelik oranda toplu güncelleme. Fiyatların aynı kalmasını istiyorsanız boş bırakabilirsiniz</div>*@
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Masraf</label>
+                    <div class="col-md-8">
+                        <input id="tedaviduzenlecost" type="number" class="form-control">
+                        @*<div class="form-text text-muted">Yeni tarife fiyatlarını yüzdelik oranda toplu güncelleme. Fiyatların aynı kalmasını istiyorsanız boş bırakabilirsiniz</div>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                <button id="tedaviduzenlebutton" type="button" class="btn btn-primary">Kaydet</button>
+            </div>
+            @*</form>*@
+        </div>
+    </div>
+</div>
+<!-- /Tedavi Düzenle Modal -->
 
 <script>
     $(document).ready(function () {
@@ -502,9 +563,8 @@
             var yenitadaviekleprice = $("#yeni-tadavi-ekle-price").val();
             var yenitadavieklevat = $("#yeni-tadavi-ekle-vat").val();
             var yenitadavieklecost = $("#yeni-tadavi-ekle-cost").val();
-            
-            if (yenitedavieklecategory==0)
-            {
+
+            if (yenitedavieklecategory == 0) {
                 alert("Kategori Seçilmeli!");
                 return;
             }
@@ -513,7 +573,7 @@
                 return;
             }
             if (yenitadaviekleprice == "") {
-                yenitadaviekleprice=0;
+                yenitadaviekleprice = 0;
             }
             if (yenitadavieklevat == "") {
                 yenitadavieklevat = 0;
@@ -541,11 +601,17 @@
         });
 
         var input = document.getElementById("yeni-tadavi-ekle-vat");
+        var input2 = document.getElementById("tedaviduzenlevat");
 
         input.addEventListener("input", function () {
             var value = input.value;
             value = value.replace(/[.,]/g, "");
             input.value = value;
+        });
+        input2.addEventListener("input", function () {
+            var value = input2.value;
+            value = value.replace(/[.,]/g, "");
+            input2.value = value;
         });
 
     });
@@ -567,6 +633,8 @@
     function fillCategoryDropdown(selectedValue, dropdownList) {
         dropdownList.empty();
         var dropdownListyenitedavieklecategory = $("#yenitedavieklecategory");
+        var dropdownListtedaviduzenlecategory = $("#tedaviduzenlecategory");
+        dropdownListtedaviduzenlecategory.empty();
         dropdownListyenitedavieklecategory.empty();
         $.ajax({
             async: false,
@@ -577,14 +645,18 @@
                 if (data.length == 0) {
                     var option = $("<option></option>").text("Kayıt Yok!").val(0);
                     var option1 = $("<option></option>").text("Kayıt Yok!").val(0);
+                    var option2 = $("<option></option>").text("Kayıt Yok!").val(0);
                     dropdownList.append(option);
                     dropdownListyenitedavieklecategory.append(option1);
+                    dropdownListtedaviduzenlecategory.append(option2);
                 }
                 for (var i = 0; i < data.length; i++) {
                     var option = $("<option></option>").text(data[i].categoryName).val(data[i].id);
                     var option1 = $("<option></option>").text(data[i].categoryName).val(data[i].id);
+                    var option2 = $("<option></option>").text(data[i].categoryName).val(data[i].id);
                     dropdownList.append(option);
                     dropdownListyenitedavieklecategory.append(option1);
+                    dropdownListtedaviduzenlecategory.append(option2);
                 }
             }
         });
@@ -599,7 +671,7 @@
     $(document).on('click', '#getcostlistwidgettedavisil', function (e) {
         var tr = $(this).closest('tr');
         var dataId = tr.data('id');
-        
+
         $.ajax({
             async: false,
             url: "/Setting/DelTreatment",
@@ -618,5 +690,65 @@
             $(".cost-list-widget").html(data);
             alert("İşlem Başarılı.");
         });
+    });
+</script>
+<script>
+    $(document).on('click', '#getcostlistwidgettedaviduzenle', function (e) {
+        var tr = $(this).closest('tr');
+        var dataId = tr.data('id');
+        var categoryId = tr.data('categoryid');
+        $("#tedaviduzenlecategory").val(categoryId).change();
+        var tdValues = [];
+        tr.find('td').each(function () {
+            var value = $(this).text();
+            tdValues.push(value);
+        });
+        console.log(tdValues);
+        $("#tedaviduzenlename").val(tdValues[2]);
+        $("#tedaviduzenlename").data("treatmentid", dataId);
+        $("#mydiv").data("treatmentid", dataId);
+        $("#tedaviduzenleprice").val(tdValues[3].replace(',', '.').replace("₺", ""));
+        $("#tedaviduzenlevat").val(tdValues[4]);
+        $("#tedaviduzenlecost").val(tdValues[6].replace(',', '.').replace("₺", ""));
+
+        $("#modal_tedaviduzenle").modal('show');
+
+    });
+
+    $(document).on('click', '#tedaviduzenlebutton', function (e) {        
+        var _treatmentId = $("#tedaviduzenlename").data("treatmentid");
+        var _treatmentName = $("#tedaviduzenlename").val();
+        var _price = $("#tedaviduzenleprice").val();
+        var _vat = $("#tedaviduzenlevat").val();
+        var _cost = $("#tedaviduzenlecost").val();
+
+        $.ajax({
+            async: false,
+            url: "/Setting/UpdateTreatment",
+            type: "POST",
+            data: { treatmentId: _treatmentId, treatmentName: _treatmentName, price: _price, vat: _vat, cost: _cost },
+            success: function (data) {
+                alert(data);;
+            }
+        });
+        var targetRow = $("tr[data-id='" + _treatmentId + "']");
+
+        // Hedef satırın içindeki td öğelerini seçerek verileri güncelleyin
+        var pricewithvat = parseFloat(_price) + (parseFloat(_price) / 100 * parseFloat(_vat));
+
+        targetRow.find("td").eq(2).text(_treatmentName);
+        _price = _price.replace('.', ',');
+        _price = "₺" + _price;
+        targetRow.find("td").eq(3).text(_price);
+        targetRow.find("td").eq(4).text(_vat);
+        pricewithvat = pricewithvat.toString();
+        pricewithvat = pricewithvat.replace('.', ',');
+        pricewithvat = "₺" + pricewithvat;
+        targetRow.find("td").eq(5).text(pricewithvat);
+        _cost = _cost.replace('.', ',');
+        _cost = "₺" + _cost;
+        targetRow.find("td").eq(6).text(_cost);
+        $("#modal_tedaviduzenle").modal('hide');
+
     });
 </script>
