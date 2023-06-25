@@ -8,6 +8,8 @@ using Business.Repositories.UserRepository;
 using Entities.Concrete;
 using Microsoft.Extensions.Options;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Business.Repositories.AccountsTariffListsRepository;
 
 namespace WebUI.Controllers
 {
@@ -391,6 +393,104 @@ namespace WebUI.Controllers
                                                                                select y.TDBCategoryName).FirstOrDefault()
                                                         }).ToList();
             return PartialView(costLists);
+        }
+        public IActionResult DiagnozCategory()
+        {
+            AppIdentityDbContext context = new AppIdentityDbContext(options);
+            List<DiagnozCategories> diagnozCategories = context.DiagnozCategories.ToList();
+            return View(diagnozCategories);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateDiagnozCategory(string name, int id)
+        {
+            using (AppIdentityDbContext context = new AppIdentityDbContext(options))
+            {
+                DiagnozCategories cat = context.DiagnozCategories.Where(x => x.Id == id).FirstOrDefault()!;
+                cat.CategoryName = name;
+                context.Update(cat);
+                context.SaveChanges();
+            }
+
+
+            return RedirectToAction("DiagnozCategory");
+        }
+        [HttpPost]
+        public IActionResult CreateDiagnozCategory(string name)
+        {
+            using (AppIdentityDbContext context = new AppIdentityDbContext(options))
+            {
+                DiagnozCategories cat = new DiagnozCategories();
+                cat.CategoryName = name;
+                context.Add(cat);
+                context.SaveChanges();
+            }
+
+
+            return RedirectToAction("DiagnozCategory");
+        }
+        public IActionResult DeleteDiagnozCategory(int id)
+        {
+            using (AppIdentityDbContext context = new AppIdentityDbContext(options))
+            {
+                DiagnozCategories cat = context.DiagnozCategories.Where(x => x.Id == id).FirstOrDefault()!;
+                context.Remove(cat);
+                context.SaveChanges();
+            }
+            return RedirectToAction("DiagnozCategory");
+        }
+
+        public IActionResult DiagnozList()
+        {
+            string id = Request.Query["ctgry_id"].SingleOrDefault();
+            if (id != null)
+            {
+                ViewBag.categoryId = id;
+            }
+            AppIdentityDbContext context = new AppIdentityDbContext(options);
+            List<DiagnozCategories> diagnozCategories = context.DiagnozCategories.ToList();
+            return View(diagnozCategories);
+        }
+        public PartialViewResult DefaultDiagnozListWidget(int id)
+        {
+            AppIdentityDbContext context = new AppIdentityDbContext(options);
+            List<DiagnozLists> diagnozLists = context.DiagnozLists.Where(x => x.DiagnozCategories_Id_Fk == id).ToList();
+            return PartialView(diagnozLists);
+        }
+        public IActionResult AddDiagnozList(int category_id, string name)
+        {
+            using (AppIdentityDbContext context = new AppIdentityDbContext(options))
+            {
+                DiagnozLists list = new DiagnozLists();
+                list.Name = name;
+                list.DiagnozCategories_Id_Fk = category_id;
+                context.Add(list);
+                context.SaveChanges();
+            }
+            return RedirectToAction("DiagnozList", new { ctgry_id = category_id });
+        }
+        [HttpPost]
+        public JsonResult UpdateDiagnozList(int Id, string name)
+        {
+            using (AppIdentityDbContext context = new AppIdentityDbContext(options))
+            {
+                DiagnozLists list = context.DiagnozLists.Where(x => x.Id == Id).SingleOrDefault()!;
+                list.Name = name;
+                context.Update(list);
+                context.SaveChanges();
+            }
+            return Json("İşlem Başarılı.");
+        }
+        [HttpPost]
+        public JsonResult DeleteDiagnozList(int Id)
+        {
+            using (AppIdentityDbContext context = new AppIdentityDbContext(options))
+            {
+                DiagnozLists list = context.DiagnozLists.Where(x => x.Id == Id).SingleOrDefault()!;
+                context.Remove(list);
+                context.SaveChanges();
+            }
+            return Json("İşlem Başarılı.");
         }
     }
 

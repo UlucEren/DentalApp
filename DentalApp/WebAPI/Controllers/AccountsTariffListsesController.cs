@@ -59,16 +59,16 @@ namespace WebApi.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var result = await _accountsTariffListsService.GetById(id);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result.Message);
-        }
+        //[HttpGet("[action]/{id}")]
+        //public async Task<IActionResult> GetById(int id)
+        //{
+        //    var result = await _accountsTariffListsService.GetById(id);
+        //    if (result.Success)
+        //    {
+        //        return Ok(result);
+        //    }
+        //    return BadRequest(result.Message);
+        //}
 
     }
 }

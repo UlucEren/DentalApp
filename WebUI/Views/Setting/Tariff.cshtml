@@ -58,7 +58,7 @@
         <li class="nav-item">
             <a href="#js-tab3" class="nav-link @{
                 isactive=(selectedPage == "/Setting/Tariff") ? "active" : "";
-                                                @isactive
+                                                    @isactive
 ;
 }" data-bs-toggle="tab">
                 <i class="ph-user-circle me-1"></i>
@@ -703,10 +703,30 @@
             var value = $(this).text();
             tdValues.push(value);
         });
-        console.log(tdValues);
+
+        // milyon olunca noktaları kaldırıyoruz ki düzgün işlem yapsın
+        var str = tdValues[3];
+        var yeniStr = "";
+
+        for (var i = 0; i < str.length; i++) {
+            if (str[i] !== '.') {
+                yeniStr += str[i];
+            }
+        }
+        var str2 = tdValues[6];
+        var yeniStr2 = "";
+
+        for (var i = 0; i < str2.length; i++) {
+            if (str2[i] !== '.') {
+                yeniStr2 += str2[i];
+            }
+        }
+                
+        tdValues[3] = yeniStr;
+        tdValues[6] = yeniStr2;        
+        
         $("#tedaviduzenlename").val(tdValues[2]);
-        $("#tedaviduzenlename").data("treatmentid", dataId);
-        $("#mydiv").data("treatmentid", dataId);
+        $("#tedaviduzenlename").data("treatmentid", dataId);        
         $("#tedaviduzenleprice").val(tdValues[3].replace(',', '.').replace("₺", ""));
         $("#tedaviduzenlevat").val(tdValues[4]);
         $("#tedaviduzenlecost").val(tdValues[6].replace(',', '.').replace("₺", ""));
@@ -715,7 +735,7 @@
 
     });
 
-    $(document).on('click', '#tedaviduzenlebutton', function (e) {        
+    $(document).on('click', '#tedaviduzenlebutton', function (e) {
         var _treatmentId = $("#tedaviduzenlename").data("treatmentid");
         var _treatmentName = $("#tedaviduzenlename").val();
         var _price = $("#tedaviduzenleprice").val();

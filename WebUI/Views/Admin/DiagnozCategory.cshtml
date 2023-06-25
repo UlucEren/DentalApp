@@ -1,0 +1,153 @@
+﻿@using Entities.Concrete;
+@model List<DiagnozCategories>
+@{
+    ViewData["Title"] = "Diagnoz Kategori";
+}
+@section head {
+    <!-- Global stylesheets -->
+   
+    <!-- /global stylesheets -->
+    <!-- Theme JS files -->
+
+    <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/datatables.min.js"></script>
+    <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/extensions/buttons.min.js"></script>
+    <script src="~/content/Limitless-40/assets/demo/pages/datatables_extension_buttons_init.js"></script>
+    <!-- /theme JS files -->
+
+
+    <style>
+        label.error {
+            color: red;
+        }
+
+        input.error {
+            border: 1px solid red;
+        }
+    </style>
+}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Kategori Listesi</h5>
+    </div>
+
+    <table class="table datatable-button-new-category">
+        <thead>
+            <tr>
+                <th>Rol Adı</th>
+                <th class="text-center">Seçenek</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DiagnozCategories u in Model)
+            {
+                <tr>
+                    <td>@u.CategoryName</td>
+                    <td class="text-center">
+                        <div class="d-inline-flex">
+                            <div class="dropdown">
+                                <a href="#" class="text-body" data-bs-toggle="dropdown">
+                                    <i class="ph-list"></i>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a style="cursor:pointer;" class="dropdown-item update_modal" data-categoryname="@u.CategoryName" data-id="@u.Id">
+                                        <i class="far fa-edit me-2"></i>
+                                        Düzenle
+                                    </a>
+                                    <a href="\Admin\DeleteDiagnozCategory\@u.Id" onclick="return confirm('Silmek istediğinizden emin misiniz?')" class="dropdown-item">
+                                        <i class="far fa-times-circle me-2"></i>
+                                        Sil
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<!-- Update modal -->
+<div id="modal_update" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="update-form" action="\Admin\UpdateDiagnozCategory" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Kategori Düzenle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Kategori Adı</label>
+                        <div class="col-md-8">
+                            <input id="update_id" name="id" type="hidden" class="form-control">
+                            <input id="update_name" name="name" type="text" class="form-control">
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                    <button type="submit" id="targetclick" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Update modal -->
+<!-- New modal -->
+<div id="modal_default" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="create-form" action="\Admin\CreateDiagnozCategory" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Kategori Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Kategori Adı</label>
+                        <div class="col-md-8">
+                            <input name="name" type="text" class="form-control">
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>                    
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                    <button type="submit" id="targetclick" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /New modal -->
+<script>
+    $(".update_modal").click(function () {
+        var name = $(this).data("categoryname");
+        var id = $(this).data("id");;
+        $("#update_id").val(id);
+        $("#update_name").val(name);
+        $("#modal_update").modal('show');
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
+        $('.datatable-button-new-category').DataTable({
+            buttons: [
+                {
+                    text: '<i class="fas fa-plus-circle"></i> Kategori Ekle',
+                    className: 'btn btn-teal',
+                    action: function (e, dt, node, config) {
+                        $("#modal_default").modal('show');
+                    }
+                }
+            ]
+        });
+    });
+</script>

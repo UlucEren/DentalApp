@@ -1,0 +1,115 @@
+﻿@using Entities.Concrete;
+@model List<DiagnozLists>
+<table class="table" id="diagnozlist">
+    <colgroup>
+        <col style="width: 90%;">
+        <col style="width: 10%;">
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Tanım</th>
+            <th class="text-center">Seçenek</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DiagnozLists u in Model)
+        {
+            <tr data-id="@u.Id">
+                <td>@u.Name</td>
+                <td class="text-center">
+                    <div class="d-inline-flex">
+                        <div class="dropdown">
+                            <a href="#" class="text-body" data-bs-toggle="dropdown">
+                                <i class="ph-list"></i>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a style="cursor:pointer;" class="dropdown-item" id="updatedefaultdiagnozlistwidget">
+                                    <i class="far fa-edit me-2"></i>
+                                    Düzenle
+                                </a>
+                                <a style="cursor:pointer;" class="dropdown-item" id="deletedefaultdiagnozlistwidget">
+                                    <i class="far fa-times-circle me-2"></i>
+                                    Sil
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $('#diagnozlist').DataTable({
+        //dom: '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"B>><"middle"rt><"bottom"ip><"clear">',
+        language: {
+            search: "",
+            lengthMenu: "Sayfa Başına _MENU_ Kayıt Göster",
+            zeroRecords: "Eşleşen Kayıt Bulunamadı",
+            info: "Toplam _TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor.",
+            infoEmpty: "Kayıt Yok",
+            infoFiltered: "(_MAX_ kayıt içerisinden filtrelendi)",
+            paginate: {
+                first: "İlk",
+                last: "Son",
+                next: "Sonraki",
+                previous: "Önceki"
+            },
+            searchPlaceholder: "Arama yapmak için yazın"
+        },
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        //"responsive": true,
+            buttons: [
+            {
+                text: '<i class="fa fa-plus"></i> Yeni Tedavi Ekle',
+                className: 'btn btn-primary',
+                action: function (e, dt, node, config) {
+                    $("#modal_diagnoz-list").modal('show');                    
+                    $("#diagnoz-list-category-id").val($("#defaultdiagnozcategory").val());
+                    
+                },
+                init: function (api, node, config) {
+                    $(node).css('margin-right', '10px');
+                }
+            },
+            {
+                extend: 'copy',
+                text: '<i class="fa fa-copy"></i> Kopyala',
+                className: 'btn btn-dark',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'excel',
+                text: '<i class="fa fa-file-excel-o"></i> Excel',
+                className: 'btn btn-dark',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'csv',
+                text: '<i class="fa fa-file-text-o"></i> CSV',
+                className: 'btn btn-dark',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'print',
+                text: '<i class="fa fa-print"></i> Yazdır',
+                className: 'btn btn-dark',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            }
+        ]
+    });
+</script>

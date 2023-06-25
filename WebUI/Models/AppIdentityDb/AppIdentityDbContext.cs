@@ -22,5 +22,7 @@ namespace WebUI.Models.AppIdentityDb
         public virtual DbSet<TDBCostNames> TDBCostNames { get; set; }
         public virtual DbSet<TDBCostNameCategories> TDBCostNameCategories { get; set; }
         public virtual DbSet<TDBCostLists> TDBCostLists { get; set; }
+        public virtual DbSet<DiagnozCategories> DiagnozCategories { get; set; }
+        public virtual DbSet<DiagnozLists> DiagnozLists { get; set; }
     }
 }

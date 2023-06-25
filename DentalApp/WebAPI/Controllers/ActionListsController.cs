@@ -16,7 +16,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Add(ActionList actionList)
+        public async Task<IActionResult> Add(ActionLists actionList)
         {
             var result = await _actionListService.Add(actionList);
             if (result.Success)
@@ -27,7 +27,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Update(ActionList actionList)
+        public async Task<IActionResult> Update(ActionLists actionList)
         {
             var result = await _actionListService.Update(actionList);
             if (result.Success)
@@ -38,7 +38,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Delete(ActionList actionList)
+        public async Task<IActionResult> Delete(ActionLists actionList)
         {
             var result = await _actionListService.Delete(actionList);
             if (result.Success)

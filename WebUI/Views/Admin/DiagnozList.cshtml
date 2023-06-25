@@ -1,0 +1,204 @@
+﻿@using Entities.Concrete;
+@model List<DiagnozCategories>
+@{
+    ViewData["Title"] = "Diagnoz Listesi";
+}
+@section head {
+    <!-- Global stylesheets -->
+    <link href="~/content/Limitless-40/assets/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">
+
+    <!-- /global stylesheets -->
+    <!-- Theme JS files -->
+        @*<script src="~/content/Limitless-40/assets/js/jquery/jquery.min.js"></script>*@
+    <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/datatables.min.js"></script>
+        @*<script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/extensions/row_reorder.min.js"></script>*@
+        @*<script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/extensions/responsive.min.js"></script>*@
+    <script src="~/content/Limitless-40/assets/js/vendor/tables/datatables/extensions/buttons.min.js"></script>
+    <script src="~/content/Limitless-40/assets/demo/pages/datatables_extension_buttons_init.js"></script>
+
+        @*<script src="~/content/Limitless-40/assets/demo/pages/datatables_extension_row_reorder.js"></script>*@
+
+        @*<script src="~/content/Limitless-40/assets/js/vendor/forms/selects/select2.min.js"></script>*@
+        @*<script src="~/content/Limitless-40/assets/demo/pages/form_select2.js"></script>*@
+    <!-- /theme JS files -->
+}
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Diagnoz Listesi</h5>
+    </div>
+    <div class="row" style="margin-left:10px;margin-right:10px;margin-top:10px;">
+        <div class="col-lg-12">
+            <div class="form-floating">
+                <select class="form-select" id="defaultdiagnozcategory">
+                    @foreach (var item in Model)
+                    {
+                        <option value=@item.Id>@item.CategoryName</option>
+                    }
+                </select>
+                <label>Kategori</label>
+            </div>
+        </div>
+    </div>
+    <div class="card-body default-diagnoz-list-widget">
+    </div>
+</div>
+<!-- Basic modal -->
+<div id="modal_diagnoz-list" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="create-form" action="\Admin\AddDiagnozList" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Diagnoz Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">Tanım Adı</label>
+                        <div class="col-md-8">
+                            <input id="diagnoz-list-category-id" name="category_id" type="hidden" class="form-control">
+                            <input name="name" type="text" class="form-control">
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                    <button type="submit" id="targetclick" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /basic modal -->
+<!-- Update modal -->
+<div id="modal_update" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            @*<form id="update-form" action="\Admin\UpdateRol" method="post">*@
+            <div class="modal-header">
+                <h5 class="modal-title">Diagnoz Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Tanım Adı</label>
+                    <div class="col-md-8">
+                        <input id="update_name" name="name" type="text" class="form-control">
+                        @*<div class="form-text text-muted">Here goes your name</div>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" id="modal_updatebutton" class="btn btn-primary">Kaydet</button>
+            </div>
+            @*</form>*@
+        </div>
+    </div>
+</div>
+<!-- /Update modal -->
+<script>
+    $(document).ready(function () {
+        var _categoryId = '@ViewBag.categoryId';
+        if (_categoryId != "") {
+            $("#defaultdiagnozcategory").val(_categoryId).change();
+        }
+        var value = $("#defaultdiagnozcategory").val();
+        $.ajax({
+            async: false,
+            url: "/Admin/DefaultDiagnozListWidget",
+            type: "GET",
+            data: { id: value },
+            success: function (data) {
+                $(".default-diagnoz-list-widget").html('');
+                $(".default-diagnoz-list-widget").html(data);
+            }
+        });
+        $("#defaultdiagnozcategory").change(function () {
+            var selectedValue = $(this).val();
+            $.ajax({
+                async: false,
+                url: "/Admin/DefaultDiagnozListWidget",
+                type: "GET",
+                data: { id: selectedValue },
+                success: function (data) {
+                    $(".default-diagnoz-list-widget").html('');
+                    $(".default-diagnoz-list-widget").html(data);
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).on('click', '#updatedefaultdiagnozlistwidget', function (e) {
+        var tr = $(this).closest('tr');
+        var dataId = tr.data('id');
+        
+        var tdValues = [];
+        tr.find('td').each(function () {
+            var value = $(this).text();
+            tdValues.push(value);
+        });
+
+        $("#update_name").val(tdValues[0]);
+        $("#update_name").data("id", dataId);
+
+        $("#modal_update").modal('show');
+
+    });
+
+    $(document).on('click', '#modal_updatebutton', function (e) {
+        var _id = $("#update_name").data("id");
+        var _name = $("#update_name").val();
+
+        $.ajax({
+            async: false,
+            url: "/Admin/UpdateDiagnozList",
+            type: "POST",
+            data: { Id: _id, name: _name },
+            success: function (data) {
+                alert(data);;
+            }
+        });
+        var targetRow = $("tr[data-id='" + _id + "']");
+
+        // Hedef satırın içindeki td öğelerini seçerek verileri güncelleyin
+        targetRow.find("td").eq(0).text(_name);        
+        $("#modal_update").modal('hide');
+
+    });
+</script>
+<script>
+    $(document).on('click', '#deletedefaultdiagnozlistwidget', function (e) {
+        var tr = $(this).closest('tr');
+        var dataId = tr.data('id');
+
+        $.ajax({
+            async: false,
+            url: "/Admin/DeleteDiagnozList",
+            type: "POST",
+            data: { Id: dataId },
+            success: function (data) {
+                tr.remove();
+            }
+        });
+
+        var value = $("#defaultdiagnozcategory").val();
+        $.ajax({
+            async: false,
+            url: "/Admin/DefaultDiagnozListWidget",
+            type: "GET",
+            data: { id: value },
+            success: function (data) {
+                $(".default-diagnoz-list-widget").html('');
+                $(".default-diagnoz-list-widget").html(data);
+                alert("İşlem Başarılı.");
+            }
+        });
+    });
+</script>
