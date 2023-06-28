@@ -10,10 +10,10 @@ namespace Business.Repositories.AccountTreatmentsRepository
 {
     public interface IAccountTreatmentsService
     {
-        Task<IResult> Add(AccountTreatments accountTreatments);
-        Task<IResult> Update(AccountTreatments accountTreatments);
-        Task<IResult> Delete(AccountTreatments accountTreatments);
-        Task<IDataResult<List<AccountTreatments>>> GetList();        
-        Task<IDataResult<List<AccountTreatments>>> GetTreatmentListByActionId(string accountsId, int actionsListsId, string patientId);
+        Task<IResult> Add(AccountsTreatments accountTreatments);
+        Task<IResult> Update(AccountsTreatments accountTreatments);
+        Task<IResult> Delete(AccountsTreatments accountTreatments);
+        Task<IDataResult<List<AccountsTreatments>>> GetList();        
+        Task<IDataResult<List<AccountsTreatments>>> GetTreatmentListByActionId(string accountsId, int actionsListsId, string patientId);
     }
 }

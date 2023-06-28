@@ -339,7 +339,7 @@ namespace WebUI.Controllers
             string _findAccount = await findAccount(userId);
 
             var tariff = await _accountsTariffListsService.GetById(tariffList);
-            AccountTreatments accountTreatments = new AccountTreatments();
+            AccountsTreatments accountTreatments = new AccountsTreatments();
             accountTreatments.Id = Guid.NewGuid().ToString();
             accountTreatments.Treatment = tariff.Data.Treatment;
             accountTreatments.Price = tariff.Data.Price;

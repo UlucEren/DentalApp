@@ -16,7 +16,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Add(AccountTreatments accountTreatments)
+        public async Task<IActionResult> Add(AccountsTreatments accountTreatments)
         {
             var result = await _accountTreatmentsService.Add(accountTreatments);
             if (result.Success)
@@ -27,7 +27,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Update(AccountTreatments accountTreatments)
+        public async Task<IActionResult> Update(AccountsTreatments accountTreatments)
         {
             var result = await _accountTreatmentsService.Update(accountTreatments);
             if (result.Success)
@@ -38,7 +38,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Delete(AccountTreatments accountTreatments)
+        public async Task<IActionResult> Delete(AccountsTreatments accountTreatments)
         {
             var result = await _accountTreatmentsService.Delete(accountTreatments);
             if (result.Success)

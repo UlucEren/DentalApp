@@ -1,6 +1,6 @@
 ﻿namespace Entities.Concrete
 {
-    public class AccountTreatments
+    public class AccountsTreatments
     {
         public string Id { get; set; }
         public string Treatment { get; set; }

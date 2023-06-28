@@ -1,0 +1,193 @@
+﻿@using Entities.Dtos;
+@model List<AccountsDiagnozListsDto>;
+<table id="Diagnoz-List" class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Kategori</th>
+            <th>Tanım</th>            
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr data-id="@item.Id" data-categoryid="@item.AccountsDiagnozCategories_Id_Fk">
+                <td>@item.Queue</td>
+                <td>@item.CategoryName</td>
+                <td>@item.Name</td>
+                <td class="text-center">
+                    <div class="d-inline-flex">
+                        <div class="dropdown">
+                            <a href="#" class="text-body" data-bs-toggle="dropdown">
+                                <i class="ph-list"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a style="cursor:pointer" id="getcostlistwidgettedaviduzenle" class="dropdown-item">
+                                    <i class="fa fa-pencil-alt me-2"></i>
+                                    Tedavi Düzelt
+                                </a>
+                                <a style="cursor:pointer" id="getcostlistwidgettedavisil" class="dropdown-item">
+                                    <i class="fas fa-trash me-2"></i>
+                                    Tedavi Sil
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    var table = $('#Diagnoz-List').DataTable({
+        //dom: '<"top"f><"middle"rt><"bottom"ip><"clear">',
+        dom: '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"B>><"middle"rt><"bottom"ip><"clear">',
+        language: {
+            search: "",
+            lengthMenu: "Sayfa Başına _MENU_ Kayıt Göster",
+            zeroRecords: "Eşleşen Kayıt Bulunamadı",
+            info: "Toplam _TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor.",
+            infoEmpty: "Kayıt Yok",
+            infoFiltered: "(_MAX_ kayıt içerisinden filtrelendi)",
+            paginate: {
+                first: "İlk",
+                last: "Son",
+                next: "Sonraki",
+                previous: "Önceki"
+            },
+            searchPlaceholder: "Arama yapmak için yazın"
+        },
+        "paging": false,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        "rowReorder": true,
+        buttons: [
+            {
+                text: '<i class="fas fa-save"></i>Sıralamayı Kaydet',
+                className: 'btn btn-dark',
+                action: function (e, dt, node, config) {
+                    //alert($("#tariffnamecategory").val());
+
+                    var data = [];
+                    //bu şekilde data-id alabildim
+                    table.rows().every(function () {
+                        var rowNode = this.node();
+                        var rowData = this.data();
+                        var rowId = $(rowNode).data('id');
+                        rowData.push(rowId);
+                        data.push(rowData);
+                    });
+
+                    for (var i = 0; i < data.length; i++) {
+                        var rowData = data[i];
+                        var rowId = rowData[rowData.length - 1]; // Son eleman data-id değeri
+
+                        // Verileri okuyun ve işleyin
+                        var _queue = rowData[0];
+
+                        //console.log(queue);
+                        //console.log(rowId);
+                        $.ajax({
+                            async: false,
+                            url: "/Setting/SetCostListQueue",
+                            type: "POST",
+                            data: { id: rowId, queue: _queue },
+                            success: function (data) {
+                                console.log(data);
+                            },
+                            error: function (xhr, status, error) {
+                                // Hata durumunda yapılacak işlemler
+                                console.error("İstek başarısız oldu: " + error);
+                                alert("İstek başarısız oldu: " + error);
+                            }
+                        });
+
+                    }
+                    alert("Kaydedildi");
+
+                },
+                // Buton arasında boşluk bırakmak için CSS özelliklerini değiştiriyoruz
+                init: function (api, node, config) {
+                    $(node).css('margin-right', '10px');
+                }
+            },
+            {
+                text: '<i class="fa fa-plus"></i>Yeni Tedavi Ekle',
+                className: 'btn btn-primary',
+                action: function (e, dt, node, config) {
+                    //alert('Kaydedildi!');
+                    $("#modal_yenitedaviekle").modal('show');
+                },
+                // Buton arasında boşluk bırakmak için CSS özelliklerini değiştiriyoruz
+                init: function (api, node, config) {
+                    $(node).css('margin-right', '10px');
+                }
+            },
+            {
+                text: '<i class="fas fa-trash"></i>Tümünü Sil',
+                className: 'btn btn-danger',
+                action: function (e, dt, node, config) {
+                    var selectedValue = $("#tariffnamecategory").val();
+                    $.ajax({
+                        async: false,
+                        url: "/Setting/DelAllTreatment",
+                        type: "POST",
+                        data: { Id: selectedValue },
+                        success: function (data) {
+                            table.clear().draw();
+                            console.log(data);
+                            alert('Tümü Silindi!');
+                        }
+                    });
+
+                },
+                // Buton arasında boşluk bırakmak için CSS özelliklerini değiştiriyoruz
+                init: function (api, node, config) {
+                    $(node).css('margin-right', '10px');
+                }
+            }
+            //{
+            //    extend: 'collection',
+            //    text: '<i class="fas fa-trash"></i>Tedavi Sil',
+            //    className: 'btn btn-danger',
+            //    buttons: [
+            //        {
+            //            text: 'Sadece Seçiliyi Sil',
+            //            action: function (e, dt, node, config) {
+            //                alert('Sadece seçili olan siliniyor!');
+            //            }
+            //        },
+            //        {
+            //            text: 'Tümünü Sil',
+            //            action: function (e, dt, node, config) {
+            //                alert('Tümü siliniyor!');
+
+            //            }
+            //        }
+            //    ],
+            //    // Buton arasında boşluk bırakmak için CSS özelliklerini değiştiriyoruz
+            //    init: function (api, node, config) {
+            //        $(node).css('margin-right', '10px');
+            //    }
+            //}
+        ]
+
+    });
+    table.on('responsive-resize', function (e, datatable, columns) {
+        if (table.responsive.rebuild(), table.responsive.hasHidden()) {
+            // responsive butonu gösterildiğinde rowreorder özelliğini devre dışı bırak
+            table.rowReorder.disable();
+        } else {
+            // responsive butonu gizlendiğinde rowreorder özelliğini yeniden etkinleştir
+            table.rowReorder.enable();
+        }
+    });
+            //var data = table.rows().data();
+            //        //console.log(data);
+
+</script>

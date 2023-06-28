@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Core.DataAccess;
 using Entities.Concrete;
 
-namespace DataAccess.Repositories.AccountTreatmentsRepository
+namespace DataAccess.Repositories.AccountsDiagnozCategoriesRepository
 {
-    public interface IAccountTreatmentsDal : IEntityRepository<AccountsTreatments>
+    public interface IAccountsDiagnozCategoriesDal : IEntityRepository<AccountsDiagnozCategories>
     {
     }
 }

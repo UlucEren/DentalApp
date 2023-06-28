@@ -1,4 +1,6 @@
-﻿using Business.Repositories.AccountsRepository;
+﻿using Business.Repositories.AccountsDiagnozCategoriesRepository;
+using Business.Repositories.AccountsDiagnozListsRepository;
+using Business.Repositories.AccountsRepository;
 using Business.Repositories.AccountsTariffListsRepository;
 using Business.Repositories.AccountsTariffNamesCategoriesRepository;
 using Business.Repositories.AccountsTariffNamesRepository;
@@ -35,7 +37,9 @@ namespace WebUI.Controllers
         private readonly ITDBCostListsService _iTDBCostListsService;
         private readonly IAccountsService _iAccountsService;
         private readonly ISubAccountsService _iSubAccountsService;
-        public SettingController(IAccountsTariffNamesService accountsTariffNamesService, IAccountsTariffNamesCategoriesService accountsTariffNamesCategoriesService, IAccountsTariffListsService accountsTariffListsService, ITDBCostNamesService tDBCostNamesService, ITDBCostNameCategoriesService tDBCostNameCategoriesService, ITDBCostListsService tDBCostListsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService)
+        private readonly IAccountsDiagnozCategoriesService _iAccountsDiagnozCategoriesService;
+        private readonly IAccountsDiagnozListsService _iAccountsDiagnozListsService;
+        public SettingController(IAccountsTariffNamesService accountsTariffNamesService, IAccountsTariffNamesCategoriesService accountsTariffNamesCategoriesService, IAccountsTariffListsService accountsTariffListsService, ITDBCostNamesService tDBCostNamesService, ITDBCostNameCategoriesService tDBCostNameCategoriesService, ITDBCostListsService tDBCostListsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService, IAccountsDiagnozCategoriesService accountsDiagnozCategoriesService, IAccountsDiagnozListsService accountsDiagnozListsService)
         {
             _accountsTariffNamesService = accountsTariffNamesService;
             _accountsTariffNamesCategoriesService = accountsTariffNamesCategoriesService;
@@ -45,6 +49,8 @@ namespace WebUI.Controllers
             _iTDBCostListsService = tDBCostListsService;
             _iAccountsService = iAccountsService;
             _iSubAccountsService = iSubAccountsService;
+            _iAccountsDiagnozCategoriesService = accountsDiagnozCategoriesService;
+            _iAccountsDiagnozListsService = accountsDiagnozListsService;
         }
         private async Task<string> findAccount(string _guid)
         {
@@ -400,5 +406,36 @@ namespace WebUI.Controllers
             await _accountsTariffListsService.Update(data.Data);
             return Json("İşlem Başarılı.");
         }
+        [Authorize(Roles = "Ayarlar Modülü » Tanımlamalar")]
+        public async Task<IActionResult> Diagnosis()
+        {
+            //userId tespitinden sonra ana hesap tespit edilip ona göre işlem yapılmalı.Bu yazılan geçiçi
+            //ilk girdimi alt hesabı kontrol et varmı 
+            //var fk ile ana hesaba yönlendir tariff çek
+            //yok hesap ana hesap olabilir ana hesabı kontrol et
+            //var tariff listesini çek
+            //yok erişim engeli koy açma
+
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            string _findAccount = await findAccount(userId);
+
+            var accountsDiagnozCategories = await _iAccountsDiagnozCategoriesService.GetByAccountsIdList(_findAccount);
+            return View(accountsDiagnozCategories.Data);
+        }
+        public async Task<PartialViewResult> GetDiagnozListWidget(long id)
+        {
+            List<AccountsDiagnozListsDto> diagnozLists = (from i in await _iAccountsDiagnozListsService.GetListByCategories_Id(id)
+                                                      select new AccountsDiagnozListsDto
+                                                      {
+                                                          Id = i.Id,
+                                                          CategoryName = _iAccountsDiagnozCategoriesService.GetCategoryName(i.AccountsDiagnozCategories_Id_Fk),
+                                                          Name = i.Name,                                                          
+                                                          Queue = i.Queue,
+                                                          AccountsDiagnozCategories_Id_Fk = i.AccountsDiagnozCategories_Id_Fk
+                                                      }).ToList();
+            return PartialView(diagnozLists);
+        }
+
     }
 }

@@ -10,7 +10,7 @@ using DataAccess.Context.EntityFramework;
 
 namespace DataAccess.Repositories.AccountTreatmentsRepository
 {
-    public class EfAccountTreatmentsDal : EfEntityRepositoryBase<AccountTreatments, SimpleContextDb>, IAccountTreatmentsDal
+    public class EfAccountTreatmentsDal : EfEntityRepositoryBase<AccountsTreatments, SimpleContextDb>, IAccountTreatmentsDal
     {
     }
 }

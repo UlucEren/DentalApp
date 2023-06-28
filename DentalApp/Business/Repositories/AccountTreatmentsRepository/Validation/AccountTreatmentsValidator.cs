@@ -7,7 +7,7 @@ using Entities.Concrete;
 
 namespace Business.Repositories.AccountTreatmentsRepository.Validation
 {
-    public class AccountTreatmentsValidator : AbstractValidator<AccountTreatments>
+    public class AccountTreatmentsValidator : AbstractValidator<AccountsTreatments>
     {
         public AccountTreatmentsValidator()
         {

@@ -30,7 +30,7 @@ namespace Business.Repositories.AccountTreatmentsRepository
         //[ValidationAspect(typeof(AccountTreatmentsValidator))]
         //[RemoveCacheAspect("IAccountTreatmentsService.Get")]
 
-        public async Task<IResult> Add(AccountTreatments accountTreatments)
+        public async Task<IResult> Add(AccountsTreatments accountTreatments)
         {
             await _accountTreatmentsDal.Add(accountTreatments);
             return new SuccessResult(AccountTreatmentsMessages.Added);
@@ -40,7 +40,7 @@ namespace Business.Repositories.AccountTreatmentsRepository
         [ValidationAspect(typeof(AccountTreatmentsValidator))]
         [RemoveCacheAspect("IAccountTreatmentsService.Get")]
 
-        public async Task<IResult> Update(AccountTreatments accountTreatments)
+        public async Task<IResult> Update(AccountsTreatments accountTreatments)
         {
             await _accountTreatmentsDal.Update(accountTreatments);
             return new SuccessResult(AccountTreatmentsMessages.Updated);
@@ -49,7 +49,7 @@ namespace Business.Repositories.AccountTreatmentsRepository
         [SecuredAspect()]
         [RemoveCacheAspect("IAccountTreatmentsService.Get")]
 
-        public async Task<IResult> Delete(AccountTreatments accountTreatments)
+        public async Task<IResult> Delete(AccountsTreatments accountTreatments)
         {
             await _accountTreatmentsDal.Delete(accountTreatments);
             return new SuccessResult(AccountTreatmentsMessages.Deleted);
@@ -58,13 +58,13 @@ namespace Business.Repositories.AccountTreatmentsRepository
         [SecuredAspect()]
         [CacheAspect()]
         [PerformanceAspect()]
-        public async Task<IDataResult<List<AccountTreatments>>> GetList()
+        public async Task<IDataResult<List<AccountsTreatments>>> GetList()
         {
-            return new SuccessDataResult<List<AccountTreatments>>(await _accountTreatmentsDal.GetAll());
+            return new SuccessDataResult<List<AccountsTreatments>>(await _accountTreatmentsDal.GetAll());
         }
-        public async Task<IDataResult<List<AccountTreatments>>> GetTreatmentListByActionId(string accountsId,int actionsListsId, string patientId)
+        public async Task<IDataResult<List<AccountsTreatments>>> GetTreatmentListByActionId(string accountsId,int actionsListsId, string patientId)
         {
-            return new SuccessDataResult<List<AccountTreatments>>(await _accountTreatmentsDal.GetAll(x=>x.Accounts_AspNetUsers_Id_Fk == accountsId && x.ActionLists_Id_Fk == actionsListsId && x.AccountPatients_Id_Fk == patientId));
+            return new SuccessDataResult<List<AccountsTreatments>>(await _accountTreatmentsDal.GetAll(x=>x.Accounts_AspNetUsers_Id_Fk == accountsId && x.ActionLists_Id_Fk == actionsListsId && x.AccountPatients_Id_Fk == patientId));
         }
 
         

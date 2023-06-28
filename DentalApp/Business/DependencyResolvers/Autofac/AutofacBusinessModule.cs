@@ -37,6 +37,10 @@ using Business.Repositories.AccountTreatmentsRepository;
 using DataAccess.Repositories.AccountTreatmentsRepository;
 using Business.Repositories.AspNetUsersRepository;
 using DataAccess.Repositories.AspNetUsersRepository;
+using Business.Repositories.AccountsDiagnozCategoriesRepository;
+using DataAccess.Repositories.AccountsDiagnozCategoriesRepository;
+using Business.Repositories.AccountsDiagnozListsRepository;
+using DataAccess.Repositories.AccountsDiagnozListsRepository;
 using Microsoft.AspNetCore.Identity;
 
 namespace Business.DependencyResolvers.Autofac
@@ -102,6 +106,12 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<AspNetUsersManager>().As<IAspNetUsersService>().SingleInstance();
             builder.RegisterType<EfAspNetUsersDal>().As<IAspNetUsersDal>().SingleInstance();
+
+            builder.RegisterType<AccountsDiagnozCategoriesManager>().As<IAccountsDiagnozCategoriesService>().SingleInstance();
+            builder.RegisterType<EfAccountsDiagnozCategoriesDal>().As<IAccountsDiagnozCategoriesDal>().SingleInstance();
+
+            builder.RegisterType<AccountsDiagnozListsManager>().As<IAccountsDiagnozListsService>().SingleInstance();
+            builder.RegisterType<EfAccountsDiagnozListsDal>().As<IAccountsDiagnozListsDal>().SingleInstance();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
