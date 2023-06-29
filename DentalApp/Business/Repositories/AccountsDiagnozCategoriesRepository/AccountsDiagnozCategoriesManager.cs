@@ -26,9 +26,9 @@ namespace Business.Repositories.AccountsDiagnozCategoriesRepository
             _accountsDiagnozCategoriesDal = accountsDiagnozCategoriesDal;
         }
 
-        [SecuredAspect()]
-        [ValidationAspect(typeof(AccountsDiagnozCategoriesValidator))]
-        [RemoveCacheAspect("IAccountsDiagnozCategoriesService.Get")]
+        //[SecuredAspect()]
+        //[ValidationAspect(typeof(AccountsDiagnozCategoriesValidator))]
+        //[RemoveCacheAspect("IAccountsDiagnozCategoriesService.Get")]
 
         public async Task<IResult> Add(AccountsDiagnozCategories accountsDiagnozCategories)
         {
@@ -46,8 +46,8 @@ namespace Business.Repositories.AccountsDiagnozCategoriesRepository
             return new SuccessResult(AccountsDiagnozCategoriesMessages.Updated);
         }
 
-        [SecuredAspect()]
-        [RemoveCacheAspect("IAccountsDiagnozCategoriesService.Get")]
+        //[SecuredAspect()]
+        //[RemoveCacheAspect("IAccountsDiagnozCategoriesService.Get")]
 
         public async Task<IResult> Delete(AccountsDiagnozCategories accountsDiagnozCategories)
         {
@@ -63,8 +63,8 @@ namespace Business.Repositories.AccountsDiagnozCategoriesRepository
             return new SuccessDataResult<List<AccountsDiagnozCategories>>(await _accountsDiagnozCategoriesDal.GetAll());
         }
 
-        [SecuredAspect()]
-        public async Task<IDataResult<AccountsDiagnozCategories>> GetById(int id)
+        //[SecuredAspect()]
+        public async Task<IDataResult<AccountsDiagnozCategories>> GetById(long id)
         {
             return new SuccessDataResult<AccountsDiagnozCategories>(await _accountsDiagnozCategoriesDal.Get(p => p.Id == id));
         }

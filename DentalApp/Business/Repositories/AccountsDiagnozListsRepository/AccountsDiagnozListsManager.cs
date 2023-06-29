@@ -26,9 +26,9 @@ namespace Business.Repositories.AccountsDiagnozListsRepository
             _accountsDiagnozListsDal = accountsDiagnozListsDal;
         }
 
-        [SecuredAspect()]
-        [ValidationAspect(typeof(AccountsDiagnozListsValidator))]
-        [RemoveCacheAspect("IAccountsDiagnozListsService.Get")]
+        //[SecuredAspect()]
+        //[ValidationAspect(typeof(AccountsDiagnozListsValidator))]
+        //[RemoveCacheAspect("IAccountsDiagnozListsService.Get")]
 
         public async Task<IResult> Add(AccountsDiagnozLists accountsDiagnozLists)
         {
@@ -46,8 +46,8 @@ namespace Business.Repositories.AccountsDiagnozListsRepository
             return new SuccessResult(AccountsDiagnozListsMessages.Updated);
         }
 
-        [SecuredAspect()]
-        [RemoveCacheAspect("IAccountsDiagnozListsService.Get")]
+        //[SecuredAspect()]
+        //[RemoveCacheAspect("IAccountsDiagnozListsService.Get")]
 
         public async Task<IResult> Delete(AccountsDiagnozLists accountsDiagnozLists)
         {

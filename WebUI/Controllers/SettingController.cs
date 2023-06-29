@@ -4,6 +4,8 @@ using Business.Repositories.AccountsRepository;
 using Business.Repositories.AccountsTariffListsRepository;
 using Business.Repositories.AccountsTariffNamesCategoriesRepository;
 using Business.Repositories.AccountsTariffNamesRepository;
+using Business.Repositories.DiagnozCategoriesRepository;
+using Business.Repositories.DiagnozListsRepository;
 using Business.Repositories.SubAccountsRepository;
 using Business.Repositories.TDBCostListsRepository;
 using Business.Repositories.TDBCostNameCategoriesRepository;
@@ -39,7 +41,9 @@ namespace WebUI.Controllers
         private readonly ISubAccountsService _iSubAccountsService;
         private readonly IAccountsDiagnozCategoriesService _iAccountsDiagnozCategoriesService;
         private readonly IAccountsDiagnozListsService _iAccountsDiagnozListsService;
-        public SettingController(IAccountsTariffNamesService accountsTariffNamesService, IAccountsTariffNamesCategoriesService accountsTariffNamesCategoriesService, IAccountsTariffListsService accountsTariffListsService, ITDBCostNamesService tDBCostNamesService, ITDBCostNameCategoriesService tDBCostNameCategoriesService, ITDBCostListsService tDBCostListsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService, IAccountsDiagnozCategoriesService accountsDiagnozCategoriesService, IAccountsDiagnozListsService accountsDiagnozListsService)
+        private readonly IDiagnozCategoriesService _iDiagnozCategoriesService;
+        private readonly IDiagnozListsService _iDiagnozListsService;
+        public SettingController(IAccountsTariffNamesService accountsTariffNamesService, IAccountsTariffNamesCategoriesService accountsTariffNamesCategoriesService, IAccountsTariffListsService accountsTariffListsService, ITDBCostNamesService tDBCostNamesService, ITDBCostNameCategoriesService tDBCostNameCategoriesService, ITDBCostListsService tDBCostListsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService, IAccountsDiagnozCategoriesService accountsDiagnozCategoriesService, IAccountsDiagnozListsService accountsDiagnozListsService, IDiagnozCategoriesService diagnozCategoriesService, IDiagnozListsService diagnozListsService)
         {
             _accountsTariffNamesService = accountsTariffNamesService;
             _accountsTariffNamesCategoriesService = accountsTariffNamesCategoriesService;
@@ -51,6 +55,8 @@ namespace WebUI.Controllers
             _iSubAccountsService = iSubAccountsService;
             _iAccountsDiagnozCategoriesService = accountsDiagnozCategoriesService;
             _iAccountsDiagnozListsService = accountsDiagnozListsService;
+            _iDiagnozCategoriesService = diagnozCategoriesService;
+            _iDiagnozListsService = diagnozListsService;
         }
         private async Task<string> findAccount(string _guid)
         {
@@ -423,18 +429,64 @@ namespace WebUI.Controllers
             var accountsDiagnozCategories = await _iAccountsDiagnozCategoriesService.GetByAccountsIdList(_findAccount);
             return View(accountsDiagnozCategories.Data);
         }
-        public async Task<PartialViewResult> GetDiagnozListWidget(long id)
+        public async Task<PartialViewResult> GetDiagnozListWidget(long categoryId)
         {
-            List<AccountsDiagnozListsDto> diagnozLists = (from i in await _iAccountsDiagnozListsService.GetListByCategories_Id(id)
-                                                      select new AccountsDiagnozListsDto
-                                                      {
-                                                          Id = i.Id,
-                                                          CategoryName = _iAccountsDiagnozCategoriesService.GetCategoryName(i.AccountsDiagnozCategories_Id_Fk),
-                                                          Name = i.Name,                                                          
-                                                          Queue = i.Queue,
-                                                          AccountsDiagnozCategories_Id_Fk = i.AccountsDiagnozCategories_Id_Fk
-                                                      }).ToList();
+            List<AccountsDiagnozListsDto> diagnozLists = (from i in await _iAccountsDiagnozListsService.GetListByCategories_Id(categoryId)
+                                                          select new AccountsDiagnozListsDto
+                                                          {
+                                                              Id = i.Id,
+                                                              CategoryName = _iAccountsDiagnozCategoriesService.GetCategoryName(i.AccountsDiagnozCategories_Id_Fk),
+                                                              Name = i.Name,
+                                                              Queue = i.Queue,
+                                                              AccountsDiagnozCategories_Id_Fk = i.AccountsDiagnozCategories_Id_Fk
+                                                          }).ToList();
             return PartialView(diagnozLists);
+        }
+        [HttpPost]
+        public async Task<JsonResult> DiagnozListToDefault()
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            string _findAccount = await findAccount(userId);
+
+            //delete accountdiagnozlist
+            //delete accountdiagnozcategori
+            var accountsDiagnozCategories = await _iAccountsDiagnozCategoriesService.GetByAccountsIdList(_findAccount);
+            foreach (AccountsDiagnozCategories item in accountsDiagnozCategories.Data)
+            {
+                var accountsDiagnozLists = await _iAccountsDiagnozListsService.GetListByCategories_Id(item.Id);
+                foreach (AccountsDiagnozLists list in accountsDiagnozLists)
+                {
+                    await _iAccountsDiagnozListsService.Delete(list);
+                }
+                await _iAccountsDiagnozCategoriesService.Delete(item);
+            }
+
+            var diagnozCategories = await _iDiagnozCategoriesService.GetList();
+            foreach (DiagnozCategories item in diagnozCategories.Data)
+            {
+                AccountsDiagnozCategories _accountsDiagnozCategories = new AccountsDiagnozCategories();
+                _accountsDiagnozCategories.CategoryName = item.CategoryName;
+                _accountsDiagnozCategories.CreateDate = DateTime.Now;
+                _accountsDiagnozCategories.Accounts_AspNetUsersIdFk_Fk = _findAccount;
+                await _iAccountsDiagnozCategoriesService.Add(_accountsDiagnozCategories);
+
+                var diagnozLists = await _iDiagnozListsService.GetByDiagnozCategories_Id_Fk(item.Id);
+                int _index = 1;
+                foreach (DiagnozLists item2 in diagnozLists.Data)
+                {
+                    AccountsDiagnozLists _accountsDiagnozLists = new AccountsDiagnozLists();
+                    _accountsDiagnozLists.Id = Guid.NewGuid().ToString();
+                    _accountsDiagnozLists.Name = item2.Name;
+                    _accountsDiagnozLists.Queue = _index;
+                    _accountsDiagnozLists.AccountsDiagnozCategories_Id_Fk = _accountsDiagnozCategories.Id;
+                    await _iAccountsDiagnozListsService.Add(_accountsDiagnozLists);
+                    _index = _index + 1;
+                }
+
+            }
+            
+            return Json("İşlem Başarılı.");
         }
 
     }

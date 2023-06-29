@@ -28,5 +28,7 @@ namespace DataAccess.Context.EntityFramework
         public DbSet<AspNetUsers> AspNetUsers { get; set; }
         public DbSet<AccountsDiagnozCategories> AccountsDiagnozCategories { get; set; }
         public DbSet<AccountsDiagnozLists> AccountsDiagnozLists { get; set; }
+        public DbSet<DiagnozCategories> DiagnozCategories { get; set; }
+        public DbSet<DiagnozLists> DiagnozLists { get; set; }
     }
 }

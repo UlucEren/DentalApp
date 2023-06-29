@@ -7,6 +7,8 @@
             <th>Kategori</th>
             <th>Tanım</th>            
             <th>İşlem</th>
+            <th>#</th>
+            <th>#</th>
         </tr>
     </thead>
     <tbody>
@@ -35,6 +37,8 @@
                         </div>
                     </div>
                 </td>
+                <th>#</th>
+                <th>#</th>
             </tr>
         }
     </tbody>
@@ -175,6 +179,16 @@
             //        $(node).css('margin-right', '10px');
             //    }
             //}
+        ],
+        columnDefs: [ // datatable sqript hata var 2 sütun fazladan görüyor sütunları ekleyerek gizliyerek sorunu giderdim
+            {
+                targets: [4],
+                visible: false
+            },
+            {
+                targets: [5],
+                visible: false
+            }
         ]
 
     });

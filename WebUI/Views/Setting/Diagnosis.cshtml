@@ -151,7 +151,7 @@
                                 <div class="col-md-6 mb-3">
                                     <div class="col-xs-12 col-sm-12 col-md-12">
                                         <div class="buton-grup d-flex justify-content-end">
-                                            <button type="button" id="btn-tdb-tarife-getir" class="btn btn-outline-dark">
+                                            <button type="button" id="btn-default-diagnoz-uygula" class="btn btn-outline-dark">
                                                 <i class="fa fa-undo"></i> <span class="hidden-xs">Temel Diagnoz Uygula</span>
                                             </button>
                                             <button type="button" id="btn-new" class="btn btn-outline-primary" style="margin-left: 10px;">
@@ -180,7 +180,7 @@
 </div>
 <script>
     $(document).ready(function () {
-        var firstValue = $("#diagnoznamecategory").val();
+        var firstValue = $("#diagnoznamecategory").val();        
         $.ajax({
             async: false,
             url: "/Setting/GetDiagnozListWidget",
@@ -190,6 +190,18 @@
                 $(".tanımlamalar-diagnoz-list-widget").html('');
                 $(".tanımlamalar-diagnoz-list-widget").html(data);
             }
+        });
+
+        $("#btn-default-diagnoz-uygula").click(function () {
+            $.ajax({
+                async: false,
+                url: "/Setting/DiagnozListToDefault",
+                type: "POST",
+                //data: { categoryId: _categoryId },
+                success: function (data) {
+                    alert(data);
+                }
+            });            
         });
     });
 </script>

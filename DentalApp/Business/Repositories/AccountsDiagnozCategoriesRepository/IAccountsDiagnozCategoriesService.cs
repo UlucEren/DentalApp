@@ -14,7 +14,7 @@ namespace Business.Repositories.AccountsDiagnozCategoriesRepository
         Task<IResult> Update(AccountsDiagnozCategories accountsDiagnozCategories);
         Task<IResult> Delete(AccountsDiagnozCategories accountsDiagnozCategories);
         Task<IDataResult<List<AccountsDiagnozCategories>>> GetList();
-        Task<IDataResult<AccountsDiagnozCategories>> GetById(int id);
+        Task<IDataResult<AccountsDiagnozCategories>> GetById(long id);
         Task<IDataResult<List<AccountsDiagnozCategories>>> GetByAccountsIdList(string AspNetUsersIdFk);
         string GetCategoryName(long id);
     }
