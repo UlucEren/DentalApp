@@ -286,6 +286,56 @@
     </div>
 </div>
 <!-- /Yeni Tanım Ekle Modal -->
+<!-- Tanim Düzenle Modal -->
+<div id="modal_tanimduzenle" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @* <form action="\Setting\CreateTariff" method="post">*@
+            <div class="modal-header">
+                <h5 class="modal-title">Tanim Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Tedavi Kategori</label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <select class="form-control select" id="modal_tanimduzenle_category" data-width="1%">
+                                @if (Model.Count > 0)
+                                {
+                                    @foreach (AccountsDiagnozCategories item in Model)
+                                    {
+                                        <option value=@item.Id>@item.CategoryName</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value=0>Kayıt Yok!</option>
+                                }
+                            </select>
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Tanim Adı</label>
+                    <div class="col-md-8">
+                        <input id="modal_tanimduzenle_name" type="text" class="form-control">
+                        @*<div class="form-text text-muted">Here goes your name</div>*@
+                    </div>
+                </div>                
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                <button id="modal_tanimduzenlebutton" type="button" class="btn btn-primary">Kaydet</button>
+            </div>
+            @*</form>*@
+        </div>
+    </div>
+</div>
+<!-- /Tanim Düzenle Modal -->
 <script>
     $(document).ready(function () {
         var firstValue = $("#diagnoznamecategory").val();
@@ -345,6 +395,8 @@
                         $("#diagnoznamecategory").append(option);
                         var option1 = $("<option></option>").attr("value", data.id).text(_categoryName);
                         $("#modal_yenitanimekle_category").append(option1);
+                        var option2 = $("<option></option>").attr("value", data.id).text(_categoryName);
+                        $("#modal_tanimduzenle_category").append(option2);
                         
                         $("#diagnoznamecategory").val(data.id).change();
                         $("#modal_yenicategory").modal('hide');
@@ -369,6 +421,7 @@
 
                         var dropdown = document.getElementById("diagnoznamecategory");
                         var dropdownmodal = document.getElementById("modal_yenitanimekle_category");
+                        var dropdownmodaltanimduzenle = document.getElementById("modal_tanimduzenle_category");
                         var selectedValue = nameId;
 
                         for (var i = 0; i < dropdown.options.length; i++) {
@@ -392,6 +445,19 @@
                                     option.text = "Kayıt Yok";
                                     option.value = "0";
                                     dropdownmodal.add(option);
+                                }
+                                break;
+                            }
+                        }
+
+                        for (var i = 0; i < dropdownmodaltanimduzenle.options.length; i++) {
+                            if (dropdownmodaltanimduzenle.options[i].value === selectedValue) {
+                                dropdownmodaltanimduzenle.remove(i);
+                                if (dropdownmodaltanimduzenle.options.length === 0) {
+                                    var option = document.createElement("option");
+                                    option.text = "Kayıt Yok";
+                                    option.value = "0";
+                                    dropdownmodaltanimduzenle.add(option);
                                 }
                                 break;
                             }
@@ -501,9 +567,83 @@
                     $(".tanımlamalar-diagnoz-list-widget").html(data);
                 }
             });
+
             $("#modal_yenitanimekle").modal('hide');
 
         });
+
+    });
+</script>
+<script>
+    $(document).on('click', '#GetDiagnozListWidgetTanimSil', function (e) {
+        var tr = $(this).closest('tr');
+        var dataId = tr.data('id');
+        
+        $.ajax({
+            async: false,
+            url: "/Setting/DelTanim",
+            type: "POST",
+            data: { Id: dataId },
+            success: function (data) {
+                tr.remove();
+            }
+        });
+
+        var firstValue = $("#diagnoznamecategory").val();
+        $.ajax({
+            async: false,
+            url: "/Setting/GetDiagnozListWidget",
+            type: "GET",
+            data: { categoryId: firstValue },
+            success: function (data) {
+                $(".tanımlamalar-diagnoz-list-widget").html('');
+                $(".tanımlamalar-diagnoz-list-widget").html(data);
+            }
+        });
+    });
+</script>
+<script>
+    $(document).on('click', '#GetDiagnozListWidgetTanimDuzenle', function (e) {
+        var tr = $(this).closest('tr');
+        var dataId = tr.data('id');
+        var categoryId = tr.data('categoryid');
+        $("#modal_tanimduzenle_category").val(categoryId).change();
+        var tdValues = [];
+        tr.find('td').each(function () {
+            var value = $(this).text();
+            tdValues.push(value);
+        });
+
+        $("#modal_tanimduzenle_name").val(tdValues[2]);
+        $("#modal_tanimduzenle_name").data("tanimid", dataId);
+
+        $("#modal_tanimduzenle").modal('show');
+
+    });
+
+    $(document).on('click', '#modal_tanimduzenlebutton', function (e) {
+        var _tanimId = $("#modal_tanimduzenle_name").data("tanimid");
+        var _tanimName = $("#modal_tanimduzenle_name").val();
+        var _price = $("#tedaviduzenleprice").val();
+        var _vat = $("#tedaviduzenlevat").val();
+        var _cost = $("#tedaviduzenlecost").val();
+
+        $.ajax({
+            async: false,
+            url: "/Setting/UpdateTanim",
+            type: "POST",
+            data: { tanimId: _tanimId, tanimName: _tanimName },
+            success: function (data) {
+                alert(data);;
+            }
+        });
+
+        var targetRow = $("tr[data-id='" + _tanimId + "']");
+        // Hedef satırın içindeki td öğelerini seçerek verileri güncelleyin
+        
+        targetRow.find("td").eq(2).text(_tanimName);
+        
+        $("#modal_tanimduzenle").modal('hide');
 
     });
 </script>

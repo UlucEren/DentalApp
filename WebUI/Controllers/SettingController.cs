@@ -412,6 +412,7 @@ namespace WebUI.Controllers
             await _accountsTariffListsService.Update(data.Data);
             return Json("İşlem Başarılı.");
         }
+
         [Authorize(Roles = "Ayarlar Modülü » Tanımlamalar")]
         public async Task<IActionResult> Diagnosis()
         {
@@ -583,6 +584,40 @@ namespace WebUI.Controllers
                 await _iAccountsDiagnozListsService.Delete(delAccountsDiagnozLists);
             }
 
+            return Json("İşlem Başarılı.");
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DelTanim(string Id)
+        {
+            var data = await _iAccountsDiagnozListsService.GetById(Id);
+            await _iAccountsDiagnozListsService.Delete(data.Data);
+            var list = await _iAccountsDiagnozListsService.GetListByCategories_Id(data.Data.AccountsDiagnozCategories_Id_Fk);
+            var orderList = list.OrderBy(x => x.Queue).ToList();
+
+            int i = 1;
+            foreach (var item in orderList)
+            {
+                AccountsDiagnozLists updateAccountsDiagnozLists = new AccountsDiagnozLists();
+                updateAccountsDiagnozLists.Id = item.Id;
+                updateAccountsDiagnozLists.Name = item.Name;
+                updateAccountsDiagnozLists.Queue = i;
+                updateAccountsDiagnozLists.AccountsDiagnozCategories_Id_Fk = item.AccountsDiagnozCategories_Id_Fk;
+
+                await _iAccountsDiagnozListsService.Update(updateAccountsDiagnozLists);
+                i = i + 1;
+            }
+
+            return Json("İşlem Başarılı.");
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> UpdateTanim(string tanimId, string tanimName)
+        {
+            var data = await _iAccountsDiagnozListsService.GetById(tanimId);
+            data.Data.Name = tanimName;
+            
+            await _iAccountsDiagnozListsService.Update(data.Data);
             return Json("İşlem Başarılı.");
         }
 
