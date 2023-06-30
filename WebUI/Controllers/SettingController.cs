@@ -547,5 +547,30 @@ namespace WebUI.Controllers
             return Json("İşlem Başarılı.");
         }
 
+        [HttpPost]
+        public async Task<JsonResult> SetDiagnozTanim(long categoryId, string name)
+        {
+            var list = await _iAccountsDiagnozListsService.GetListByCategories_Id(categoryId);
+            foreach (var item1 in list)
+            {
+                AccountsDiagnozLists updateDiagnozLists = new AccountsDiagnozLists();
+                updateDiagnozLists.Id = item1.Id;
+                updateDiagnozLists.Name = item1.Name;
+                updateDiagnozLists.Queue = item1.Queue + 1;
+                updateDiagnozLists.AccountsDiagnozCategories_Id_Fk = item1.AccountsDiagnozCategories_Id_Fk;
+
+                await _iAccountsDiagnozListsService.Update(updateDiagnozLists);
+            }
+            AccountsDiagnozLists addAccountsDiagnozLists = new AccountsDiagnozLists();
+            addAccountsDiagnozLists.Id = Guid.NewGuid().ToString();
+            addAccountsDiagnozLists.Name = name;
+            addAccountsDiagnozLists.Queue = 1;
+            addAccountsDiagnozLists.AccountsDiagnozCategories_Id_Fk = categoryId;
+
+            await _iAccountsDiagnozListsService.Add(addAccountsDiagnozLists);
+
+            return Json("İşlem Başarılı.");
+        }
+
     }
 }

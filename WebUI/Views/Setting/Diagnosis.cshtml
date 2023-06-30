@@ -236,6 +236,56 @@
     </div>
 </div>
 <!-- /Düzelt Category modal -->
+<!-- Yeni Tanım Ekle Modal -->
+<div id="modal_yenitanimekle" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @* <form action="\Setting\CreateTariff" method="post">*@
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni Tanım Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Tedavi Kategori</label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <select class="form-control select" id="modal_yenitanimekle_category" data-width="1%">
+                                @if (Model.Count > 0)
+                                {
+                                    @foreach (AccountsDiagnozCategories item in Model)
+                                    {
+                                        <option value=@item.Id>@item.CategoryName</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value=0>Kayıt Yok!</option>
+                                }
+                            </select>
+                            @*<div class="form-text text-muted">Here goes your name</div>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Tanım Adı</label>
+                    <div class="col-md-8">
+                        <input id="modal_yenitanimekle_name" type="text" class="form-control">
+                        @*<div class="form-text text-muted">Here goes your name</div>*@
+                    </div>
+                </div>                
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                <button id="modal_yenitanimekle_button" type="button" class="btn btn-primary">Kaydet</button>
+            </div>
+            @*</form>*@
+        </div>
+    </div>
+</div>
+<!-- /Yeni Tanım Ekle Modal -->
 <script>
     $(document).ready(function () {
         var firstValue = $("#diagnoznamecategory").val();
@@ -293,6 +343,9 @@
                     if (data.success == "İşlem Başarılı.") {
                         var option = $("<option></option>").attr("value", data.id).text(_categoryName);
                         $("#diagnoznamecategory").append(option);
+                        var option1 = $("<option></option>").attr("value", data.id).text(_categoryName);
+                        $("#modal_yenitanimekle_category").append(option1);
+                        
                         $("#diagnoznamecategory").val(data.id).change();
                         $("#modal_yenicategory").modal('hide');
                     }
@@ -315,7 +368,7 @@
                         alert(data);
 
                         var dropdown = document.getElementById("diagnoznamecategory");
-
+                        var dropdownmodal = document.getElementById("modal_yenitanimekle_category");
                         var selectedValue = nameId;
 
                         for (var i = 0; i < dropdown.options.length; i++) {
@@ -326,6 +379,19 @@
                                     option.text = "Kayıt Yok";
                                     option.value = "0";
                                     dropdown.add(option);
+                                }
+                                break;
+                            }
+                        }
+
+                        for (var i = 0; i < dropdownmodal.options.length; i++) {
+                            if (dropdownmodal.options[i].value === selectedValue) {
+                                dropdownmodal.remove(i);
+                                if (dropdownmodal.options.length === 0) {
+                                    var option = document.createElement("option");
+                                    option.text = "Kayıt Yok";
+                                    option.value = "0";
+                                    dropdownmodal.add(option);
                                 }
                                 break;
                             }
@@ -400,6 +466,43 @@
             });
 
             $("#modal_updatecategory").modal('hide');
+        });
+
+        $("#modal_yenitanimekle_button").click(function () {
+            var yenitanimeklecategory = $("#modal_yenitanimekle_category").val();
+            var yenitanimeklename = $("#modal_yenitanimekle_name").val();            
+
+            if (yenitanimeklecategory == 0) {
+                alert("Kategori Seçilmeli!");
+                return;
+            }
+            if (yenitanimeklename == "") {
+                alert("Tedavi Adı Girilmeli!");
+                return;
+            }
+            
+            $.ajax({
+                async: false,
+                url: "/Setting/SetDiagnozTanim",
+                type: "POST",
+                data: { categoryId: yenitanimeklecategory, name: yenitanimeklename },
+                success: function (data) {
+                    alert(data);
+                }
+            });
+            var firstValue = $("#diagnoznamecategory").val();
+            $.ajax({
+                async: false,
+                url: "/Setting/GetDiagnozListWidget",
+                type: "GET",
+                data: { categoryId: firstValue },
+                success: function (data) {
+                    $(".tanımlamalar-diagnoz-list-widget").html('');
+                    $(".tanımlamalar-diagnoz-list-widget").html(data);
+                }
+            });
+            $("#modal_yenitanimekle").modal('hide');
+
         });
 
     });
