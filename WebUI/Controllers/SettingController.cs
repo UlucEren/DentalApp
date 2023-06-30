@@ -485,7 +485,49 @@ namespace WebUI.Controllers
                 }
 
             }
+
+            return Json("İşlem Başarılı.");
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> CreateAccountCategory(string categoryName)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            string _findAccount = await findAccount(userId);
+
+            AccountsDiagnozCategories _accountsDiagnozCategories = new AccountsDiagnozCategories();
+            _accountsDiagnozCategories.CategoryName = categoryName;
+            _accountsDiagnozCategories.CreateDate = DateTime.Now;
+            _accountsDiagnozCategories.Accounts_AspNetUsersIdFk_Fk = _findAccount;
+            await _iAccountsDiagnozCategoriesService.Add(_accountsDiagnozCategories);
+            // İşlem başarılı olduğunu belirten JSON sonucu oluşturuluyor
+            var result = new { success = "İşlem Başarılı.", id = _accountsDiagnozCategories.Id };
+            return Json(result);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DelAccountCategory(long id)
+        {
+            AccountsDiagnozCategories _accountsDiagnozCategories = new AccountsDiagnozCategories();
+            _accountsDiagnozCategories.Id = id;
+            //delete accountdiagnozlist
+            //delete accountdiagnozcategori
+            var accountsDiagnozLists = await _iAccountsDiagnozListsService.GetListByCategories_Id(_accountsDiagnozCategories.Id);
+            foreach (AccountsDiagnozLists list in accountsDiagnozLists)
+            {
+                await _iAccountsDiagnozListsService.Delete(list);
+            }
+            await _iAccountsDiagnozCategoriesService.Delete(_accountsDiagnozCategories);
+            return Json("İşlem Başarılı.");
+        }
+        [HttpPost]
+        public async Task<JsonResult> UpdateAccountCategory(long categoryId, string categorName)
+        {
+            var _accountsDiagnozCategories = await _iAccountsDiagnozCategoriesService.GetById(categoryId);
+            _accountsDiagnozCategories.Data.CategoryName = categorName;
             
+            await _iAccountsDiagnozCategoriesService.Update(_accountsDiagnozCategories.Data);
             return Json("İşlem Başarılı.");
         }
 

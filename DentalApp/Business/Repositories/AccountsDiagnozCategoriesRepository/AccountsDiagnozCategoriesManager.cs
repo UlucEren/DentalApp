@@ -36,9 +36,9 @@ namespace Business.Repositories.AccountsDiagnozCategoriesRepository
             return new SuccessResult(AccountsDiagnozCategoriesMessages.Added);
         }
 
-        [SecuredAspect()]
-        [ValidationAspect(typeof(AccountsDiagnozCategoriesValidator))]
-        [RemoveCacheAspect("IAccountsDiagnozCategoriesService.Get")]
+        //[SecuredAspect()]
+        //[ValidationAspect(typeof(AccountsDiagnozCategoriesValidator))]
+        //[RemoveCacheAspect("IAccountsDiagnozCategoriesService.Get")]
 
         public async Task<IResult> Update(AccountsDiagnozCategories accountsDiagnozCategories)
         {

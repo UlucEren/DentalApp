@@ -64,7 +64,7 @@
         <li class="nav-item">
             <a href="#js-tab4" class="nav-link @{
                 isactive=(selectedPage == "/Setting/Diagnosis") ? "active" : "";
-                                                                @isactive
+                                                                                @isactive
 ;
 }" data-bs-toggle="tab">
                 <i class="ph-user-circle me-1"></i>
@@ -178,9 +178,67 @@
         </div>
     </div>
 </div>
+<!-- Yeni Category modal -->
+<div id="modal_yenicategory" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @*<form action="\Setting\CreateAccountCategory" method="post">*@
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni Kategori</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Kategori Adı</label>
+                    <div class="col-md-8">
+                        <input id="modal_yevicategory_name" name="name" type="text" class="form-control">
+                        @*<div class="form-text text-muted">Here goes your name</div>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                <button id="modal_yevicategory_button" type="button" class="btn btn-primary">Kaydet</button>
+            </div>
+            @*</form>*@
+        </div>
+    </div>
+</div>
+<!-- /Yeni Category modal -->
+<!-- Düzelt Category modal -->
+<div id="modal_updatecategory" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @*<form action="\Setting\CreateAccountCategory" method="post">*@
+            <div class="modal-header">
+                <h5 class="modal-title">Düzelt Kategori</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Kategori Adı</label>
+                    <div class="col-md-8">
+                        <input id="modal_updatecategory_name" name="name" type="text" class="form-control">
+                        @*<div class="form-text text-muted">Here goes your name</div>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                <button id="modal_updatecategory_button" type="button" class="btn btn-primary">Kaydet</button>
+            </div>
+            @*</form>*@
+        </div>
+    </div>
+</div>
+<!-- /Düzelt Category modal -->
 <script>
     $(document).ready(function () {
-        var firstValue = $("#diagnoznamecategory").val();        
+        var firstValue = $("#diagnoznamecategory").val();
         $.ajax({
             async: false,
             url: "/Setting/GetDiagnozListWidget",
@@ -192,6 +250,20 @@
             }
         });
 
+        $("#diagnoznamecategory").change(function () {
+            var selectedValue = $(this).val();
+            $.ajax({
+                async: false,
+                url: "/Setting/GetDiagnozListWidget",
+                type: "GET",
+                data: { categoryId: selectedValue },
+                success: function (data) {
+                    $(".tanımlamalar-diagnoz-list-widget").html('');
+                    $(".tanımlamalar-diagnoz-list-widget").html(data);
+                }
+            });
+        });
+
         $("#btn-default-diagnoz-uygula").click(function () {
             $.ajax({
                 async: false,
@@ -200,8 +272,135 @@
                 //data: { categoryId: _categoryId },
                 success: function (data) {
                     alert(data);
+                    location.reload();
                 }
-            });            
+            });
         });
+
+        $("#btn-new").click(function () {
+            $("#modal_yenicategory").modal('show');
+        });
+
+        $("#modal_yevicategory_button").click(function () {
+            var _categoryName = $("#modal_yevicategory_name").val();
+            $.ajax({
+                async: false,
+                url: "/Setting/CreateAccountCategory",
+                type: "POST",
+                data: { categoryName: _categoryName },
+                success: function (data) {
+                    alert(data.success);
+                    if (data.success == "İşlem Başarılı.") {
+                        var option = $("<option></option>").attr("value", data.id).text(_categoryName);
+                        $("#diagnoznamecategory").append(option);
+                        $("#diagnoznamecategory").val(data.id).change();
+                        $("#modal_yenicategory").modal('hide');
+                    }
+                }
+            });
+        });
+
+        $("#btn-delete").click(function () {
+            var dropdown = document.getElementById("diagnoznamecategory");
+            var selectedOption = dropdown.options[dropdown.selectedIndex].text;
+            var cevap = confirm(selectedOption + " kategorisinin silinmesine emin misiniz?");
+            if (cevap) {
+                var nameId = $("#diagnoznamecategory").val();
+                $.ajax({
+                    async: false,
+                    url: "/Setting/DelAccountCategory",
+                    type: "POST",
+                    data: { id: nameId },
+                    success: function (data) {
+                        alert(data);
+
+                        var dropdown = document.getElementById("diagnoznamecategory");
+
+                        var selectedValue = nameId;
+
+                        for (var i = 0; i < dropdown.options.length; i++) {
+                            if (dropdown.options[i].value === selectedValue) {
+                                dropdown.remove(i);
+                                if (dropdown.options.length === 0) {
+                                    var option = document.createElement("option");
+                                    option.text = "Kayıt Yok";
+                                    option.value = "0";
+                                    dropdown.add(option);
+                                }
+                                break;
+                            }
+                        }
+
+                        var value = $("#diagnoznamecategory").val();
+                        $.ajax({
+                            async: false,
+                            url: "/Setting/GetDiagnozListWidget",
+                            type: "GET",
+                            data: { categoryId: value },
+                            success: function (data) {
+                                $(".tanımlamalar-diagnoz-list-widget").html('');
+                                $(".tanımlamalar-diagnoz-list-widget").html(data);
+                            }
+                        });
+                    }
+                });
+
+            }
+            else {
+                alert("İptal Edildi!");
+            }
+        });
+
+        $("#btn-update").click(function () {
+            
+            var dataId = $("#diagnoznamecategory").val(); 
+            if(dataId==0){
+                alert("Kategori Kayıt Yapılmalı.");
+                return;
+            }
+            $("#modal_updatecategory_name").data("id", dataId);
+
+            var dropdown = document.getElementById("diagnoznamecategory");
+            var selectedOption = dropdown.options[dropdown.selectedIndex].text;
+            $("#modal_updatecategory_name").val(selectedOption);
+
+            $("#modal_updatecategory").modal('show');
+        });
+
+        $("#modal_updatecategory_button").click(function () {
+                       
+            var dataId = $("#modal_updatecategory_name").data("id");
+            var dataName = $("#modal_updatecategory_name").val();
+
+            $.ajax({
+                async: false,
+                url: "/Setting/UpdateAccountCategory",
+                type: "POST",
+                data: { categoryId: dataId, categorName: dataName },
+                success: function (data) {
+                    alert(data);
+                    var dropdown = document.getElementById("diagnoznamecategory");
+                    
+                    var selectedValue = dataId;
+
+                    for (var i = 0; i < dropdown.options.length; i++) {
+                        if (dropdown.options[i].value === selectedValue) {
+                            //dropdown.options[i].text = dataName; 
+                            var option = document.createElement("option");
+                            option.text = dataName;
+                            option.value = dropdown.options[i].value;
+                            dropdown.add(option, i + 1);
+                            dropdown.remove(i);
+                            $("#diagnoznamecategory").val(dropdown.options[i].value).change();
+                            break;
+                        }
+                    }
+                    
+                }
+            });
+
+            $("#modal_updatecategory").modal('hide');
+        });
+
     });
 </script>
