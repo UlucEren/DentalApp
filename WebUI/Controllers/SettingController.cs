@@ -572,5 +572,19 @@ namespace WebUI.Controllers
             return Json("İşlem Başarılı.");
         }
 
+        [HttpPost]
+        public async Task<JsonResult> DelAllTanim(long Id)
+        {
+            var list = await _iAccountsDiagnozListsService.GetListByCategories_Id(Id);
+            foreach (var item in list)
+            {
+                AccountsDiagnozLists delAccountsDiagnozLists = new AccountsDiagnozLists();
+                delAccountsDiagnozLists.Id = item.Id;
+                await _iAccountsDiagnozListsService.Delete(delAccountsDiagnozLists);
+            }
+
+            return Json("İşlem Başarılı.");
+        }
+
     }
 }

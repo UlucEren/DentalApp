@@ -136,10 +136,10 @@
                 text: '<i class="fas fa-trash"></i>Tümünü Sil',
                 className: 'btn btn-danger',
                 action: function (e, dt, node, config) {
-                    var selectedValue = $("#tariffnamecategory").val();
+                    var selectedValue = $("#diagnoznamecategory").val();
                     $.ajax({
                         async: false,
-                        url: "/Setting/DelAllTreatment",
+                        url: "/Setting/DelAllTanim",
                         type: "POST",
                         data: { Id: selectedValue },
                         success: function (data) {
