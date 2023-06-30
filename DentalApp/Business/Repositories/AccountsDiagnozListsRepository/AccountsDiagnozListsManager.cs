@@ -36,9 +36,9 @@ namespace Business.Repositories.AccountsDiagnozListsRepository
             return new SuccessResult(AccountsDiagnozListsMessages.Added);
         }
 
-        [SecuredAspect()]
-        [ValidationAspect(typeof(AccountsDiagnozListsValidator))]
-        [RemoveCacheAspect("IAccountsDiagnozListsService.Get")]
+        //[SecuredAspect()]
+        //[ValidationAspect(typeof(AccountsDiagnozListsValidator))]
+        //[RemoveCacheAspect("IAccountsDiagnozListsService.Get")]
 
         public async Task<IResult> Update(AccountsDiagnozLists accountsDiagnozLists)
         {
@@ -61,6 +61,10 @@ namespace Business.Repositories.AccountsDiagnozListsRepository
         public async Task<IDataResult<List<AccountsDiagnozLists>>> GetList()
         {
             return new SuccessDataResult<List<AccountsDiagnozLists>>(await _accountsDiagnozListsDal.GetAll());
+        }
+        public async Task<IDataResult<AccountsDiagnozLists>> GetById(string id)
+        {
+            return new SuccessDataResult<AccountsDiagnozLists>(await _accountsDiagnozListsDal.Get(p => p.Id == id));
         }
         public async Task<List<AccountsDiagnozLists>> GetListByCategories_Id(long id)
         {

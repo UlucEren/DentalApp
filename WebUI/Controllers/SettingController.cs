@@ -531,5 +531,21 @@ namespace WebUI.Controllers
             return Json("İşlem Başarılı.");
         }
 
+        [HttpPost]
+        public async Task<JsonResult> SetDiagnozListQueue(string id, int queue)
+        {
+            var data = await _iAccountsDiagnozListsService.GetById(id);
+
+            AccountsDiagnozLists updateAccountsDiagnozLists = new AccountsDiagnozLists();
+            updateAccountsDiagnozLists.Id = data.Data.Id;
+            updateAccountsDiagnozLists.Name = data.Data.Name;
+            updateAccountsDiagnozLists.Queue = queue;
+            updateAccountsDiagnozLists.AccountsDiagnozCategories_Id_Fk = data.Data.AccountsDiagnozCategories_Id_Fk;
+
+            await _iAccountsDiagnozListsService.Update(updateAccountsDiagnozLists);
+
+            return Json("İşlem Başarılı.");
+        }
+
     }
 }

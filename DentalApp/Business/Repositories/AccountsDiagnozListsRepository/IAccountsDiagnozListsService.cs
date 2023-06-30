@@ -14,6 +14,7 @@ namespace Business.Repositories.AccountsDiagnozListsRepository
         Task<IResult> Update(AccountsDiagnozLists accountsDiagnozLists);
         Task<IResult> Delete(AccountsDiagnozLists accountsDiagnozLists);
         Task<IDataResult<List<AccountsDiagnozLists>>> GetList();
+        Task<IDataResult<AccountsDiagnozLists>> GetById(string id);
         Task<List<AccountsDiagnozLists>> GetListByCategories_Id(long id);
     }
 }

@@ -15,7 +15,7 @@
         @foreach (var item in Model)
         {
             <tr data-id="@item.Id" data-categoryid="@item.AccountsDiagnozCategories_Id_Fk">
-                <td>@item.Queue</td>
+                <td style="cursor:pointer">@item.Queue</td>
                 <td>@item.CategoryName</td>
                 <td>@item.Name</td>
                 <td class="text-center">
@@ -98,7 +98,7 @@
                         //console.log(rowId);
                         $.ajax({
                             async: false,
-                            url: "/Setting/SetCostListQueue",
+                            url: "/Setting/SetDiagnozListQueue",
                             type: "POST",
                             data: { id: rowId, queue: _queue },
                             success: function (data) {

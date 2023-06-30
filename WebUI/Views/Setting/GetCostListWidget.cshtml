@@ -17,7 +17,7 @@
         @foreach (var item in Model)
         {
             <tr data-id="@item.Id" data-categoryid="@item.AccountsTariffNamesCategories_Id_Fk">
-                <td>@item.Queue</td>
+                <td style="cursor:pointer">@item.Queue</td>
                 <td>@item.CategoryName</td>
                 <td>@item.Treatment</td>
                 <td>@item.Price.ToString("C2")</td>
