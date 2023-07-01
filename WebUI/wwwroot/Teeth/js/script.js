@@ -1,25 +1,25 @@
 const container = document.querySelector('.container');
 /*console.log(container);*/
-const count = document.getElementById('count');
-/*console.log(count);*/
-const amount = document.getElementById('amount');
-/*console.log(amount);*/
-const select = document.getElementById('movie');
+//const count = document.getElementById('count');
+///*console.log(count);*/
+//const amount = document.getElementById('amount');
+///*console.log(amount);*/
+//const select = document.getElementById('movie');
 /*console.log(select);*/
-const teets = document.querySelectorAll('.teets:not(.reserved)');
+/*const teets = document.querySelectorAll('.teets:not(.reserved)');*/
 /*console.log(teets);*/
 const oral_treatment_list = document.querySelector('.oral-treatment-list');
 
-getFromLocalStorage();
-calculateTotal();
+//getFromLocalStorage();
+//calculateTotal();
 
 container.addEventListener('click', function (e) {
     //console.log(e);
     if (e.target.classList.contains('teets')) {
-       //e.target.classList.toggle('selected');
+        //e.target.classList.toggle('selected');
         /*calculateTotal() */
         const selected_oral_treatment_list = oral_treatment_list.querySelectorAll('.selected');
-        if (selected_oral_treatment_list.length==0) {
+        if (selected_oral_treatment_list.length == 0) {
             alert("Tedavi Seçiniz.");
             return;
         }
@@ -33,13 +33,13 @@ container.addEventListener('click', function (e) {
         /*console.log(e.target.classList[1]);*/
         //console.log($('#treatments-table-body'));
         //console.log($('#treatments-table-body tr').length);
-        
+
         var ThisMonth = new Date().getMonth() + 1;
         var ThisDay = new Date().getDate();
         var ThisYear = new Date().getFullYear(); ThisMonth.toString()
         var ThisDate = ThisDay.toString() + "." + ThisMonth.toString() + "." + ThisYear.toString();
         /*console.log(ThisDate);*/
-        
+
         let teet = e.target.classList[1];
         let result_teet = teet.substring(teet.indexOf("-") + 1);
         if (document.getElementById('treatments-table-body').rows[0].cells.item(1).innerHTML == "Sistemde Kayitli Veri Bulunamadi") {
@@ -49,20 +49,20 @@ container.addEventListener('click', function (e) {
         var _patientId = selected_oral_treatment_list[0].dataset.patientid;
         var _doctorId = $("#doctor").val();
         var _doctorName = $("#doctor").text();
-        var treatmentId="";
+        var treatmentId = "";
         $.ajax({
             async: false,
             type: "POST",
             url: "/Patient/TreatmentSaveDb",
             data: { tariffList: selected_oral_treatment_list[0].dataset.tedaviId, teet: result_teet, actionListId: actionListValue, patientId: _patientId, doctorId: _doctorId },
-            success: function myfunction(veri) {                
+            success: function myfunction(veri) {
                 treatmentId = veri.treatmentId;
             },
             error: function myfunction(veri) {
                 alert("error");
             }
         });
-        $('#treatments-table-body').append('<tr data-treatment-id="' + treatmentId + '" data-treatmentlist-id="' + selected_oral_treatment_list[0].dataset.tedaviId + '"><td>' + ThisDate + '</td><td>' + result_teet + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviAdi + '</td><td>' + _doctorName + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviFiyat + '</td></tr>'); 
+        $('#treatments-table-body').append('<tr data-treatment-id="' + treatmentId + '" data-treatmentlist-id="' + selected_oral_treatment_list[0].dataset.tedaviId + '"><td>' + ThisDate + '</td><td>' + result_teet + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviAdi + '</td><td>' + _doctorName + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviFiyat + '</td></tr>');
 
     }
 });
@@ -71,66 +71,59 @@ container.addEventListener('click', function (e) {
 //    calculateTotal();  
 //});
 
-function calculateTotal() {
-    const selectedteets = container.querySelectorAll('.teets.selected');
+//function calculateTotal() {
+//    const selectedteets = container.querySelectorAll('.teets.selected');
 
-    const selectedteetsArr = [];
-    const teetsArr = [];
-    
-    selectedteets.forEach(function (teets) {
-       
-        selectedteetsArr.push(teets);
-    });
+//    const selectedteetsArr = [];
+//    const teetsArr = [];
 
-    teets.forEach(function (teets) {
-        teetsArr.push(teets);
-    });
+//    selectedteets.forEach(function (teets) {
 
-    // [1,3,5]
-    let selectedteetsIndexs = selectedteetsArr.map(function (teets) {
-        return teetsArr.indexOf(teets);
-    });
+//        selectedteetsArr.push(teets);
+//    });
 
-    let selectedteetsCount = selectedteets.length;
-    /*count.innerText = selectedteetsCount;*/
-    /*amount.innerText = selectedteetsCount * select.value;*/
+//    teets.forEach(function (teets) {
+//        teetsArr.push(teets);
+//    });
 
-    saveToLocalStorage(selectedteetsIndexs);
-}
+//    // [1,3,5]
+//    let selectedteetsIndexs = selectedteetsArr.map(function (teets) {
+//        return teetsArr.indexOf(teets);
+//    });
 
-function getFromLocalStorage() {
-    const selectedteets = JSON.parse(localStorage.getItem('selectedteets'));
+//    let selectedteetsCount = selectedteets.length;
+//    /*count.innerText = selectedteetsCount;*/
+//    /*amount.innerText = selectedteetsCount * select.value;*/
 
-    if (selectedteets != null && selectedteets.length > 0) {
-        teets.forEach(function (teets, index) {
-            if (selectedteets.indexOf(index) > -1) {
-                teets.classList.add('selected');
-            }
-        });
-    }
+//    saveToLocalStorage(selectedteetsIndexs);
+//}
 
+//function getFromLocalStorage() {
+//    const selectedteets = JSON.parse(localStorage.getItem('selectedteets'));
 
-
-    //const selectedMovieIndex = localStorage.getItem('selectedMovieIndex');
-
-    //if (selectedMovieIndex != null) {
-    //    select.selectedIndex = selectedMovieIndex;
-    //}
-}
-
-function saveToLocalStorage(indexs) {
-    localStorage.setItem('selectedteets', JSON.stringify(indexs));
-    /*localStorage.setItem('selectedMovieIndex', select.selectedIndex);*/
-}
+//    if (selectedteets != null && selectedteets.length > 0) {
+//        teets.forEach(function (teets, index) {
+//            if (selectedteets.indexOf(index) > -1) {
+//                teets.classList.add('selected');
+//            }
+//        });
+//    }
 
 
-$("#oral-treatment-list tr").click(function () {
-    
-    if (this.classList.contains('process-treatment')) {
-        $(this).toggleClass('selected').siblings().removeClass('selected');
-    }
-        
-});
+
+//    //const selectedMovieIndex = localStorage.getItem('selectedMovieIndex');
+
+//    //if (selectedMovieIndex != null) {
+//    //    select.selectedIndex = selectedMovieIndex;
+//    //}
+//}
+
+//function saveToLocalStorage(indexs) {
+//    localStorage.setItem('selectedteets', JSON.stringify(indexs));
+//    /*localStorage.setItem('selectedMovieIndex', select.selectedIndex);*/
+//}
+
+
 
 
 

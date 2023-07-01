@@ -13,6 +13,7 @@
         public string Accounts_AspNetUsers_Id_Fk { get; set; }
         public string AccountPatients_Id_Fk { get; set; }
         public string AccountsTariffLists_Id_Fk { get; set; }
+        public string AccountsDiagnozLists_Id_Fk { get; set; }
         public int ActionLists_Id_Fk { get; set; }
         public string Doctor_SubAccounts_AspNetUsers_Id_Fk { get; set; } 
     }

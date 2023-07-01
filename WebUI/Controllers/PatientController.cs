@@ -1,4 +1,6 @@
 ﻿using Business.Repositories.AccountPatientsRepository;
+using Business.Repositories.AccountsDiagnozCategoriesRepository;
+using Business.Repositories.AccountsDiagnozListsRepository;
 using Business.Repositories.AccountsRepository;
 using Business.Repositories.AccountsTariffListsRepository;
 using Business.Repositories.AccountsTariffNamesCategoriesRepository;
@@ -37,9 +39,11 @@ namespace WebUI.Controllers
         private readonly IAccountsTariffNamesCategoriesService _accountsTariffNamesCategoriesService;
         private readonly IAccountsTariffListsService _accountsTariffListsService;
         private readonly IAccountTreatmentsService _iAccountTreatmentsService;        
-        private readonly IAspNetUsersService _iAspNetUsersService;        
+        private readonly IAspNetUsersService _iAspNetUsersService;
+        private readonly IAccountsDiagnozCategoriesService _iAccountsDiagnozCategoriesService;
+        private readonly IAccountsDiagnozListsService _iAccountsDiagnozListsService;
 
-        public PatientController(IAccountPatientsService iAccountPatientsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService, IActionListsService iActionListService, IAccountsTariffNamesService iAccountsTariffNamesService, IAccountsTariffNamesCategoriesService accountsTariffNamesCategoriesService, IAccountsTariffListsService accountsTariffListsService, IAccountTreatmentsService accountTreatmentsService, IAspNetUsersService aspNetUsersService)
+        public PatientController(IAccountPatientsService iAccountPatientsService, IAccountsService iAccountsService, ISubAccountsService iSubAccountsService, IActionListsService iActionListService, IAccountsTariffNamesService iAccountsTariffNamesService, IAccountsTariffNamesCategoriesService accountsTariffNamesCategoriesService, IAccountsTariffListsService accountsTariffListsService, IAccountTreatmentsService accountTreatmentsService, IAspNetUsersService aspNetUsersService, IAccountsDiagnozCategoriesService accountsDiagnozCategoriesService, IAccountsDiagnozListsService accountsDiagnozListsService)
         {
             _iAccountPatientsService = iAccountPatientsService;
             _iAccountsService = iAccountsService;
@@ -50,6 +54,8 @@ namespace WebUI.Controllers
             _accountsTariffListsService = accountsTariffListsService;
             _iAccountTreatmentsService = accountTreatmentsService;
             _iAspNetUsersService = aspNetUsersService;
+            _iAccountsDiagnozCategoriesService = accountsDiagnozCategoriesService;
+            _iAccountsDiagnozListsService = accountsDiagnozListsService;
         }
         private async Task<string> findAccount(string _guid)
         {
@@ -269,7 +275,9 @@ namespace WebUI.Controllers
             //subaccountlarda doktorları tespit edilip eklenecek
             ViewBag.Doctor = doctor;
 
+            var patient = await _iAccountPatientsService.GetByPatient(patientId, _findAccount);
             ViewBag.PatientId = patientId;
+            ViewBag.PatientName = patient.Data.NameSurname;
             return PartialView();
         }
         [HttpPost]
@@ -332,31 +340,76 @@ namespace WebUI.Controllers
             return PartialView(costLists);
         }
         [HttpPost]
-        public async Task<JsonResult> TreatmentSaveDb(string tariffList,string teet, string actionListId,string patientId,string doctorId)
+        public async Task<JsonResult> TreatmentSaveDb(string listId, string teet, string actionListId,string patientId,string doctorId)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
             string _findAccount = await findAccount(userId);
+            if (actionListId=="1")
+            {
+                var diagnoz = await _iAccountsDiagnozListsService.GetById(listId);
+                AccountsTreatments accountTreatments = new AccountsTreatments();
+                accountTreatments.Id = Guid.NewGuid().ToString();
+                accountTreatments.Treatment = diagnoz.Data.Name;                
+                accountTreatments.Date = DateTime.Now;
+                accountTreatments.Teet = teet;
+                accountTreatments.Accounts_AspNetUsers_Id_Fk = _findAccount;
+                accountTreatments.AccountPatients_Id_Fk = patientId;
+                accountTreatments.AccountsDiagnozLists_Id_Fk = listId;
+                accountTreatments.ActionLists_Id_Fk = Convert.ToInt32(actionListId);
+                accountTreatments.Doctor_SubAccounts_AspNetUsers_Id_Fk = doctorId;
 
-            var tariff = await _accountsTariffListsService.GetById(tariffList);
-            AccountsTreatments accountTreatments = new AccountsTreatments();
-            accountTreatments.Id = Guid.NewGuid().ToString();
-            accountTreatments.Treatment = tariff.Data.Treatment;
-            accountTreatments.Price = tariff.Data.Price;
-            accountTreatments.Vat = tariff.Data.Vat;
-            accountTreatments.PriceWithVat = tariff.Data.PriceWithVat;
-            accountTreatments.Cost = tariff.Data.Cost;
-            accountTreatments.Date = DateTime.Now;
-            accountTreatments.Teet = teet;
-            accountTreatments.Accounts_AspNetUsers_Id_Fk = _findAccount;
-            accountTreatments.AccountPatients_Id_Fk = patientId;
-            accountTreatments.AccountsTariffLists_Id_Fk = tariffList;
-            accountTreatments.ActionLists_Id_Fk = Convert.ToInt32(actionListId);
-            accountTreatments.Doctor_SubAccounts_AspNetUsers_Id_Fk = doctorId;
+                await _iAccountTreatmentsService.Add(accountTreatments);
+
+                return Json(new { TreatmentId = accountTreatments.Id });
+            }
+            else
+            {
+                var tariff = await _accountsTariffListsService.GetById(listId);
+                AccountsTreatments accountTreatments = new AccountsTreatments();
+                accountTreatments.Id = Guid.NewGuid().ToString();
+                accountTreatments.Treatment = tariff.Data.Treatment;
+                accountTreatments.Price = tariff.Data.Price;
+                accountTreatments.Vat = tariff.Data.Vat;
+                accountTreatments.PriceWithVat = tariff.Data.PriceWithVat;
+                accountTreatments.Cost = tariff.Data.Cost;
+                accountTreatments.Date = DateTime.Now;
+                accountTreatments.Teet = teet;
+                accountTreatments.Accounts_AspNetUsers_Id_Fk = _findAccount;
+                accountTreatments.AccountPatients_Id_Fk = patientId;
+                accountTreatments.AccountsTariffLists_Id_Fk = listId;
+                accountTreatments.ActionLists_Id_Fk = Convert.ToInt32(actionListId);
+                accountTreatments.Doctor_SubAccounts_AspNetUsers_Id_Fk = doctorId;
+
+                await _iAccountTreatmentsService.Add(accountTreatments);
+
+                return Json(new { TreatmentId = accountTreatments.Id });
+            }
             
-            await _iAccountTreatmentsService.Add(accountTreatments);
-                 
-            return Json(new { TreatmentId = accountTreatments.Id });
+        }
+        [HttpPost]
+        public async Task<JsonResult> GetAccountDiagnozCategories()
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            string _findAccount = await findAccount(userId);
+            var accountsDiagnozCategories = await _iAccountsDiagnozCategoriesService.GetByAccountsIdList(_findAccount);
+            return Json(accountsDiagnozCategories.Data);
+        }
+        [HttpPost]
+        public async Task<PartialViewResult> RightTableDiagnozWidget(long categoryId, string patientId)
+        {
+            List<AccountsTariffListsDto> costLists = (from i in await _iAccountsDiagnozListsService.GetListByCategories_Id(categoryId)
+                                                      select new AccountsTariffListsDto
+                                                      {
+                                                          Id = i.Id,
+                                                          CategoryName = _iAccountsDiagnozCategoriesService.GetCategoryName(i.AccountsDiagnozCategories_Id_Fk),
+                                                          Treatment = i.Name,                                                          
+                                                          Queue = i.Queue,
+                                                          AccountsTariffNamesCategories_Id_Fk = i.AccountsDiagnozCategories_Id_Fk
+                                                      }).OrderBy(x => x.Queue).ToList();
+            ViewBag.PatientId = patientId;
+            return PartialView(costLists);
         }
     }
 }

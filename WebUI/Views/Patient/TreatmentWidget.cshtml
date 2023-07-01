@@ -60,19 +60,19 @@
     <div class="col-lg-4">
         <div class="card border-top border-top-width-3 border-top-primary border-bottom border-bottom-width-3 border-bottom-primary rounded-0">
             <div class="card-body">
-                <h6>Hasta: Ferhat Işık</h6>
+                <h6>Hasta: @ViewBag.PatientName</h6>
                 <div class="row">
                     <div class="col-lg-6">
                         <select id="doctor" class="form-control form-control-select2" data-container-css-class="border-primary">
                             @foreach (var item in ViewBag.Doctor)
                             {
                                 <option value=@item.Value>@item.Text</option>
-                            }                            
+                            }
                         </select>
                     </div>
                     <div class="col-lg-6">
                         <select id="tariffnames" class="form-control form-control-select2" data-container-css-class="border-primary">
-                            @if (ViewBag.TariffNames.Count>0)
+                            @if (ViewBag.TariffNames.Count > 0)
                             {
                                 foreach (var item in ViewBag.TariffNames)
                                 {
@@ -83,7 +83,7 @@
                             {
                                 <option value="0">Kayıt Yok!</option>
                             }
-                            
+
                         </select>
                     </div>
                 </div>
@@ -107,6 +107,7 @@
     </div>
 </div>
 <script>
+    $("#actionlist").val(2).change();
     var actionListValue = $("#actionlist").val();
     var _patientId = '@ViewBag.PatientId';
     $.ajax({
@@ -126,16 +127,57 @@
 <script>
     $("#actionlist").change(function () {
         var selectedValue = $(this).val();
-        
+        var _patientId = '@ViewBag.PatientId';
         if (selectedValue == 1) {
 
-            var actionListValue = $("#actionlist").val();
-            var _patientId = '@ViewBag.PatientId';
+            //tedavi kategori diagnoz kategori olacak
+
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "/Patient/GetAccountDiagnozCategories",
+                data: { id: selectedValue },
+                success: function myfunction(data) {
+                    var veriler = data;
+                    $("#AccounttariffNamesCategories").empty();
+                    if (veriler.length == 0) {
+                        var optionElementi = $('<option>').attr('value', 0).text("Kayıt Yok!");
+                        $("#AccounttariffNamesCategories").append(optionElementi);
+                    }
+                    $.each(veriler, function (i, veri) {
+                        var optionElementi = $('<option>').attr('value', veri.id).text(veri.categoryName);
+                        $("#AccounttariffNamesCategories").append(optionElementi);
+                    });
+                },
+                error: function myfunction(veri) {
+                    alert("error");
+                }
+            });
+
+            var categoryValue = $("#AccounttariffNamesCategories").val();
+
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "/Patient/RightTableDiagnozWidget",
+                data: { categoryId: categoryValue, patientId: _patientId },
+                success: function myfunction(data) {
+                    $("#right_table").html('');
+                    $("#right_table").html(data);
+                },
+                error: function myfunction(veri) {
+                    alert("error");
+                }
+            });
+            //tedavi kategori diagnoz kategori olacak
+            //left table yüklenecek
+            //var actionListValue = $("#actionlist").val();
+
             $.ajax({
                 async: false,
                 type: "POST",
                 url: "/Patient/LeftTableWidget",
-                data: { actionListId: actionListValue, patientId: _patientId },
+                data: { actionListId: selectedValue, patientId: _patientId },
                 success: function myfunction(veri) {
                     $("#left_table").html('');
                     $("#left_table").html(veri);
@@ -147,13 +189,52 @@
 
         }
         else {
-            var actionListValue = $("#actionlist").val();
-            var _patientId = '@ViewBag.PatientId';
+            var value = $("#tariffnames").val();
+            //var _patientId = '@ViewBag.PatientId';
+
+            $.ajax({
+                async: false,
+                type: "GET",
+                url: "/Patient/GetAccountTariffNamesCategories",
+                data: { id: value },
+                success: function myfunction(data) {
+                    var veriler = data;
+                    $("#AccounttariffNamesCategories").empty();
+                    if (veriler.length == 0) {
+                        var optionElementi = $('<option>').attr('value', 0).text("Kayıt Yok!");
+                        $("#AccounttariffNamesCategories").append(optionElementi);
+                    }
+                    $.each(veriler, function (i, veri) {
+                        var optionElementi = $('<option>').attr('value', veri.id).text(veri.categoryName);
+                        $("#AccounttariffNamesCategories").append(optionElementi);
+                    });
+                },
+                error: function myfunction(veri) {
+                    alert("error");
+                }
+            });
+
+            var categoryValue = $("#AccounttariffNamesCategories").val();
+
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "/Patient/RightTableWidget",
+                data: { categoryId: categoryValue, patientId: _patientId },
+                success: function myfunction(data) {
+                    $("#right_table").html('');
+                    $("#right_table").html(data);
+                },
+                error: function myfunction(veri) {
+                    alert("error");
+                }
+            });
+            //Left table yüklenecek
             $.ajax({
                 async: false,
                 type: "POST",
                 url: "/Patient/LeftTableWidget",
-                data: { actionListId: actionListValue, patientId: _patientId },
+                data: { actionListId: selectedValue, patientId: _patientId },
                 success: function myfunction(veri) {
                     $("#left_table").html('');
                     $("#left_table").html(veri);
@@ -163,17 +244,21 @@
                 }
             });
 
-        }        
+        }
     });
 </script>
 <script>
     $("#tariffnames").change(function () {
-        var selectedValue = $(this).val();        
+        var actionlistcontrol = $("#actionlist").val();
+        if (actionlistcontrol == 1) {
+            return;
+        }
+        var selectedValue = $(this).val();
         $.ajax({
             async: false,
             type: "GET",
             url: "/Patient/GetAccountTariffNamesCategories",
-            data: { id: selectedValue},
+            data: { id: selectedValue },
             success: function myfunction(data) {
                 var veriler = data;
                 $("#AccounttariffNamesCategories").empty();
@@ -191,7 +276,7 @@
             }
         });
 
-        var categoryValue = $("#AccounttariffNamesCategories").val();        
+        var categoryValue = $("#AccounttariffNamesCategories").val();
         $.ajax({
             async: false,
             type: "POST",
@@ -209,52 +294,39 @@
 </script>
 <script>
     //$(document).ready(function myfunction() {
-    var selectedValue = $("#tariffnames").val();
-    $.ajax({
-        async: false,
-        type: "GET",
-        url: "/Patient/GetAccountTariffNamesCategories",
-        data: { id: selectedValue },
-        success: function myfunction(data) {
-            var veriler = data;            
-            $("#AccounttariffNamesCategories").empty();
-            if(veriler.length==0){
-                var optionElementi = $('<option>').attr('value', 0).text("Kayıt Yok!");
-                $("#AccounttariffNamesCategories").append(optionElementi);
+    var actionlistcontrol = $("#actionlist").val();
+    if (actionlistcontrol == 1) {
+        //return;
+    }
+    else {
+        var selectedValue = $("#tariffnames").val();
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: "/Patient/GetAccountTariffNamesCategories",
+            data: { id: selectedValue },
+            success: function myfunction(data) {
+                var veriler = data;
+                $("#AccounttariffNamesCategories").empty();
+                if (veriler.length == 0) {
+                    var optionElementi = $('<option>').attr('value', 0).text("Kayıt Yok!");
+                    $("#AccounttariffNamesCategories").append(optionElementi);
+                }
+                $.each(veriler, function (i, veri) {
+                    var optionElementi = $('<option>').attr('value', veri.id).text(veri.categoryName);
+                    $("#AccounttariffNamesCategories").append(optionElementi);
+                });
+            },
+            error: function myfunction(veri) {
+                alert("error");
             }
-            $.each(veriler, function (i, veri) {
-                var optionElementi = $('<option>').attr('value', veri.id).text(veri.categoryName);
-                $("#AccounttariffNamesCategories").append(optionElementi);
-            });
-        },
-        error: function myfunction(veri) {
-            alert("error");
-        }
-    });
-    var categoryValue = $("#AccounttariffNamesCategories").val();
-    $.ajax({
-        async: false,
-        type: "POST",
-        url: "/Patient/RightTableWidget",
-        data: { categoryId: categoryValue, patientId: _patientId },
-        success: function myfunction(data) {
-            $("#right_table").html('');
-            $("#right_table").html(data);
-        },
-        error: function myfunction(veri) {
-            alert("error");
-        }
-    });
-    //});
-</script>
-<script>
-    $("#AccounttariffNamesCategories").change(function () {
-        var selectedValue = $(this).val();
+        });
+        var categoryValue = $("#AccounttariffNamesCategories").val();
         $.ajax({
             async: false,
             type: "POST",
             url: "/Patient/RightTableWidget",
-            data: { categoryId: selectedValue, patientId: _patientId },
+            data: { categoryId: categoryValue, patientId: _patientId },
             success: function myfunction(data) {
                 $("#right_table").html('');
                 $("#right_table").html(data);
@@ -263,5 +335,112 @@
                 alert("error");
             }
         });
+    }
+    //});
+</script>
+<script>
+    $("#AccounttariffNamesCategories").change(function () {
+        var actionlistcontrol = $("#actionlist").val();
+        var _patientId = '@ViewBag.PatientId';
+        var selectedValue = $(this).val();
+        if (actionlistcontrol == 1) {
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "/Patient/RightTableDiagnozWidget",
+                data: { categoryId: selectedValue, patientId: _patientId },
+                success: function myfunction(data) {
+                    $("#right_table").html('');
+                    $("#right_table").html(data);
+                },
+                error: function myfunction(veri) {
+                    alert("error");
+                }
+            });
+        }
+        else {
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "/Patient/RightTableWidget",
+                data: { categoryId: selectedValue, patientId: _patientId },
+                success: function myfunction(data) {
+                    $("#right_table").html('');
+                    $("#right_table").html(data);
+                },
+                error: function myfunction(veri) {
+                    alert("error");
+                }
+            });
+        }
+    });
+</script>
+<script>
+
+    $(document).ready(function () {
+        // Tablo satırlarına tıklama olayını belge düzeyinde dinleme
+        $(document).on('click', '#oral-treatment-list tr', function () {            
+            if ($(this).hasClass('process-treatment')) {
+                $(this).toggleClass('selected').siblings().removeClass('selected');
+            }
+        });
+    });
+
+    const container = document.querySelector('.container');
+
+    container.addEventListener('click', function (e) {
+        //console.log(e);
+        if (e.target.classList.contains('teets')) {
+            //e.target.classList.toggle('selected');
+            /*calculateTotal() */
+            const oral_treatment_list = document.querySelector('.oral-treatment-list');
+            const selected_oral_treatment_list = oral_treatment_list.querySelectorAll('.selected');
+            //console.log(selected_oral_treatment_list);
+            if (selected_oral_treatment_list.length == 0) {
+                alert("Tedavi Seçiniz.");
+                return;
+            }
+            //console.log(selected_oral_treatment_list);
+            //console.log(selected_oral_treatment_list[0].dataset);
+            //console.log(selected_oral_treatment_list[0].dataset.tedaviId);
+            //console.log(selected_oral_treatment_list[0].dataset.tedaviKod);
+            //console.log(selected_oral_treatment_list[0].dataset.tedaviAdi);
+            //console.log(selected_oral_treatment_list[0].dataset.tedaviMasraf);
+            //console.log(selected_oral_treatment_list[0].dataset.tedaviFiyat);
+            /*console.log(e.target.classList[1]);*/
+            //console.log($('#treatments-table-body'));
+            //console.log($('#treatments-table-body tr').length);
+
+            var ThisMonth = new Date().getMonth() + 1;
+            var ThisDay = new Date().getDate();
+            var ThisYear = new Date().getFullYear(); ThisMonth.toString()
+            var ThisDate = ThisDay.toString() + "." + ThisMonth.toString() + "." + ThisYear.toString();
+            /*console.log(ThisDate);*/
+
+            let teet = e.target.classList[1];
+            let result_teet = teet.substring(teet.indexOf("-") + 1);
+            if (document.getElementById('treatments-table-body').rows[0].cells.item(1).innerHTML == "Sistemde Kayitli Veri Bulunamadi") {
+                document.getElementById('treatments-table-body').deleteRow(0);
+            }
+            var actionListValue = $("#actionlist").val();
+            var _patientId = selected_oral_treatment_list[0].dataset.patientid;
+            var _doctorId = $("#doctor").val();
+            var _doctorName = $("#doctor").text();
+            var treatmentId = "";
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "/Patient/TreatmentSaveDb",
+                data: { listId: selected_oral_treatment_list[0].dataset.tedaviId, teet: result_teet, actionListId: actionListValue, patientId: _patientId, doctorId: _doctorId },
+                success: function myfunction(veri) {
+                    treatmentId = veri.treatmentId;
+                },
+                error: function myfunction(veri) {
+                    alert("error");
+                }
+            });
+            $('#treatments-table-body').append('<tr data-treatment-id="' + treatmentId + '" data-treatmentlist-id="' + selected_oral_treatment_list[0].dataset.tedaviId + '"><td>' + ThisDate + '</td><td>' + result_teet + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviAdi + '</td><td>' + _doctorName + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviFiyat + '</td></tr>');
+
+        }
     });
 </script>
