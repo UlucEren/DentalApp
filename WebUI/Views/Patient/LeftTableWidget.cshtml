@@ -22,7 +22,7 @@
                     <td>@item.Teeth</td>
                     <td>@item.Treatment</td>
                     <td>@item.Doctor_SubAccounts_AspNetUsers_Id_Fk_Name</td>
-                    <td class="tedavi-fiyat"><span>@item.PriceWithVat</span></td>
+                    <td><span>@item.PriceWithVat.ToString("C2")</span></td>
                 </tr>
             }
         }
@@ -31,7 +31,7 @@
             <tr class="disabled">
                 <td></td>
                 <td colspan="3" class="text-center">Sistemde Kayitli Veri Bulunamadi</td>
-                <td class="tedavi-fiyat"><span>0.00</span></td>
+                <td><span>₺0.00</span></td>
             </tr>
         }
        
@@ -39,7 +39,7 @@
     <tfoot>
         <tr>
             <td colspan="6" class="text-right">
-                <strong><span class="toplam">Toplam: 0.00 TRY</span></strong>
+                <strong><span id="LeftTableWidgetSum">Toplam: @ViewBag.TotalPrice.ToString("C2") TRY</span></strong>
             </td>
         </tr>
     </tfoot>

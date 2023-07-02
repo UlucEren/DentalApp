@@ -291,6 +291,12 @@ namespace WebUI.Controllers
                 return PartialView();
             }
             var result = await _iAccountTreatmentsService.GetTreatmentListByActionId(_findAccount, actionListId, patientId);
+            decimal totalPrice = 0;
+            foreach (var item in result.Data)
+            {
+                totalPrice = totalPrice + item.PriceWithVat;
+            }
+            ViewBag.TotalPrice = totalPrice;
             List<AccountTreatmentsDto> treatment = (from i in _iAccountTreatmentsService.GetTreatmentListByActionId(_findAccount, actionListId, patientId).Result.Data
                                                     select new AccountTreatmentsDto
                                                     {
