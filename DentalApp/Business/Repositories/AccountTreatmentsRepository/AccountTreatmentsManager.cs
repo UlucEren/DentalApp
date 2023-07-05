@@ -46,8 +46,8 @@ namespace Business.Repositories.AccountTreatmentsRepository
             return new SuccessResult(AccountTreatmentsMessages.Updated);
         }
 
-        [SecuredAspect()]
-        [RemoveCacheAspect("IAccountTreatmentsService.Get")]
+        //[SecuredAspect()]
+        //[RemoveCacheAspect("IAccountTreatmentsService.Get")]
 
         public async Task<IResult> Delete(AccountsTreatments accountTreatments)
         {

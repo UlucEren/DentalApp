@@ -1,7 +1,10 @@
-﻿namespace Entities.Concrete
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Entities.Concrete
 {
     public class AccountsTreatments
     {
+        [Key]
         public string Id { get; set; }
         public string Treatment { get; set; }
         public decimal Price { get; set; }

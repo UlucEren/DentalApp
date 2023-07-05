@@ -379,7 +379,7 @@
 
     $(document).ready(function () {
         // Tablo satırlarına tıklama olayını belge düzeyinde dinleme
-        $(document).on('click', '#oral-treatment-list tr', function () {            
+        $(document).on('click', '#oral-treatment-list tr', function () {
             if ($(this).hasClass('process-treatment')) {
                 $(this).toggleClass('selected').siblings().removeClass('selected');
             }
@@ -411,10 +411,11 @@
             //console.log($('#treatments-table-body'));
             //console.log($('#treatments-table-body tr').length);
 
-            var ThisMonth = new Date().getMonth() + 1;
-            var ThisDay = new Date().getDate();
-            var ThisYear = new Date().getFullYear(); ThisMonth.toString()
-            var ThisDate = ThisDay.toString() + "." + ThisMonth.toString() + "." + ThisYear.toString();
+            //var ThisMonth = new Date().getMonth() + 1;
+            //var ThisDay = new Date().getDate();
+            //var ThisYear = new Date().getFullYear(); ThisMonth.toString()
+            //var ThisDate = ThisDay.toString() + "." + ThisMonth.toString() + "." + ThisYear.toString();
+            var ThisDate = "";
             /*console.log(ThisDate);*/
 
             let teet = e.target.classList[1];
@@ -433,12 +434,13 @@
             var _fiyat = parseFloat(fiyat);
             var stringfiyat = "₺" + _fiyat.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             
+            //toplam string değerde işlem yapma
             var spanElement = document.getElementById("LeftTableWidgetSum");
             var text = spanElement.textContent.trim();
 
             // Rakamsal değeri almak için düzenli ifade kullanabiliriz
             var match = text.match(/\d{1,3}(?:\.\d{3})*(?:,\d{2})?/);
-            
+
             var str = match[0];
             var yeniStr = "";
 
@@ -447,10 +449,10 @@
                     yeniStr += str[i];
                 }
             }
-            yeniStr = yeniStr.replace(',', '.')
+            yeniStr = yeniStr.replace(',', '.');
             var _yeniStr = parseFloat(yeniStr);
             var total = _fiyat + _yeniStr;
-            
+
             var stringtotal = "Toplam: " + "₺" + total.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " TRY";
 
             $.ajax({
@@ -459,16 +461,89 @@
                 url: "/Patient/TreatmentSaveDb",
                 data: { listId: selected_oral_treatment_list[0].dataset.tedaviId, teet: result_teet, actionListId: actionListValue, patientId: _patientId, doctorId: _doctorId },
                 success: function myfunction(veri) {
-                    treatmentId = veri.treatmentId;
+                    treatmentId = veri.treatmentId;                     
+                    var date = new Date(veri.createDate);
+                    var day = date.getDate();
+                    var month = date.getMonth() + 1;
+                    var year = date.getFullYear();
+                    var hours = date.getHours();
+                    var minutes = date.getMinutes();
+                    var seconds = date.getSeconds();
+
+                    var formattedDate = day + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds;
+                    ThisDate = formattedDate;
                 },
                 error: function myfunction(veri) {
                     alert("error");
                 }
             });
 
-            $("#LeftTableWidgetSum").text(stringtotal);
-            $('#treatments-table-body').prepend('<tr data-treatment-id="' + treatmentId + '" data-treatmentlist-id="' + selected_oral_treatment_list[0].dataset.tedaviId + '"><td>' + ThisDate + '</td><td>' + result_teet + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviAdi + '</td><td>' + _doctorName + '</td><td>' + stringfiyat + '</td></tr>');
+            var islem = "<td class='text-center'><div class='d-inline-flex'><div class='dropdown'><a href='#' class='text-body' data-bs-toggle='dropdown'><i class='ph-list'></i></a><div class='dropdown-menu dropdown-menu-end'><a style='cursor:pointer' id = 'lefttablewidgettedavihesap' class='dropdown-item'><i class='fa fa-retweet me-2'></i>Hesap</a><a style='cursor:pointer' id='lefttablewidgettedaviduzenle' class='dropdown-item'><i class='fa fa-pencil-alt me-2'></i>Düzelt</a><a style = 'cursor:pointer' id = 'lefttablewidgettedavisil' class='dropdown-item'><i class='fas fa-trash me-2'></i>Sil</a></div></div></div></td>";
 
+            $("#LeftTableWidgetSum").text(stringtotal);
+            $('#treatments-table-body').prepend('<tr data-treatment-id="' + treatmentId + '" data-treatmentlist-id="' + selected_oral_treatment_list[0].dataset.tedaviId + '"><td>' + ThisDate + '</td><td>' + result_teet + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviAdi + '</td><td>' + _doctorName + '</td><td>' + stringfiyat + '</td>' + islem + '</tr>');
+
+        }
+    });
+</script>
+<script>
+    $(document).on('click', '#lefttablewidgettedavisil', function (e) {
+        var tr = $(this).closest('tr');
+        var treatmentId = tr.data('treatment-id');
+        var tr = $(this).closest('tr');
+        var tdValues = [];
+        tr.find('td').each(function () {
+            var value = $(this).text();
+            tdValues.push(value);
+        });
+        
+        var cevap = confirm(tdValues[2] + " silinmesine emin misiniz?");
+        if (cevap) {
+            $.ajax({
+                async: false,
+                url: "/Patient/DelAccountsTreatments",
+                type: "POST",
+                data: { Id: treatmentId },
+                success: function (data) {
+                    //toplam string değerde işlem yapma
+                    var spanElement = document.getElementById("LeftTableWidgetSum");
+                    var text = spanElement.textContent.trim();
+
+                    // Rakamsal değeri almak için düzenli ifade kullanabiliriz
+                    var match = text.match(/\d{1,3}(?:\.\d{3})*(?:,\d{2})?/);
+
+                    var str = match[0];
+                    var yeniStr = "";
+
+                    for (var i = 0; i < str.length; i++) {
+                        if (str[i] !== '.') {
+                            yeniStr += str[i];
+                        }
+                    }
+                    yeniStr = yeniStr.replace(',', '.');
+                    var _yeniStr = parseFloat(yeniStr);
+
+                    var _fiyat = tdValues[4].replace('₺', '');                    
+                    var yeniStrFiyat = "";
+                    for (var i = 0; i < _fiyat.length; i++) {
+                        if (_fiyat[i] !== '.') {
+                            yeniStrFiyat += _fiyat[i];
+                        }
+                    }
+                    yeniStrFiyat.replace(',', '.');
+
+                    var total = _yeniStr - parseFloat(yeniStrFiyat);
+
+                    var stringtotal = "Toplam: " + "₺" + total.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " TRY";
+                    $("#LeftTableWidgetSum").text(stringtotal);
+
+                    tr.remove();
+                    alert(data);
+                }
+            });
+        }
+        else {
+            alert("İptal Edildi!");
         }
     });
 </script>

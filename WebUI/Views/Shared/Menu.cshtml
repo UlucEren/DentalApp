@@ -86,7 +86,7 @@
 {
     <li class="nav-item">
         <a href="\Patient\Index" class="nav-link @{
-        isactive=(selectedPage == "/Patient/Index") ? "active" : "";
+        isactive=(selectedPage.Contains("/Patient/Index") || selectedPage.Contains("/Patient/Oral")) ? "active" : "";
         @isactive
 ;
 } ">

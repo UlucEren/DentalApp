@@ -64,7 +64,7 @@
         <li class="nav-item">
             <a href="#js-tab4" class="nav-link @{
                 isactive=(selectedPage == "/Setting/Diagnosis") ? "active" : "";
-                                                                                @isactive
+                                                                                    @isactive
 ;
 }" data-bs-toggle="tab">
                 <i class="ph-user-circle me-1"></i>
@@ -274,7 +274,7 @@
                         <input id="modal_yenitanimekle_name" type="text" class="form-control">
                         @*<div class="form-text text-muted">Here goes your name</div>*@
                     </div>
-                </div>                
+                </div>
             </div>
 
             <div class="modal-footer">
@@ -324,7 +324,7 @@
                         <input id="modal_tanimduzenle_name" type="text" class="form-control">
                         @*<div class="form-text text-muted">Here goes your name</div>*@
                     </div>
-                </div>                
+                </div>
             </div>
 
             <div class="modal-footer">
@@ -397,7 +397,7 @@
                         $("#modal_yenitanimekle_category").append(option1);
                         var option2 = $("<option></option>").attr("value", data.id).text(_categoryName);
                         $("#modal_tanimduzenle_category").append(option2);
-                        
+
                         $("#diagnoznamecategory").val(data.id).change();
                         $("#modal_yenicategory").modal('hide');
                     }
@@ -484,9 +484,9 @@
         });
 
         $("#btn-update").click(function () {
-            
-            var dataId = $("#diagnoznamecategory").val(); 
-            if(dataId==0){
+
+            var dataId = $("#diagnoznamecategory").val();
+            if (dataId == 0) {
                 alert("Kategori Kayıt Yapılmalı.");
                 return;
             }
@@ -500,7 +500,7 @@
         });
 
         $("#modal_updatecategory_button").click(function () {
-                       
+
             var dataId = $("#modal_updatecategory_name").data("id");
             var dataName = $("#modal_updatecategory_name").val();
 
@@ -512,12 +512,12 @@
                 success: function (data) {
                     alert(data);
                     var dropdown = document.getElementById("diagnoznamecategory");
-                    
+
                     var selectedValue = dataId;
 
                     for (var i = 0; i < dropdown.options.length; i++) {
                         if (dropdown.options[i].value === selectedValue) {
-                            //dropdown.options[i].text = dataName; 
+                            //dropdown.options[i].text = dataName;
                             var option = document.createElement("option");
                             option.text = dataName;
                             option.value = dropdown.options[i].value;
@@ -527,7 +527,7 @@
                             break;
                         }
                     }
-                    
+
                 }
             });
 
@@ -536,7 +536,7 @@
 
         $("#modal_yenitanimekle_button").click(function () {
             var yenitanimeklecategory = $("#modal_yenitanimekle_category").val();
-            var yenitanimeklename = $("#modal_yenitanimekle_name").val();            
+            var yenitanimeklename = $("#modal_yenitanimekle_name").val();
 
             if (yenitanimeklecategory == 0) {
                 alert("Kategori Seçilmeli!");
@@ -546,7 +546,7 @@
                 alert("Tedavi Adı Girilmeli!");
                 return;
             }
-            
+
             $.ajax({
                 async: false,
                 url: "/Setting/SetDiagnozTanim",
@@ -578,28 +578,39 @@
     $(document).on('click', '#GetDiagnozListWidgetTanimSil', function (e) {
         var tr = $(this).closest('tr');
         var dataId = tr.data('id');
-        
-        $.ajax({
-            async: false,
-            url: "/Setting/DelTanim",
-            type: "POST",
-            data: { Id: dataId },
-            success: function (data) {
-                tr.remove();
-            }
+        var tdValues = [];
+        tr.find('td').each(function () {
+            var value = $(this).text();
+            tdValues.push(value);
         });
+        var cevap = confirm(tdValues[2] + " tanımının silinmesine emin misiniz?");
+        if (cevap) {
 
-        var firstValue = $("#diagnoznamecategory").val();
-        $.ajax({
-            async: false,
-            url: "/Setting/GetDiagnozListWidget",
-            type: "GET",
-            data: { categoryId: firstValue },
-            success: function (data) {
-                $(".tanımlamalar-diagnoz-list-widget").html('');
-                $(".tanımlamalar-diagnoz-list-widget").html(data);
-            }
-        });
+            $.ajax({
+                async: false,
+                url: "/Setting/DelTanim",
+                type: "POST",
+                data: { Id: dataId },
+                success: function (data) {
+                    tr.remove();
+                }
+            });
+
+            var firstValue = $("#diagnoznamecategory").val();
+            $.ajax({
+                async: false,
+                url: "/Setting/GetDiagnozListWidget",
+                type: "GET",
+                data: { categoryId: firstValue },
+                success: function (data) {
+                    $(".tanımlamalar-diagnoz-list-widget").html('');
+                    $(".tanımlamalar-diagnoz-list-widget").html(data);
+                }
+            });
+        }
+        else {
+            alert("İptal Edildi!");
+        }
     });
 </script>
 <script>
@@ -640,9 +651,9 @@
 
         var targetRow = $("tr[data-id='" + _tanimId + "']");
         // Hedef satırın içindeki td öğelerini seçerek verileri güncelleyin
-        
+
         targetRow.find("td").eq(2).text(_tanimName);
-        
+
         $("#modal_tanimduzenle").modal('hide');
 
     });

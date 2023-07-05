@@ -9,6 +9,7 @@
             <th>Tedavi</th>
             <th>Doktor</th>
             <th>Fiyat</th>
+            <th>İşlem</th>
 
         </tr>
     </thead>
@@ -23,6 +24,29 @@
                     <td>@item.Treatment</td>
                     <td>@item.Doctor_SubAccounts_AspNetUsers_Id_Fk_Name</td>
                     <td><span>@item.PriceWithVat.ToString("C2")</span></td>
+                    <td class="text-center">
+                        <div class="d-inline-flex">
+                            <div class="dropdown">
+                                <a href="#" class="text-body" data-bs-toggle="dropdown">
+                                    <i class="ph-list"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a style="cursor:pointer" id="lefttablewidgettedavihesap" class="dropdown-item">
+                                        <i class="fa fa-retweet me-2"></i>
+                                        Hesap
+                                    </a>
+                                    <a style="cursor:pointer" id="lefttablewidgettedaviduzenle" class="dropdown-item">
+                                        <i class="fa fa-pencil-alt me-2"></i>
+                                        Düzelt
+                                    </a>
+                                    <a style="cursor:pointer" id="lefttablewidgettedavisil" class="dropdown-item">
+                                        <i class="fas fa-trash me-2"></i>
+                                        Sil
+                                    </a>                                
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             }
         }
@@ -46,7 +70,7 @@
 </table>
 
 <div>
-    <button type="submit" class="btn-tedavi-islem btn btn-custom btn-danger  waves-effect waves-light" disabled="" onclick="$.tedavi_sil();">
+   @* <button type="submit" class="btn-tedavi-islem btn btn-custom btn-danger  waves-effect waves-light" disabled="" onclick="$.tedavi_sil();">
         <i class="fa fa-trash"></i>
         Sil
     </button>
@@ -54,9 +78,9 @@
     <button type="submit" class="btn-tedavi-islem btn btn-custom btn-default waves-effect waves-light duzelt" disabled="" onclick="$.tedavi_duzelt();" name="duzelt">
         <i class="fa fa-pencil"></i>
         Düzelt
-    </button>
+    </button>*@
 
-    <button type="submit" class="btn-tedavi-islem btn btn-custom btn-success waves-effect waves-light yuvarla" disabled="" onclick="$.fiyat_yuvarla();"><i class="fa fa-retweet"></i> Hesap</button>
+    @*<button type="submit" class="btn-tedavi-islem btn btn-custom btn-success waves-effect waves-light yuvarla" disabled="" onclick="$.fiyat_yuvarla();"><i class="fa fa-retweet"></i> Hesap</button>*@
 
     <button type="submit" class="btn-tedavi-islem btn btn-custom btn-inverse waves-effect waves-light hidden" name="tedaviye_kopyala" disabled="" onclick="$.tedaviye_kopyala();">
         <i class="fa fa-clone"></i>

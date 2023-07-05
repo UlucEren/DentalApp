@@ -367,7 +367,7 @@ namespace WebUI.Controllers
 
                 await _iAccountTreatmentsService.Add(accountTreatments);
 
-                return Json(new { TreatmentId = accountTreatments.Id });
+                return Json(new { TreatmentId = accountTreatments.Id, CreateDate= accountTreatments.Date });
             }
             else
             {
@@ -389,7 +389,7 @@ namespace WebUI.Controllers
 
                 await _iAccountTreatmentsService.Add(accountTreatments);
 
-                return Json(new { TreatmentId = accountTreatments.Id });
+                return Json(new { TreatmentId = accountTreatments.Id,CreateDate = accountTreatments.Date });
             }
             
         }
@@ -416,6 +416,24 @@ namespace WebUI.Controllers
                                                       }).OrderBy(x => x.Queue).ToList();
             ViewBag.PatientId = patientId;
             return PartialView(costLists);
+        }
+        [HttpPost]
+        public async Task<JsonResult> DelAccountsTreatments(string Id)
+        {
+            AccountsTreatments accountsTreatments = new AccountsTreatments();
+            accountsTreatments.Id = Id;
+            try
+            {
+                await _iAccountTreatmentsService.Delete(accountsTreatments);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
+
+            return Json("İşlem Başarılı.");
         }
     }
 }
