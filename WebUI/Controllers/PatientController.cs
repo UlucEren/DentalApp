@@ -435,5 +435,20 @@ namespace WebUI.Controllers
 
             return Json("İşlem Başarılı.");
         }
+
+        [HttpPost]
+        public async Task<JsonResult> UpdateAccountsTreatments(string treatmentId,string accountsTariffLists_Id_Fk, string treatmentName, string price)
+        {
+            //var data = await _accountsTariffListsService.GetById(treatmentId);
+            //data.Data.Treatment = treatmentName;
+            //price = price.Replace('.', ',');
+            //data.Data.Price = Convert.ToDecimal(price);
+            //data.Data.Vat = vat;
+            //data.Data.PriceWithVat = data.Data.Price + (data.Data.Price / 100 * Convert.ToDecimal(vat));
+            //cost = cost.Replace('.', ',');
+            //data.Data.Cost = Convert.ToDecimal(cost);
+            //await _accountsTariffListsService.Update(data.Data);
+            return Json("İşlem Başarılı.");
+        }
     }
 }

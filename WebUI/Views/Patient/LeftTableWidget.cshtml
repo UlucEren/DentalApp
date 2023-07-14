@@ -18,7 +18,7 @@
         {
             foreach (var item in Model)
             {
-                <tr data-treatment-id="@item.Id" data-treatmentlist-id="@item.AccountsTariffLists_Id_Fk" @*class="disabled"*@>
+                <tr data-treatment-id="@item.Id" data-treatmentlist-id="@item.AccountsTariffLists_Id_Fk" data-doctor-id="@item.Doctor_SubAccounts_AspNetUsers_Id_Fk" data-masraf="@item.Cost">
                     <td>@item.Date</td>
                     <td>@item.Teeth</td>
                     <td>@item.Treatment</td>

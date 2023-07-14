@@ -106,6 +106,75 @@
         </div>
     </div>
 </div>
+<!-- Tedavi Düzenle Modal -->
+<div id="modal_tedaviduzenle" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @* <form action="\Setting\CreateTariff" method="post">*@
+            <div class="modal-header">
+                <h5 class="modal-title">Tedavi Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Tarih</label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input id="tedaviduzenledatetime" class="form-control" type="datetime-local" name="datetime-local">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Tedavi Adı</label>
+                    <div class="col-md-8">
+                        <input id="tedaviduzenlename" disabled type="text" class="form-control">
+                        @*<div class="form-text text-muted">Here goes your name</div>*@
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Fiyat</label>
+                    <div class="col-md-8">
+                        <input id="tedaviduzenleprice" type="number" class="form-control">
+                        @*<div class="form-text text-muted">Yeni tarife, seçilen tarifedeki tedavilerden oluşacak</div>*@
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Masraf</label>
+                    <div class="col-md-8">
+                        <input id="tedaviduzenlecost" type="number" class="form-control">                        
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Doktor</label>
+                    <div class="col-md-8">
+                        <select id="tedaviduzenledoctor" class="form-control form-control-select2" data-container-css-class="border-primary">
+                            @foreach (var item in ViewBag.Doctor)
+                            {
+                                <option value=@item.Value>@item.Text</option>
+                            }
+                        </select>
+                        @*<div class="form-text text-muted">Yeni tarife fiyatlarını yüzdelik oranda toplu güncelleme. Fiyatların aynı kalmasını istiyorsanız boş bırakabilirsiniz</div>*@
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">Açıklama</label>
+                    <div class="col-md-8">
+                        <input id="tedaviduzenleaciklama" type="number" class="form-control">
+                        @*<div class="form-text text-muted">Yeni tarife fiyatlarını yüzdelik oranda toplu güncelleme. Fiyatların aynı kalmasını istiyorsanız boş bırakabilirsiniz</div>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Kapat</button>
+                <button id="tedaviduzenlebutton" type="button" class="btn btn-primary">Kaydet</button>
+            </div>
+            @*</form>*@
+        </div>
+    </div>
+</div>
+<!-- /Tedavi Düzenle Modal -->
 <script>
     $("#actionlist").val(2).change();
     var actionListValue = $("#actionlist").val();
@@ -426,14 +495,15 @@
             var actionListValue = $("#actionlist").val();
             var _patientId = selected_oral_treatment_list[0].dataset.patientid;
             var _doctorId = $("#doctor").val();
-            var _doctorName = $("#doctor").text();
+            var _doctorName = $("#doctor").text();            
+            var _masraf = selected_oral_treatment_list[0].dataset.tedaviMasraf;
             var treatmentId = "";
 
             var fiyat = selected_oral_treatment_list[0].dataset.tedaviFiyat;
             fiyat = fiyat.replace(',', '.');
             var _fiyat = parseFloat(fiyat);
             var stringfiyat = "₺" + _fiyat.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            
+
             //toplam string değerde işlem yapma
             var spanElement = document.getElementById("LeftTableWidgetSum");
             var text = spanElement.textContent.trim();
@@ -461,7 +531,7 @@
                 url: "/Patient/TreatmentSaveDb",
                 data: { listId: selected_oral_treatment_list[0].dataset.tedaviId, teet: result_teet, actionListId: actionListValue, patientId: _patientId, doctorId: _doctorId },
                 success: function myfunction(veri) {
-                    treatmentId = veri.treatmentId;                     
+                    treatmentId = veri.treatmentId;
                     var date = new Date(veri.createDate);
                     var day = date.getDate();
                     var month = date.getMonth() + 1;
@@ -481,7 +551,7 @@
             var islem = "<td class='text-center'><div class='d-inline-flex'><div class='dropdown'><a href='#' class='text-body' data-bs-toggle='dropdown'><i class='ph-list'></i></a><div class='dropdown-menu dropdown-menu-end'><a style='cursor:pointer' id = 'lefttablewidgettedavihesap' class='dropdown-item'><i class='fa fa-retweet me-2'></i>Hesap</a><a style='cursor:pointer' id='lefttablewidgettedaviduzenle' class='dropdown-item'><i class='fa fa-pencil-alt me-2'></i>Düzelt</a><a style = 'cursor:pointer' id = 'lefttablewidgettedavisil' class='dropdown-item'><i class='fas fa-trash me-2'></i>Sil</a></div></div></div></td>";
 
             $("#LeftTableWidgetSum").text(stringtotal);
-            $('#treatments-table-body').prepend('<tr data-treatment-id="' + treatmentId + '" data-treatmentlist-id="' + selected_oral_treatment_list[0].dataset.tedaviId + '"><td>' + ThisDate + '</td><td>' + result_teet + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviAdi + '</td><td>' + _doctorName + '</td><td>' + stringfiyat + '</td>' + islem + '</tr>');
+            $('#treatments-table-body').prepend('<tr data-treatment-id="' + treatmentId + '" data-treatmentlist-id="' + selected_oral_treatment_list[0].dataset.tedaviId + '" data-doctor-id="' + _doctorId + '" data-masraf="' + _masraf + '"><td>' + ThisDate + '</td><td>' + result_teet + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviAdi + '</td><td>' + _doctorName + '</td><td>' + stringfiyat + '</td>' + islem + '</tr>');
 
         }
     });
@@ -496,7 +566,7 @@
             var value = $(this).text();
             tdValues.push(value);
         });
-        
+
         var cevap = confirm(tdValues[2] + " silinmesine emin misiniz?");
         if (cevap) {
             $.ajax({
@@ -523,7 +593,7 @@
                     yeniStr = yeniStr.replace(',', '.');
                     var _yeniStr = parseFloat(yeniStr);
 
-                    var _fiyat = tdValues[4].replace('₺', '');                    
+                    var _fiyat = tdValues[4].replace('₺', '');
                     var yeniStrFiyat = "";
                     for (var i = 0; i < _fiyat.length; i++) {
                         if (_fiyat[i] !== '.') {
@@ -545,5 +615,94 @@
         else {
             alert("İptal Edildi!");
         }
+    });
+</script>
+<script>
+    $(document).on('click', '#lefttablewidgettedaviduzenle', function (e) {
+        var tr = $(this).closest('tr');
+        var treatmentId = tr.data('treatment-id');
+        var treatmentList = tr.data('treatmentlist-id');
+        var doctorId = tr.data('doctor-id');
+        var cost = tr.data('masraf');
+        //$("#tedaviduzenlecategory").val(categoryId).change();
+        var tdValues = [];
+        tr.find('td').each(function () {
+            var value = $(this).text();
+            tdValues.push(value);
+        });        
+        
+        
+        var tdValue = tdValues[0];
+        // Tarihi parçalara ayırın
+        var dateParts = tdValue.split(' ')[0].split('.');
+        var timeParts = tdValue.split(' ')[1].split(':');
+
+        // Tarih nesnesini oluşturun
+        var year = parseInt(dateParts[2], 10);
+        var month = parseInt(dateParts[1], 10) - 1; // Ay indeksi 0-11 arasında olduğu için 1 çıkarıyoruz
+        var day = parseInt(dateParts[0], 10);
+        var hours = parseInt(timeParts[0], 10);
+        var minutes = parseInt(timeParts[1], 10);
+        var seconds = parseInt(timeParts[2], 10);
+        
+        //var date = new Date(year, month, day, hours, minutes, seconds);
+        var date = year + "-" + ('0' + month).slice(-2) + "-" + ('0' + day).slice(-2) + "T" + ('0' + hours).slice(-2) + ":" + ('0' + minutes).slice(-2) + ":" + ('0' + seconds).slice(-2);
+        //console.log(date.toISOString().slice(0, 16));
+        $("#tedaviduzenledatetime").val(date);
+        $("#tedaviduzenlename").val(tdValues[2]);
+        $("#tedaviduzenlename").data("treatment-id", treatmentId);
+        $("#tedaviduzenlename").data("treatmentlist-id", treatmentList);
+        $("#tedaviduzenleprice").val(tdValues[4].replace(',', '.').replace("₺", ""));
+        var formattedCost = cost.replace(',', '.');
+        var roundedCost = parseFloat(formattedCost).toFixed(2);
+        $("#tedaviduzenlecost").val(roundedCost);
+
+        //doktorlar silinirse ne yapacağım bilmiyorum
+        $("#tedaviduzenledoctor").val(doctorId).change();
+       
+        
+        //$("#tedaviduzenlename").data("treatmentid", dataId);
+        //$("#tedaviduzenleprice").val(tdValues[3].replace(',', '.').replace("₺", ""));
+        //$("#tedaviduzenlevat").val(tdValues[4]);
+        //$("#tedaviduzenlecost").val(tdValues[6].replace(',', '.').replace("₺", ""));
+
+        $("#modal_tedaviduzenle").modal('show');
+
+    });
+
+    $(document).on('click', '#tedaviduzenlebutton', function (e) {
+        var _treatmentId = $("#tedaviduzenlename").data("treatment-id");
+        var _treatmentlistId = $("#tedaviduzenlename").data("treatmentlist-id");
+        var _treatmentName = $("#tedaviduzenlename").val();
+        var _price = $("#tedaviduzenleprice").val();        
+
+        $.ajax({
+            async: false,
+            url: "/Setting/UpdateAccountsTreatments",
+            type: "POST",
+            data: { treatmentId: _treatmentId, accountsTariffLists_Id_Fk: _treatmentlistId, treatmentName: _treatmentName, price: _price },
+            success: function (data) {
+                alert(data);;
+            }
+        });
+        var targetRow = $("tr[data-id='" + _treatmentId + "']");
+
+        // Hedef satırın içindeki td öğelerini seçerek verileri güncelleyin
+        var pricewithvat = parseFloat(_price) + (parseFloat(_price) / 100 * parseFloat(_vat));
+
+        targetRow.find("td").eq(2).text(_treatmentName);
+        _price = _price.replace('.', ',');
+        _price = "₺" + _price;
+        targetRow.find("td").eq(3).text(_price);
+        targetRow.find("td").eq(4).text(_vat);
+        pricewithvat = pricewithvat.toString();
+        pricewithvat = pricewithvat.replace('.', ',');
+        pricewithvat = "₺" + pricewithvat;
+        targetRow.find("td").eq(5).text(pricewithvat);
+        _cost = _cost.replace('.', ',');
+        _cost = "₺" + _cost;
+        targetRow.find("td").eq(6).text(_cost);
+        $("#modal_tedaviduzenle").modal('hide');
+
     });
 </script>

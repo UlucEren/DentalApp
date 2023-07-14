@@ -9,7 +9,8 @@
                 <th class="hidden-xs">#</th>
                 <th>Tedavi</th>
                 <th class="tedavi-diagnoz-fiyat text-right">Fiyat</th>
-                <th></th>
+                <th>Masraf</th>
+                <th>Para Birimi</th>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +22,7 @@
                     <td class="hidden-xs"><strong>@item.Queue</strong></td>
                     <td>@item.Treatment</td>
                     <td class="mevcut-fiyat text-right">@item.PriceWithVat.ToString("C2")</td>
+                    <td>@item.Cost.ToString("C2")</td>
                     <td>TRY</td>
                 </tr>
             }                      
