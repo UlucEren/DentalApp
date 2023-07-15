@@ -16,5 +16,6 @@
         public int ActionLists_Id_Fk { get; set; }
         public string Doctor_SubAccounts_AspNetUsers_Id_Fk { get; set; } 
         public string Doctor_SubAccounts_AspNetUsers_Id_Fk_Name { get; set; } 
+        public string Comment { get; set; } 
     }
 }

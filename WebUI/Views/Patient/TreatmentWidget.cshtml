@@ -160,7 +160,7 @@
                 <div class="row mb-3">
                     <label class="col-md-4 col-form-label">Açıklama</label>
                     <div class="col-md-8">
-                        <input id="tedaviduzenleaciklama" type="number" class="form-control">
+                        <input id="tedaviduzenleaciklama" type="text" class="form-control">
                         @*<div class="form-text text-muted">Yeni tarife fiyatlarını yüzdelik oranda toplu güncelleme. Fiyatların aynı kalmasını istiyorsanız boş bırakabilirsiniz</div>*@
                     </div>
                 </div>
@@ -620,10 +620,11 @@
 <script>
     $(document).on('click', '#lefttablewidgettedaviduzenle', function (e) {
         var tr = $(this).closest('tr');
-        var treatmentId = tr.data('treatment-id');
-        var treatmentList = tr.data('treatmentlist-id');
+        var treatmentId = tr.data('treatment-id');        
         var doctorId = tr.data('doctor-id');
         var cost = tr.data('masraf');
+        console.log(cost);
+        var comment = tr.data('comment');
         //$("#tedaviduzenlecategory").val(categoryId).change();
         var tdValues = [];
         tr.find('td').each(function () {
@@ -639,7 +640,7 @@
 
         // Tarih nesnesini oluşturun
         var year = parseInt(dateParts[2], 10);
-        var month = parseInt(dateParts[1], 10) - 1; // Ay indeksi 0-11 arasında olduğu için 1 çıkarıyoruz
+        var month = parseInt(dateParts[1], 10); // Ay indeksi 0-11 arasında olduğu için 1 çıkarıyoruz
         var day = parseInt(dateParts[0], 10);
         var hours = parseInt(timeParts[0], 10);
         var minutes = parseInt(timeParts[1], 10);
@@ -648,10 +649,11 @@
         //var date = new Date(year, month, day, hours, minutes, seconds);
         var date = year + "-" + ('0' + month).slice(-2) + "-" + ('0' + day).slice(-2) + "T" + ('0' + hours).slice(-2) + ":" + ('0' + minutes).slice(-2) + ":" + ('0' + seconds).slice(-2);
         //console.log(date.toISOString().slice(0, 16));
+        //console.log(date);
         $("#tedaviduzenledatetime").val(date);
         $("#tedaviduzenlename").val(tdValues[2]);
         $("#tedaviduzenlename").data("treatment-id", treatmentId);
-        $("#tedaviduzenlename").data("treatmentlist-id", treatmentList);
+                
         $("#tedaviduzenleprice").val(tdValues[4].replace(',', '.').replace("₺", ""));
         var formattedCost = cost.replace(',', '.');
         var roundedCost = parseFloat(formattedCost).toFixed(2);
@@ -659,6 +661,8 @@
 
         //doktorlar silinirse ne yapacağım bilmiyorum
         $("#tedaviduzenledoctor").val(doctorId).change();
+
+        $("#tedaviduzenleaciklama").val(comment);
        
         
         //$("#tedaviduzenlename").data("treatmentid", dataId);
@@ -671,37 +675,44 @@
     });
 
     $(document).on('click', '#tedaviduzenlebutton', function (e) {
-        var _treatmentId = $("#tedaviduzenlename").data("treatment-id");
-        var _treatmentlistId = $("#tedaviduzenlename").data("treatmentlist-id");
+        var _treatmentId = $("#tedaviduzenlename").data("treatment-id");        
         var _treatmentName = $("#tedaviduzenlename").val();
         var _price = $("#tedaviduzenleprice").val();        
+        var _cost = $("#tedaviduzenlecost").val();
+        var _dateTime = $("#tedaviduzenledatetime").val();
+        var _doctorId = $("#tedaviduzenledoctor").val();
+        var _doctorName = $("#tedaviduzenledoctor").text();
+        var _comment = $("#tedaviduzenleaciklama").val();
 
         $.ajax({
             async: false,
-            url: "/Setting/UpdateAccountsTreatments",
+            url: "/Patient/UpdateAccountsTreatments",
             type: "POST",
-            data: { treatmentId: _treatmentId, accountsTariffLists_Id_Fk: _treatmentlistId, treatmentName: _treatmentName, price: _price },
+            data: { treatmentId: _treatmentId, treatmentName: _treatmentName, price: _price, cost: _cost, dateTime: _dateTime, doctorId: _doctorId, comment: _comment },
             success: function (data) {
-                alert(data);;
+                alert(data);
             }
         });
-        var targetRow = $("tr[data-id='" + _treatmentId + "']");
+        var targetRow = $("tr[data-treatment-id='" + _treatmentId + "']");
 
         // Hedef satırın içindeki td öğelerini seçerek verileri güncelleyin
-        var pricewithvat = parseFloat(_price) + (parseFloat(_price) / 100 * parseFloat(_vat));
+        //var pricewithvat = parseFloat(_price) + (parseFloat(_price) / 100 * parseFloat(_vat));
 
-        targetRow.find("td").eq(2).text(_treatmentName);
+        //targetRow.find("td").eq(2).text(_treatmentName);
+        targetRow.find("td").eq(3).text(_doctorName);
         _price = _price.replace('.', ',');
         _price = "₺" + _price;
-        targetRow.find("td").eq(3).text(_price);
-        targetRow.find("td").eq(4).text(_vat);
-        pricewithvat = pricewithvat.toString();
-        pricewithvat = pricewithvat.replace('.', ',');
-        pricewithvat = "₺" + pricewithvat;
-        targetRow.find("td").eq(5).text(pricewithvat);
-        _cost = _cost.replace('.', ',');
-        _cost = "₺" + _cost;
-        targetRow.find("td").eq(6).text(_cost);
+        targetRow.find("td").eq(4).text(_price);        
+        targetRow.data("masraf", _cost.replace('.', ','));
+        //targetRow.find("td").eq(4).text(_vat);
+        //pricewithvat = pricewithvat.toString();
+        //pricewithvat = pricewithvat.replace('.', ',');
+        //pricewithvat = "₺" + pricewithvat;
+        //targetRow.find("td").eq(5).text(pricewithvat);
+        
+        
+        
+        
         $("#modal_tedaviduzenle").modal('hide');
 
     });

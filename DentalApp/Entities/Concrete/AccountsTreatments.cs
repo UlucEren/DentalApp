@@ -19,5 +19,6 @@ namespace Entities.Concrete
         public string AccountsDiagnozLists_Id_Fk { get; set; }
         public int ActionLists_Id_Fk { get; set; }
         public string Doctor_SubAccounts_AspNetUsers_Id_Fk { get; set; } 
+        public string Comment { get; set; } 
     }
 }

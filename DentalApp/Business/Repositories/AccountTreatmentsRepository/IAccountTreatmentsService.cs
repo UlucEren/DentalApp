@@ -13,7 +13,8 @@ namespace Business.Repositories.AccountTreatmentsRepository
         Task<IResult> Add(AccountsTreatments accountTreatments);
         Task<IResult> Update(AccountsTreatments accountTreatments);
         Task<IResult> Delete(AccountsTreatments accountTreatments);
-        Task<IDataResult<List<AccountsTreatments>>> GetList();        
+        Task<IDataResult<List<AccountsTreatments>>> GetList();
+        Task<IDataResult<AccountsTreatments>> GetById(string Id);
         Task<IDataResult<List<AccountsTreatments>>> GetTreatmentListByActionId(string accountsId, int actionsListsId, string patientId);
     }
 }

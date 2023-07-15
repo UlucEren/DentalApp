@@ -36,9 +36,9 @@ namespace Business.Repositories.AccountTreatmentsRepository
             return new SuccessResult(AccountTreatmentsMessages.Added);
         }
 
-        [SecuredAspect()]
-        [ValidationAspect(typeof(AccountTreatmentsValidator))]
-        [RemoveCacheAspect("IAccountTreatmentsService.Get")]
+        //[SecuredAspect()]
+        //[ValidationAspect(typeof(AccountTreatmentsValidator))]
+        //[RemoveCacheAspect("IAccountTreatmentsService.Get")]
 
         public async Task<IResult> Update(AccountsTreatments accountTreatments)
         {
@@ -61,6 +61,10 @@ namespace Business.Repositories.AccountTreatmentsRepository
         public async Task<IDataResult<List<AccountsTreatments>>> GetList()
         {
             return new SuccessDataResult<List<AccountsTreatments>>(await _accountTreatmentsDal.GetAll());
+        }
+         public async Task<IDataResult<AccountsTreatments>> GetById(string Id)
+        {
+            return new SuccessDataResult<AccountsTreatments>(await _accountTreatmentsDal.Get(x=>x.Id==Id));
         }
         public async Task<IDataResult<List<AccountsTreatments>>> GetTreatmentListByActionId(string accountsId,int actionsListsId, string patientId)
         {

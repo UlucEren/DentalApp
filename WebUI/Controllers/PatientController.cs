@@ -313,7 +313,8 @@ namespace WebUI.Controllers
                                                         AccountsTariffLists_Id_Fk= i.AccountsTariffLists_Id_Fk,
                                                         ActionLists_Id_Fk = i.ActionLists_Id_Fk,
                                                         Doctor_SubAccounts_AspNetUsers_Id_Fk= i.Doctor_SubAccounts_AspNetUsers_Id_Fk,
-                                                        Doctor_SubAccounts_AspNetUsers_Id_Fk_Name = _iAspNetUsersService.GetUserName(i.Doctor_SubAccounts_AspNetUsers_Id_Fk)
+                                                        Doctor_SubAccounts_AspNetUsers_Id_Fk_Name = _iAspNetUsersService.GetUserName(i.Doctor_SubAccounts_AspNetUsers_Id_Fk),
+                                                        Comment = i.Comment
 
                                                     }).OrderByDescending(x=>x.Date).ToList();
 
@@ -437,17 +438,33 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> UpdateAccountsTreatments(string treatmentId,string accountsTariffLists_Id_Fk, string treatmentName, string price)
+        public async Task<JsonResult> UpdateAccountsTreatments(string treatmentId, string price, string cost,DateTime dateTime,string doctorId,string comment)
         {
-            //var data = await _accountsTariffListsService.GetById(treatmentId);
-            //data.Data.Treatment = treatmentName;
-            //price = price.Replace('.', ',');
-            //data.Data.Price = Convert.ToDecimal(price);
-            //data.Data.Vat = vat;
-            //data.Data.PriceWithVat = data.Data.Price + (data.Data.Price / 100 * Convert.ToDecimal(vat));
-            //cost = cost.Replace('.', ',');
-            //data.Data.Cost = Convert.ToDecimal(cost);
-            //await _accountsTariffListsService.Update(data.Data);
+            var data = await _iAccountTreatmentsService.GetById(treatmentId);            
+            price = price.Replace('.', ',');
+            data.Data.PriceWithVat = Convert.ToDecimal(price);
+
+            decimal kdvOrani = Convert.ToDecimal(data.Data.Vat); // KDV oranı (%10)
+            decimal kdvliFiyat = data.Data.PriceWithVat; // KDV'li fiyat
+            decimal kdvMiktari = kdvliFiyat / (1 + kdvOrani);
+            decimal kdvSizFiyat = kdvliFiyat - kdvMiktari;
+            data.Data.Price = kdvSizFiyat; 
+            
+            cost = cost.Replace('.', ',');
+            data.Data.Cost = Convert.ToDecimal(cost);
+            data.Data.Date = dateTime;
+            data.Data.Doctor_SubAccounts_AspNetUsers_Id_Fk = doctorId;
+            data.Data.Comment = comment;
+            try
+            {
+                await _iAccountTreatmentsService.Update(data.Data);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
             return Json("İşlem Başarılı.");
         }
     }
