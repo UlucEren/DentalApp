@@ -315,6 +315,30 @@
             });
 
         }
+        if (selectedValue == 1) {
+            // Option A için işlemler
+            $("#tedaviye_kopyala").hide();
+        } else if (selectedValue == 2) {
+            // Option B için işlemler
+            $("#tedaviye_kopyala").hide();
+        } else {
+            // Diğer seçenekler için varsayılan işlemler
+            var table = document.getElementById("treatments-table-body");
+            console.log(table.rows.length);
+            if (table.rows.length === 1) {
+                var secondColumn = $("#treatments-table-body tr td:nth-child(2)");
+                var shouldShow = secondColumn.text().trim() !== "Sistemde Kayıtlı Veri Bulunamadı.";
+
+                if (shouldShow) {
+                    $("#tedaviye_kopyala").show();
+                } else {
+                    $("#tedaviye_kopyala").hide();
+                }
+            }
+            else{
+                $("#tedaviye_kopyala").show();
+            }                     
+        }
     });
 </script>
 <script>
@@ -490,7 +514,7 @@
 
             let teet = e.target.classList[1];
             let result_teet = teet.substring(teet.indexOf("-") + 1);
-            if (document.getElementById('treatments-table-body').rows[0].cells.item(1).innerHTML == "Sistemde Kayitli Veri Bulunamadi") {
+            if (document.getElementById('treatments-table-body').rows[0].cells.item(1).innerHTML == "Sistemde Kayıtlı Veri Bulunamadı.") {
                 document.getElementById('treatments-table-body').deleteRow(0);
             }
             var actionListValue = $("#actionlist").val();
@@ -611,7 +635,7 @@
                     tr.remove();
                     var table = document.getElementById("treatments-table-body");                    
                     if (table.rows.length === 0) {
-                        $('#treatments-table-body').prepend("<tr class='disabled'><td></td><td colspan='3' class='text-center'>Sistemde Kayitli Veri Bulunamadi</td><td><span>₺0.00</span></td></tr>");
+                        $('#treatments-table-body').prepend("<tr class='disabled'><td></td><td colspan='3' class='text-center'>Sistemde Kayıtlı Veri Bulunamadı.</td><td><span>₺0.00</span></td></tr>");
                     }
 
                     alert(data);
