@@ -608,6 +608,11 @@
                     $("#LeftTableWidgetSum").text(stringtotal);
 
                     tr.remove();
+                    var table = document.getElementById("treatments-table-body");
+                    console.log(table.rows.length);
+                    if (table.rows.length === 0) {
+                        $('#treatments-table-body').prepend("<tr class='disabled'><td></td><td colspan='3' class='text-center'>Sistemde Kayitli Veri Bulunamadi</td><td><span>₺0.00</span></td></tr>");
+                    }
                     alert(data);
                 }
             });
@@ -704,6 +709,7 @@
         _price = "₺" + _price;
         targetRow.find("td").eq(4).text(_price);        
         targetRow.data("masraf", _cost.replace('.', ','));
+        targetRow.data("comment", _comment);
         //targetRow.find("td").eq(4).text(_vat);
         //pricewithvat = pricewithvat.toString();
         //pricewithvat = pricewithvat.replace('.', ',');
