@@ -142,7 +142,7 @@
                 <div class="row mb-3">
                     <label class="col-md-4 col-form-label">Masraf</label>
                     <div class="col-md-8">
-                        <input id="tedaviduzenlecost" type="number" class="form-control">                        
+                        <input id="tedaviduzenlecost" type="number" class="form-control">
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -324,7 +324,7 @@
         } else {
             // Diğer seçenekler için varsayılan işlemler
             var table = document.getElementById("treatments-table-body");
-            console.log(table.rows.length);
+            //console.log(table.rows.length);
             if (table.rows.length === 1) {
                 var secondColumn = $("#treatments-table-body tr td:nth-child(2)");
                 var shouldShow = secondColumn.text().trim() !== "Sistemde Kayıtlı Veri Bulunamadı.";
@@ -335,9 +335,9 @@
                     $("#tedaviye_kopyala").hide();
                 }
             }
-            else{
+            else {
                 $("#tedaviye_kopyala").show();
-            }                     
+            }
         }
     });
 </script>
@@ -520,7 +520,7 @@
             var actionListValue = $("#actionlist").val();
             var _patientId = selected_oral_treatment_list[0].dataset.patientid;
             var _doctorId = $("#doctor").val();
-            var _doctorName = $("#doctor").text();            
+            var _doctorName = $("#doctor").text();
             var _masraf = selected_oral_treatment_list[0].dataset.tedaviMasraf;
             var treatmentId = "";
 
@@ -578,6 +578,20 @@
             $("#LeftTableWidgetSum").text(stringtotal);
             $('#treatments-table-body').prepend('<tr data-treatment-id="' + treatmentId + '" data-treatmentlist-id="' + selected_oral_treatment_list[0].dataset.tedaviId + '" data-doctor-id="' + _doctorId + '" data-masraf="' + _masraf + '"><td>' + ThisDate + '</td><td>' + result_teet + '</td><td>' + selected_oral_treatment_list[0].dataset.tedaviAdi + '</td><td>' + _doctorName + '</td><td>' + stringfiyat + '</td>' + islem + '</tr>');
 
+            var actionlistcontrol = $("#actionlist").val();
+            if (actionlistcontrol != 1 && actionlistcontrol != 2) {
+                var table = document.getElementById("treatments-table-body");
+                //console.log(table.rows.length);
+                if (table.rows.length === 1) {
+                    var secondColumn = $("#treatments-table-body tr td:nth-child(2)");
+                    var shouldShow = secondColumn.text().trim() !== "Sistemde Kayıtlı Veri Bulunamadı.";
+
+                    if (shouldShow) {
+                        $("#tedaviye_kopyala").show();
+                    }
+                }
+            }
+
         }
     });
 </script>
@@ -633,11 +647,19 @@
                     $("#LeftTableWidgetSum").text(stringtotal);
 
                     tr.remove();
-                    var table = document.getElementById("treatments-table-body");                    
+                    var table = document.getElementById("treatments-table-body");
                     if (table.rows.length === 0) {
                         $('#treatments-table-body').prepend("<tr class='disabled'><td></td><td colspan='3' class='text-center'>Sistemde Kayıtlı Veri Bulunamadı.</td><td><span>₺0.00</span></td></tr>");
-                    }
 
+                        var actionlistcontrol = $("#actionlist").val();
+                        if (actionlistcontrol != 1 && actionlistcontrol != 2) {
+                            var secondColumn = $("#treatments-table-body tr td:nth-child(2)");
+                            var shouldShow = secondColumn.text().trim() === "Sistemde Kayıtlı Veri Bulunamadı.";
+                            if (shouldShow) {
+                                $("#tedaviye_kopyala").hide();
+                            }
+                        }
+                    }
                     alert(data);
                 }
             });
@@ -650,7 +672,7 @@
 <script>
     $(document).on('click', '#lefttablewidgettedaviduzenle', function (e) {
         var tr = $(this).closest('tr');
-        var treatmentId = tr.data('treatment-id');        
+        var treatmentId = tr.data('treatment-id');
         var doctorId = tr.data('doctor-id');
         var cost = tr.data('masraf');
         console.log(cost);
@@ -660,9 +682,9 @@
         tr.find('td').each(function () {
             var value = $(this).text();
             tdValues.push(value);
-        });        
-        
-        
+        });
+
+
         var tdValue = tdValues[0];
         // Tarihi parçalara ayırın
         var dateParts = tdValue.split(' ')[0].split('.');
@@ -675,7 +697,7 @@
         var hours = parseInt(timeParts[0], 10);
         var minutes = parseInt(timeParts[1], 10);
         var seconds = parseInt(timeParts[2], 10);
-        
+
         //var date = new Date(year, month, day, hours, minutes, seconds);
         var date = year + "-" + ('0' + month).slice(-2) + "-" + ('0' + day).slice(-2) + "T" + ('0' + hours).slice(-2) + ":" + ('0' + minutes).slice(-2) + ":" + ('0' + seconds).slice(-2);
         //console.log(date.toISOString().slice(0, 16));
@@ -683,7 +705,7 @@
         $("#tedaviduzenledatetime").val(date);
         $("#tedaviduzenlename").val(tdValues[2]);
         $("#tedaviduzenlename").data("treatment-id", treatmentId);
-                
+
         $("#tedaviduzenleprice").val(tdValues[4].replace(',', '.').replace("₺", ""));
         var formattedCost = cost.replace(',', '.');
         var roundedCost = parseFloat(formattedCost).toFixed(2);
@@ -699,9 +721,9 @@
     });
 
     $(document).on('click', '#tedaviduzenlebutton', function (e) {
-        var _treatmentId = $("#tedaviduzenlename").data("treatment-id");        
+        var _treatmentId = $("#tedaviduzenlename").data("treatment-id");
         var _treatmentName = $("#tedaviduzenlename").val();
-        var _price = $("#tedaviduzenleprice").val();        
+        var _price = $("#tedaviduzenleprice").val();
         var _cost = $("#tedaviduzenlecost").val();
         var _dateTime = $("#tedaviduzenledatetime").val();
         var _doctorId = $("#tedaviduzenledoctor").val();
@@ -718,16 +740,16 @@
             }
         });
         var targetRow = $("tr[data-treatment-id='" + _treatmentId + "']");
-        
+
         var date = new Date(_dateTime);
         targetRow.find("td").eq(0).text(date.toLocaleString());
         targetRow.find("td").eq(3).text(_doctorName);
         _price = _price.replace('.', ',');
         _price = "₺" + _price;
-        targetRow.find("td").eq(4).text(_price);        
+        targetRow.find("td").eq(4).text(_price);
         targetRow.data("masraf", _cost.replace('.', ','));
         targetRow.data("comment", _comment);
-        
+
         $("#modal_tedaviduzenle").modal('hide');
 
     });
