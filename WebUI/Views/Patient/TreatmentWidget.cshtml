@@ -675,7 +675,7 @@
         var treatmentId = tr.data('treatment-id');
         var doctorId = tr.data('doctor-id');
         var cost = tr.data('masraf');
-        console.log(cost);
+        //console.log(cost);
         var comment = tr.data('comment');
         //$("#tedaviduzenlecategory").val(categoryId).change();
         var tdValues = [];
@@ -752,5 +752,29 @@
 
         $("#modal_tedaviduzenle").modal('hide');
 
+    });
+</script>
+<script>
+    $(document).on('click', '#tedaviye_kopyala', function (e) {
+        var cevap = confirm("Liste Tedaviye aktarılsın mı?");
+        if (cevap) {
+            var _actionlist = $("#actionlist").val();
+            var _patientId = '@ViewBag.PatientId';
+            $.ajax({
+                async: false,
+                url: "/Patient/CopyAccountsTreatments",
+                type: "POST",
+                data: { patientId: _patientId, actionList: _actionlist },
+                success: function (data) {
+                    alert(data);
+                    var patientId = _patientId;
+                    var url = '/Patient/Oral?patientId=' + patientId;
+                    window.location.href = url;
+                }
+            });
+        }
+        else {
+            alert("İptal Edildi!");
+        }
     });
 </script>

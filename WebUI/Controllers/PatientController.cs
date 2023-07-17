@@ -38,7 +38,7 @@ namespace WebUI.Controllers
         private readonly IAccountsTariffNamesService _accountsTariffNamesService;
         private readonly IAccountsTariffNamesCategoriesService _accountsTariffNamesCategoriesService;
         private readonly IAccountsTariffListsService _accountsTariffListsService;
-        private readonly IAccountTreatmentsService _iAccountTreatmentsService;        
+        private readonly IAccountTreatmentsService _iAccountTreatmentsService;
         private readonly IAspNetUsersService _iAspNetUsersService;
         private readonly IAccountsDiagnozCategoriesService _iAccountsDiagnozCategoriesService;
         private readonly IAccountsDiagnozListsService _iAccountsDiagnozListsService;
@@ -263,13 +263,13 @@ namespace WebUI.Controllers
         public async Task<PartialViewResult> TreatmentWidget(string patientId)
         {
             var result = await _iActionListService.GetList();
-            ViewBag.ActionList = result.Data;      
+            ViewBag.ActionList = result.Data;
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             string _findAccount = await findAccount(userId);
             var result1 = await _accountsTariffNamesService.GetByAccountsIdList(_findAccount);
             ViewBag.TariffNames = result1.ToList();
-            
+
             List<SelectListItem> doctor = new List<SelectListItem>();
             doctor.Add(new SelectListItem { Value = _findAccount, Text = _iAspNetUsersService.GetUserName(_findAccount) });
             //subaccountlarda doktorları tespit edilip eklenecek
@@ -306,17 +306,17 @@ namespace WebUI.Controllers
                                                         Vat = i.Vat,
                                                         PriceWithVat = i.PriceWithVat,
                                                         Cost = i.Cost,
-                                                        Date= i.Date,
+                                                        Date = i.Date,
                                                         Teeth = i.Teet,
                                                         Accounts_AspNetUsers_Id_Fk = i.Accounts_AspNetUsers_Id_Fk,
                                                         AccountPatients_Id_Fk = i.AccountPatients_Id_Fk,
-                                                        AccountsTariffLists_Id_Fk= i.AccountsTariffLists_Id_Fk,
+                                                        AccountsTariffLists_Id_Fk = i.AccountsTariffLists_Id_Fk,
                                                         ActionLists_Id_Fk = i.ActionLists_Id_Fk,
-                                                        Doctor_SubAccounts_AspNetUsers_Id_Fk= i.Doctor_SubAccounts_AspNetUsers_Id_Fk,
+                                                        Doctor_SubAccounts_AspNetUsers_Id_Fk = i.Doctor_SubAccounts_AspNetUsers_Id_Fk,
                                                         Doctor_SubAccounts_AspNetUsers_Id_Fk_Name = _iAspNetUsersService.GetUserName(i.Doctor_SubAccounts_AspNetUsers_Id_Fk),
                                                         Comment = i.Comment
 
-                                                    }).OrderByDescending(x=>x.Date).ToList();
+                                                    }).OrderByDescending(x => x.Date).ToList();
 
 
             return PartialView(treatment);
@@ -328,7 +328,7 @@ namespace WebUI.Controllers
             return Json(accountsTariffNamesCategories);
         }
         [HttpPost]
-        public async Task<PartialViewResult> RightTableWidget(long categoryId,string patientId)
+        public async Task<PartialViewResult> RightTableWidget(long categoryId, string patientId)
         {
             List<AccountsTariffListsDto> costLists = (from i in await _accountsTariffListsService.GetListByCategories_Id(categoryId)
                                                       select new AccountsTariffListsDto
@@ -347,17 +347,17 @@ namespace WebUI.Controllers
             return PartialView(costLists);
         }
         [HttpPost]
-        public async Task<JsonResult> TreatmentSaveDb(string listId, string teet, string actionListId,string patientId,string doctorId)
+        public async Task<JsonResult> TreatmentSaveDb(string listId, string teet, string actionListId, string patientId, string doctorId)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
             string _findAccount = await findAccount(userId);
-            if (actionListId=="1")
+            if (actionListId == "1")
             {
                 var diagnoz = await _iAccountsDiagnozListsService.GetById(listId);
                 AccountsTreatments accountTreatments = new AccountsTreatments();
                 accountTreatments.Id = Guid.NewGuid().ToString();
-                accountTreatments.Treatment = diagnoz.Data.Name;                
+                accountTreatments.Treatment = diagnoz.Data.Name;
                 accountTreatments.Date = DateTime.Now;
                 accountTreatments.Teet = teet;
                 accountTreatments.Accounts_AspNetUsers_Id_Fk = _findAccount;
@@ -368,7 +368,7 @@ namespace WebUI.Controllers
 
                 await _iAccountTreatmentsService.Add(accountTreatments);
 
-                return Json(new { TreatmentId = accountTreatments.Id, CreateDate= accountTreatments.Date });
+                return Json(new { TreatmentId = accountTreatments.Id, CreateDate = accountTreatments.Date });
             }
             else
             {
@@ -390,9 +390,9 @@ namespace WebUI.Controllers
 
                 await _iAccountTreatmentsService.Add(accountTreatments);
 
-                return Json(new { TreatmentId = accountTreatments.Id,CreateDate = accountTreatments.Date });
+                return Json(new { TreatmentId = accountTreatments.Id, CreateDate = accountTreatments.Date });
             }
-            
+
         }
         [HttpPost]
         public async Task<JsonResult> GetAccountDiagnozCategories()
@@ -411,7 +411,7 @@ namespace WebUI.Controllers
                                                       {
                                                           Id = i.Id,
                                                           CategoryName = _iAccountsDiagnozCategoriesService.GetCategoryName(i.AccountsDiagnozCategories_Id_Fk),
-                                                          Treatment = i.Name,                                                          
+                                                          Treatment = i.Name,
                                                           Queue = i.Queue,
                                                           AccountsTariffNamesCategories_Id_Fk = i.AccountsDiagnozCategories_Id_Fk
                                                       }).OrderBy(x => x.Queue).ToList();
@@ -432,15 +432,15 @@ namespace WebUI.Controllers
 
                 throw;
             }
-            
+
 
             return Json("İşlem Başarılı.");
         }
 
         [HttpPost]
-        public async Task<JsonResult> UpdateAccountsTreatments(string treatmentId, string price, string cost,DateTime dateTime,string doctorId,string comment)
+        public async Task<JsonResult> UpdateAccountsTreatments(string treatmentId, string price, string cost, DateTime dateTime, string doctorId, string comment)
         {
-            var data = await _iAccountTreatmentsService.GetById(treatmentId);            
+            var data = await _iAccountTreatmentsService.GetById(treatmentId);
             price = price.Replace('.', ',');
             data.Data.PriceWithVat = Convert.ToDecimal(price);
 
@@ -448,8 +448,8 @@ namespace WebUI.Controllers
             decimal kdvliFiyat = data.Data.PriceWithVat; // KDV'li fiyat
             decimal kdvMiktari = kdvliFiyat / (1 + kdvOrani);
             decimal kdvSizFiyat = kdvliFiyat - kdvMiktari;
-            data.Data.Price = kdvSizFiyat; 
-            
+            data.Data.Price = kdvSizFiyat;
+
             cost = cost.Replace('.', ',');
             data.Data.Cost = Convert.ToDecimal(cost);
             data.Data.Date = dateTime;
@@ -464,7 +464,38 @@ namespace WebUI.Controllers
 
                 throw;
             }
-            
+
+            return Json("İşlem Başarılı.");
+        }
+        [HttpPost]
+        public async Task<JsonResult> CopyAccountsTreatments(string patientId, int actionList)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            string _findAccount = await findAccount(userId);
+
+            var accountTreatments = await _iAccountTreatmentsService.GetTreatmentListByActionId(_findAccount, actionList, patientId);
+            foreach (var item in accountTreatments.Data)
+            {
+                AccountsTreatments _accountsTreatments = new AccountsTreatments();
+                _accountsTreatments.Id = Guid.NewGuid().ToString();
+                _accountsTreatments.Treatment = item.Treatment;
+                _accountsTreatments.Price = item.Price;
+                _accountsTreatments.Vat = item.Vat;
+                _accountsTreatments.PriceWithVat = item.PriceWithVat;
+                _accountsTreatments.Cost = item.Cost;
+                _accountsTreatments.Date = DateTime.Now;
+                _accountsTreatments.Teet = item.Teet;
+                _accountsTreatments.Accounts_AspNetUsers_Id_Fk = item.Accounts_AspNetUsers_Id_Fk;
+                _accountsTreatments.AccountPatients_Id_Fk = item.AccountPatients_Id_Fk;
+                _accountsTreatments.AccountsTariffLists_Id_Fk = item.AccountsTariffLists_Id_Fk;
+                _accountsTreatments.AccountsDiagnozLists_Id_Fk = null;
+                _accountsTreatments.ActionLists_Id_Fk = 2;
+                _accountsTreatments.Doctor_SubAccounts_AspNetUsers_Id_Fk = item.Doctor_SubAccounts_AspNetUsers_Id_Fk;
+                _accountsTreatments.Comment = item.Comment;
+                await _iAccountTreatmentsService.Add(_accountsTreatments);
+
+            }
             return Json("İşlem Başarılı.");
         }
     }
